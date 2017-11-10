@@ -1,5 +1,5 @@
-# MAJOR
-Meta-Analysis for JAMOVI
+# MAJOR: Meta Analysis JamOvi R
+Meta-Analysis Module for JAMOVI
 
 If there’s something missing please open an issue and I’ll be sure to give it a look. 
 
