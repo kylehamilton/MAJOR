@@ -2,6 +2,7 @@
 name:  metaDichotomousModel
 title: Dichotomous Models
 menuGroup: MAJOR
+menuSubgroup: Meta Analysis
 version: '1.0.0'
 jas: '1.1'
 

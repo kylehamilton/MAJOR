@@ -1,10 +1,10 @@
-Package: MetaModel
+Package: MAJOR
 Type: Package
-Title: Meta-Analysis for JAMOVI
-Version: 0.1.1
+Title: MAJOR: Meta-Analysis for JAMOVI
+Version: 1.0.0
 Author: W. Kyle Hamilton
 Maintainer: W. Kyle Hamilton <kyle.hamilton@gmail.com>
-Description: An interface for Jamovi and the R package Metafor
+Description: This module allows you to run a meta-analysis and is based on the R package Metafor by Wolfgang Viechtbauer.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

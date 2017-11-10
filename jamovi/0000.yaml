@@ -1,7 +1,7 @@
 ---
 title: Meta-Analysis for JAMOVI
 name: MAJOR
-version: 0.2
+version: 1.0.0
 jms: '1.0'
 authors:
   - W. Kyle Hamilton
@@ -16,23 +16,23 @@ analyses:
     menuGroup: MAJOR
     menuTitle: Correlation Coefficients
     menuSubgroup: Meta Analysis
-  - title: 'Mean Differences (n, M, SD)'
-    name: metaMeanDiff
-    ns: MAJOR
-    menuGroup: MAJOR
-    menuTitle: 'Mean Differences (n, M, SD)'
-    menuSubgroup: Meta Analysis
   - title: Dichotomous Models
     name: metaDichotomousModel
     ns: MAJOR
     menuGroup: MAJOR
     menuTitle: Dichotomous Models
     menuSubgroup: Meta Analysis
-  - title: Reliability Generalization
-    name: metaAlpha
+  - title: Effect Sizes and Sampling Variances
+    name: metaDV
     ns: MAJOR
     menuGroup: MAJOR
-    menuTitle: Reliability Generalization
+    menuTitle: Effect Sizes and Sampling Variances
+    menuSubgroup: Meta Analysis
+  - title: 'Mean Differences (n, M, SD)'
+    name: metaMeanDiff
+    ns: MAJOR
+    menuGroup: MAJOR
+    menuTitle: 'Mean Differences (n, M, SD)'
     menuSubgroup: Meta Analysis
   - title: Proportions
     name: metaProportion
@@ -40,11 +40,11 @@ analyses:
     menuGroup: MAJOR
     menuTitle: Proportions
     menuSubgroup: Meta Analysis
-  - title: Effect Sizes and Sampling Variances
-    name: metaDV
+  - title: Reliability Generalization
+    name: metaAlpha
     ns: MAJOR
     menuGroup: MAJOR
-    menuTitle: Effect Sizes and Sampling Variances
+    menuTitle: Reliability Generalization
     menuSubgroup: Meta Analysis
 
 ...
