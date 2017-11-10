@@ -1,0 +1,11 @@
+Package: MetaModel
+Type: Package
+Title: Meta-Analysis for JAMOVI
+Version: 0.1.1
+Author: W. Kyle Hamilton
+Maintainer: W. Kyle Hamilton <kyle.hamilton@gmail.com>
+Description: An interface for Jamovi and the R package Metafor
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports: jmvcore (>= 0.5.5), R6, metafor, gsl, MAc, ggplot2

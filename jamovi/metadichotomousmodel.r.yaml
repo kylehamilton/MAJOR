@@ -1,0 +1,151 @@
+---
+name:  metaDichotomousModel
+title: Dichotomous Models
+jrs:   '1.1'
+
+items:
+    - name:  textRICH
+      type: Table
+      title: "Random-Effects Model"
+      rows:  2
+      columns:
+        - name: Intercept
+          title: ''
+          type: text
+        - name: Estimate
+          type: number
+        - name: se
+          type: number
+        - name: Z
+          type: number
+        - name: p
+          type: number
+          format: zto,pvalue
+        - name: CILow
+          title: CI Lower Bound
+          type: number
+          format: zto
+        - name: CIHigh
+          title: CI Upper Bound
+          type: number
+          format: zto
+
+    - name:  tableTauSqaured
+      title: Heterogeneity Statistics
+      type: Table
+      rows:  1
+      columns:
+        - name: tauSQRT
+          title: 'Tau'
+          type: number
+          format: zto
+        - name: tauSqComb
+          title: 'Tau²'
+          type: number
+          format: zto
+        - name: ISqu
+          title: 'I²'
+          type: text
+        - name: HSqu
+          title: 'H²'
+          type: number
+          format: zto
+        - name: RSqu
+          title: 'R²'
+          type: text
+        - name: QallDF
+          title: 'df'
+          type: integer
+          format: zto
+        - name: Qall
+          title: 'Q'
+          type: number
+          format: zto
+        - name: QallPval
+          title: 'p'
+          type: number
+          format: zto,pvalue
+
+    - name:  modelFitRICH
+      title: Model Fit Statistics and Information Criteria
+      type: Table
+      rows:  2
+      columns:
+        - name: label
+          title: ''
+          type: text
+        - name: loglikelihood
+          title: log-likelihood
+          type: number
+          format: zto
+        - name: deviance
+          title: Deviance
+          type: number
+          format: zto
+        - name: AIC
+          type: number
+          format: zto
+        - name: BIC
+          type: number
+          format: zto
+        - name: AICc
+          type: number
+          format: zto
+
+    - name: plot
+      title: Forest Plot
+      type: Image
+      width:  600
+      height: 450
+      renderFun: .plot
+
+    - name: pubBias
+      title: Publication Bias Assessment
+      type: Group
+      items:
+        - name:  fsnRICH
+          title: "Fail-Safe N Analysis"
+          type: Table
+          rows:  1
+          columns:
+            - name: failSafeNumber
+              title: "Fail-safe N"
+              type: integer
+              format: zto
+            - name: p
+              type: number
+              format: zto,pvalue
+
+        - name:  rankRICH
+          title: "Rank Correlation Test for Funnel Plot Asymmetry"
+          type: Table
+          rows:  1
+          columns:
+            - name: rankTau
+              title: "Kendall's Tau"
+              type: number
+              format: zto
+            - name: p
+              type: number
+              format: zto,pvalue
+
+        - name:  regRICH
+          title: "Regression Test for Funnel Plot Asymmetry"
+          type: Table
+          rows:  1
+          columns:
+            - name: Z
+              type: number
+              format: zto
+            - name: p
+              type: number
+              format: zto,pvalue
+
+    - name: funplot
+      title: Funnel Plot
+      type: Image
+      width:  600
+      height: 450
+      renderFun: .funplot
+
+...

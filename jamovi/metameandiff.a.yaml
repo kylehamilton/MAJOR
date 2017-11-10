@@ -1,0 +1,189 @@
+---
+name:  metaMeanDiff
+title: Mean Differences (n, M, SD)
+menuGroup: MAJOR
+menuSubgroup: Meta Analysis
+version: '1.0.0'
+jas: '1.1'
+
+options:
+    - name: data
+      type: Data
+
+    - name: n1i
+      title: Group one sample size
+      suggested: [continuous]
+      permitted: [continuous]
+      type: Variable
+
+    - name: m1i
+      title: Group one mean
+      suggested: [continuous]
+      permitted: [continuous]
+      type: Variable
+
+    - name: sd1i
+      title: Group one standard deviation
+      suggested: [continuous]
+      permitted: [continuous]
+      type: Variable
+
+    - name: n2i
+      title: Group two sample size
+      suggested: [continuous]
+      permitted: [continuous]
+      type: Variable
+
+    - name: m2i
+      title: Group two mean
+      suggested: [continuous]
+      permitted: [continuous]
+      type: Variable
+
+    - name: sd2i
+      title: Group two standard deviation
+      suggested: [continuous]
+      permitted: [continuous]
+      type: Variable
+
+    - name: slab
+      title: Study label
+      suggested: [nominaltext]
+      type: Variable
+
+    - name: moderatorcor
+      title: Moderator
+      suggested: [continuous]
+      permitted: [continuous]
+      type: Variable
+
+    - name: includemods
+      title: Include moderator
+      type: Bool
+      default: FALSE
+
+    - name: methodmetacor
+      title: Model estimator
+      type: List
+      options:
+        - name: "DL"
+          title: DerSimonian-Laird
+        - name: "HE"
+          title: Hedges
+        - name: "HS"
+          title: Hunter-Schmidt
+        - name: "SJ"
+          title: Sidik-Jonkman
+        - name: "ML"
+          title: Maximum-Likelihood
+        - name: "REML"
+          title: Restricted Maximum-Likelihood
+        - name: "EB"
+          title: Empirical Bayes
+        - name: "PM"
+          title: Paule-Mandel
+        #- name: "GENQ"
+        #  title: Generalized Q-statistic
+        - name: "FE"
+          title: Fixed-Effect
+      default: REML
+
+    - name: cormeasure
+      title: Effect size model measures
+      type: List
+      options:
+        - name: "MD"
+          title: Raw Mean Difference
+        - name: "SMD"
+          title: Standardized Mean Difference
+        - name: "SMDH"
+          title: Standardized Mean Difference (Heteroscedastic Population Variances)
+        - name: "ROM"
+          title: Log Transformed Ratio of Means
+      default: SMD
+
+    - name: level
+      type: Number
+      title: Confidence interval level
+      min: 50
+      max: 99.9
+      default: 95
+
+    - name: showModelFit
+      title: Display model fit
+      type: Bool
+      default: FALSE
+
+    - name: addcred
+      title: Prediction interval
+      type: Bool
+      default: FALSE
+
+    - name: addfit
+      title: Summary estimate
+      type: Bool
+      default: TRUE
+
+    - name: showweights
+      title: Model fitting weights
+      type: Bool
+      default: FALSE
+
+    - name: xAxisTitle
+      title: x-axis title
+      type: String
+
+    - name: forestOrder
+      title: Study order
+      type: List
+      options:
+        - name: "obs"
+          title: Observed effect sizes
+        - name: "fit"
+          title: Fitted values
+        - name: "prec"
+          title: Sampling variances
+        - name: "resid"
+          title: Residuals
+        - name: "abs.resid"
+          title: Absolute residuals
+      default: fit
+
+    - name: fsntype
+      title: Fail-Safe N method
+      type: List
+      options:
+        - name: "Rosenthal"
+          title: Rosenthal
+        - name: "Orwin"
+          title: Orwin
+        - name: "Rosenberg"
+          title: Rosenberg
+      default: Rosenthal
+
+    - name: yaxis
+      title: Funnel plot y-axis options
+      type: List
+      options:
+        - name: "sei"
+          title: Standard error
+        - name: "vi"
+          title: Sampling variance
+        - name: "ni"
+          title: Sample size
+        - name: "sqrtni"
+          title: Square root sample size
+        - name: "lni"
+          title: Log of the sample size
+      default: sei
+
+    - name: yaxisInv
+      title: Funnel plot y-axis inverse
+      type: Bool
+      default: false
+
+    - name: enhanceFunnel
+      title: Contour-Enhanced
+      type: Bool
+      default: false
+...

@@ -1,0 +1,14 @@
+**List of things to do and that have been done**
+- [x] Meta-analysis with correlations 
+- [x] Meta-analysis mean differences
+- [x] Meta-analysis dichotomous outcomes
+- [x] Basic funnel plot
+- [x] Basic forest plot
+- [x] Basic publication bias
+- [ ] Vevea and Hedges weight function model with the weightr package
+- [ ] Add labels for plots
+- [ ] Add additional plots and tests from metafor
+- [ ] Figure out Jamovi icon
+- [x] Better name
+- [x] Clean up menus
+- [ ] Allow for more than one moderator

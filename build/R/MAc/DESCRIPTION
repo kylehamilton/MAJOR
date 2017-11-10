@@ -1,0 +1,24 @@
+Package: MAc
+Type: Package
+Title: Meta-Analysis with Correlations
+Version: 1.1
+Date: 2010-07-06
+Author: AC Del Re & William T. Hoyt
+Maintainer: AC Del Re <acdelre@gmail.com>
+Description: This is an integrated meta-analysis package for conducting
+        a correlational research synthesis. One of the unique features
+        of this package is in its integration of user-friendly
+        functions to facilitate statistical analyses at each stage in a
+        meta-analysis with correlations. It uses recommended procedures
+        as described in The Handbook of Research Synthesis and
+        Meta-Analysis (Cooper, Hedges, & Valentine, 2009).
+Depends: R (>= 2.10.1)
+Suggests: ggplot2, R2wd, metafor
+Enhances: compute.es, irr
+License: GPL-2
+URL:
+        http://rwiki.sciviews.org/doku.php?id=packages:cran:ma_meta-analysis
+Packaged: 2012-10-29 08:57:15 UTC; ripley
+Repository: CRAN
+Date/Publication: 2012-10-29 08:57:15
+Built: R 3.3.3; ; 2017-07-15 22:22:12 UTC; windows

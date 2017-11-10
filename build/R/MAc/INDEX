@@ -1,0 +1,52 @@
+Kappa                   Inter-Rater Agreement
+MAc-package             Meta-Analysis with Correlations
+PubBias                 Assess for Publication Bias
+agg                     Meta-Analysis Aggregation
+ancova_to_d1            ANCOVA F-statistic to d
+ancova_to_d2            ANCOVA F-statistic to d II
+atten                   Correction for Attenuation
+d_to_g                  Standardized Mean Difference (d) Statistic to
+                        Unbiased Standardized Mean Difference (g)
+f.ancova_to_d           ANCOVA F-statistic to Standardized Mean
+                        Difference (d)
+f_to_d                  F-test to Standardized Mean Difference (d)
+fail_to_d               Failure groups to Standardized Mean Difference
+                        (d)
+icc                     Intraclass correlation coefficient (ICC) for
+                        oneway and twoway models
+lor_to_d                Log Odds Ratio to Standardized Mean Difference
+                        (d)
+macat                   Categorical Moderator Analysis
+macatC                  Direct Categorical Moderator Comparison
+mareg                   Meta-Regression
+mean_to_d               Means to Standardized Mean Difference
+mean_to_d2              Means with Pooled SD to Standardized Mean
+                        Difference
+omni                    Omnibus Effect Size (Fixed and Random Effects)
+or_to_d                 Odds Ratio to Standardized Mean Difference (d)
+p.ancova_to_d1          One-tailed p-value from ANCOVA to Standardized
+                        Mean Difference (d)
+p.ancova_to_d2          Two-tailed p-value from ANCOVA to Standardized
+                        Mean Difference (d)
+p_to_d1                 One-tailed p-value to Standardized Mean
+                        Difference (d)
+p_to_d2                 Two-tailed p-value to Standardized Mean
+                        Difference (d)
+plotcat                 Categorical Moderator Graph
+plotcon                 Meta Regression Scatterplot
+r2                      Explained Variance
+r_from_chi              Chi-Squared to Correlation
+r_from_d                Correlation from Mean Difference
+r_from_d1               Correlation from Mean Difference II
+r_from_t                Correlation from t-test
+r_to_d                  Correlation (r) to Standardized Mean Difference
+                        (d)
+r_to_z                  Correlation to Fisher's z
+t_to_d                  t-test Value to Standardized Mean Difference
+                        (d)
+tt.ancova_to_d          t-test Value from ANCOVA to Standardized Mean
+                        Difference (d)
+var_r                   Correlation Variance
+var_z                   Fisher's z Variance
+wd                      Output to Word in formatted tables
+wgts                    Weights added to Meta Data

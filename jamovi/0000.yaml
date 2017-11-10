@@ -1,0 +1,50 @@
+---
+title: Meta-Analysis for JAMOVI
+name: MAJOR
+version: 0.2
+jms: '1.0'
+authors:
+  - W. Kyle Hamilton
+maintainer: W. Kyle Hamilton <kyle.hamilton@gmail.com>
+date: '2017-11-10'
+type: R
+description: An interface for Jamovi and the R package Metafor
+analyses:
+  - title: Correlation Coefficients
+    name: MetaCorr
+    ns: MAJOR
+    menuGroup: MAJOR
+    menuTitle: Correlation Coefficients
+    menuSubgroup: Meta Analysis
+  - title: 'Mean Differences (n, M, SD)'
+    name: metaMeanDiff
+    ns: MAJOR
+    menuGroup: MAJOR
+    menuTitle: 'Mean Differences (n, M, SD)'
+    menuSubgroup: Meta Analysis
+  - title: Dichotomous Models
+    name: metaDichotomousModel
+    ns: MAJOR
+    menuGroup: MAJOR
+    menuTitle: Dichotomous Models
+    menuSubgroup: Meta Analysis
+  - title: Reliability Generalization
+    name: metaAlpha
+    ns: MAJOR
+    menuGroup: MAJOR
+    menuTitle: Reliability Generalization
+    menuSubgroup: Meta Analysis
+  - title: Proportions
+    name: metaProportion
+    ns: MAJOR
+    menuGroup: MAJOR
+    menuTitle: Proportions
+    menuSubgroup: Meta Analysis
+  - title: Effect Sizes and Sampling Variances
+    name: metaDV
+    ns: MAJOR
+    menuGroup: MAJOR
+    menuTitle: Effect Sizes and Sampling Variances
+    menuSubgroup: Meta Analysis
+
+...
