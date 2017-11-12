@@ -29,13 +29,13 @@ children:
             name: slab
             maxItemCount: 1
             isTarget: true
-          - type: TargetLayoutBox
-            label: Moderator
-            children:
-              - type: VariablesListBox
-                name: moderatorcor
-                maxItemCount: 1
-                isTarget: true
+      - type: TargetLayoutBox
+        label: Moderator (optional)
+        children:
+          - type: VariablesListBox
+            name: moderatorcor
+            maxItemCount: 1
+            isTarget: true
   - type: LayoutBox
     margin: large
     children:
