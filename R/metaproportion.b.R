@@ -30,6 +30,12 @@ metaProportionClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           # I really need to think of a better error message this is a place holder until I figure something out
           jmvcore::reject("Number of indivduals with the experiencing the event, Sample Sizes, and Study Label fields must be populated to run analysis", code='')
         }
+        if (is.null(self$options$slab) == TRUE){
+          
+          ready <- FALSE
+          # I really need to think of a better error message this is a place holder until I figure something out
+          jmvcore::reject("Study Label fields must be populated to run analysis", code='')
+        }
         if (ready == TRUE) {
           
           if (self$options$includemods == TRUE) {
@@ -37,10 +43,24 @@ metaProportionClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             data[[xi]] <- jmvcore::toNumeric(data[[xi]])
             data[[ni]] <- jmvcore::toNumeric(data[[ni]])
             data[[mods]] <- jmvcore::toNumeric(data[[mods]])
+            data$checkG1 <- 0
+            data$checkG1 <- data$ni - data$xi
+            if (data$checkG1 < 0){
+              #ready <- FALSE
+              jmvcore::reject("Number of incidents is higher than the sample size , check your data ", code='')
+            }
+
           } else {
             data <- data.frame(xi = self$data[[self$options$xi]], ni = self$data[[self$options$ni]], slab = self$data[[self$options$slab]])
             data[[xi]] <- jmvcore::toNumeric(data[[xi]])
             data[[ni]] <- jmvcore::toNumeric(data[[ni]])
+            data$checkG1 <- 0
+            data$checkG1 <- data$ni - data$xi
+            if (data$checkG1 < 0){
+              #ready <- FALSE
+              jmvcore::reject("Number of incidents is higher than the sample size , check your data ", code='')
+            }
+
           }
           
           if (self$options$includemods == TRUE) {
@@ -281,6 +301,9 @@ metaProportionClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           
           ready <- FALSE
         }
+        if (is.null(image$state$yi) || is.null(image$state$vi) == TRUE){
+          ready <- FALSE
+        }
         if (ready == TRUE) {
           
           #plot <- metafor::forest(plotData$yi, plotData$vi, addcred=addcred, addfit=addfit)
@@ -298,6 +321,9 @@ metaProportionClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         if (is.null(self$options$xi) || is.null(self$options$ni) == TRUE){
           #if (is.null(self$options$rcor) == TRUE){
           
+          ready <- FALSE
+        }
+        if (is.null(imageFUN$state$yi) || is.null(imageFUN$state$vi) == TRUE){
           ready <- FALSE
         }
         if (ready == TRUE) {

@@ -33,6 +33,12 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             # I really need to think of a better error message this is a place holder until I figure something out
             jmvcore::reject("Sample Size, Mean, Standard Deviation and Study Label fields must be populated to run analysis", code='')
           }
+          if (is.null(self$options$slab) == TRUE){
+            
+            ready <- FALSE
+            # I really need to think of a better error message this is a place holder until I figure something out
+            jmvcore::reject("Study Label fields must be populated to run analysis", code='')
+          }
           if (ready == TRUE) {
             
             if (self$options$includemods == TRUE) {
@@ -266,6 +272,9 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             
             ready <- FALSE
           }
+          if (is.null(image$state$yi) || is.null(image$state$vi) == TRUE){
+            ready <- FALSE
+          }
           if (ready == TRUE) {
             
             #plot <- metafor::forest(plotData$yi, plotData$vi, addcred=addcred, addfit=addfit)
@@ -283,6 +292,9 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           if (is.null(self$options$n1i) || is.null(self$options$m1i) || is.null(self$options$sd1i) || is.null(self$options$n2i) || is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE){
             #if (is.null(self$options$rcor) == TRUE){
             
+            ready <- FALSE
+          }
+          if (is.null(imageFUN$state$yi) || is.null(imageFUN$state$vi) == TRUE){
             ready <- FALSE
           }
           if (ready == TRUE) {

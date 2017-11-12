@@ -31,6 +31,13 @@ metaDichotomousModelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           # I really need to think of a better error message this is a place holder until I figure something out
           jmvcore::reject("Incidents, Sample Size, and Study Label fields must be populated to run analysis", code='')
         }
+        if (is.null(self$options$slab) == TRUE){
+          
+          ready <- FALSE
+          # I really need to think of a better error message this is a place holder until I figure something out
+          jmvcore::reject("Study Label fields must be populated to run analysis", code='')
+        }
+
         if (ready == TRUE) {
           
           if (self$options$includemods == TRUE) {
@@ -40,19 +47,57 @@ metaDichotomousModelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             data[[ci]] <- jmvcore::toNumeric(data[[ci]])
             data[[n2i]] <- jmvcore::toNumeric(data[[n2i]])
             data[[mods]] <- jmvcore::toNumeric(data[[mods]])
+            data$checkG1 <- 0
+            data$checkG2 <- 0
+            data$checkG1 <- data$n1i - data$ai
+            data$checkG2 <- data$n2i - data$ci
+            if (data$checkG1 < 0){
+              #ready <- FALSE
+              jmvcore::reject("Number of incidents in the experimental group is higher than the associated sample size group, check your data ", code='')
+            }
+            if (data$checkG2 < 0){
+              #ready <- FALSE
+              jmvcore::reject("Number of incidents in the control group is higher than the associated sample size group, check your data ", code='')
+            }
           } else {
             data <- data.frame(ai = self$data[[self$options$ai]], n1i = self$data[[self$options$n1i]], ci = self$data[[self$options$ci]], n2i = self$data[[self$options$n2i]], slab = self$data[[self$options$slab]])
             data[[ai]] <- jmvcore::toNumeric(data[[ai]])
             data[[n1i]] <- jmvcore::toNumeric(data[[n1i]])
             data[[ci]] <- jmvcore::toNumeric(data[[ci]])
             data[[n2i]] <- jmvcore::toNumeric(data[[n2i]])
+            data$checkG1 <- 0
+            data$checkG2 <- 0
+            data$checkG1 <- data$n1i - data$ai
+            data$checkG2 <- data$n2i - data$ci
+            if (data$checkG1 < 0){
+              #ready <- FALSE
+              jmvcore::reject("Number of incidents in the experimental group is higher than the associated sample size group, check your data ", code='')
+            }
+            if (data$checkG2 < 0){
+              #ready <- FALSE
+              jmvcore::reject("Number of incidents in the control group is higher than the associated sample size group, check your data ", code='')
+            }
           }
           
           if (self$options$includemods == TRUE) {
             res <- metafor::rma(ai=ai, n1i=n1i, ci=ci, n2i=n2i, mods=mods, method=method2, measure=mdmseasure, data=data, slab=slab, level=level)
-          } else {
-            res <- metafor::rma(ai=ai, n1i=n1i, ci=ci, n2i=n2i, method=method2, measure=mdmseasure, data=data, slab=slab, level=level)
+            if (is.list(res) == FALSE){
+              jmvcore::reject("Check sample size and incident data", code='')
+            }
+            
+            } else {
+
+            res <- try(metafor::rma(ai=ai, n1i=n1i, ci=ci, n2i=n2i, method=method2, measure=mdmseasure, data=data, slab=slab, level=level))
+            if (is.list(res) == FALSE){
+              jmvcore::reject("Check sample size and incident data", code='')
+            }
           }
+          
+            # else if (message == 'missing value where TRUE/FALSE needed')
+            #   message <- 'One or both variables contain infinite values'
+            # if (is.character(res)== TRUE)
+            #   jmvcore::reject("Check sample size and incident data", code='')
+          
           
           
           #Pub Bias
@@ -228,14 +273,14 @@ metaDichotomousModelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             QallPval=res$QEp
           )) 
           
-          
-          
+
           # `self$data` contains the data
           # `self$options` contains the options
           # `self$results` contains the results object (to populate)
+          
           image <- self$results$plot
           imageFUN <- self$results$funplot
-          
+
           image$setState(res)
           imageFUN$setState(res)
           
@@ -256,18 +301,19 @@ metaDichotomousModelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         order <- self$options$forestOrder
         ready <- TRUE
         if (is.null(self$options$ai) || is.null(self$options$n1i) || is.null(self$options$ci) || is.null(self$options$n2i) == TRUE){
-          #if (is.null(self$options$rcor) == TRUE){
-          
+          ready <- FALSE
+        }
+        if (is.null(image$state$yi) || is.null(image$state$vi) == TRUE){
           ready <- FALSE
         }
         if (ready == TRUE) {
-          
+
           #plot <- metafor::forest(plotData$yi, plotData$vi, addcred=addcred, addfit=addfit)
           plot <- metafor::forest(plotData, addcred=addcred, addfit=addfit, level=level, showweights=showweights, xlab=xlab, order=order)
           print(plot)
           TRUE}
       },
-      #Funnel Plot Function
+     # Funnel Plot Function
       .funplot=function(imageFUN, ...) {  # <-- the plot function
         plotDataFUN <- imageFUN$state
         yaxis <- self$options$yaxis
@@ -275,12 +321,13 @@ metaDichotomousModelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         enhancePlot <- self$options$enhanceFunnel
         ready <- TRUE
         if (is.null(self$options$ai) || is.null(self$options$n1i) || is.null(self$options$ci) || is.null(self$options$n2i) == TRUE){
-          #if (is.null(self$options$rcor) == TRUE){
-          
+          ready <- FALSE
+        }
+        if (is.null(imageFUN$state$yi) || is.null(imageFUN$state$vi) == TRUE){
           ready <- FALSE
         }
         if (ready == TRUE) {
-          
+
           if (self$options$yaxisInv == TRUE) {
             if (self$options$enhanceFunnel == TRUE) {
               yaxisTrans <- paste(yaxis,"nv",sep="")
@@ -289,15 +336,17 @@ metaDichotomousModelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
               yaxisTrans <- paste(yaxis,"nv",sep="")
               plotFUN <- metafor::funnel(plotDataFUN,yaxis=yaxisTrans)
             }
-            
+
           } else {
             if (self$options$enhanceFunnel == TRUE) {
               plotFUN <- metafor::funnel(plotDataFUN,yaxis=yaxis,level=c(90, 95, 99), shade=c("white", "gray", "darkgray"))
             } else {
               plotFUN <- metafor::funnel(plotDataFUN,yaxis=yaxis)
+
             }
           }
           print(plotFUN)
           TRUE}
-      })
+      }
+      )
 )

@@ -29,6 +29,12 @@ metaDVClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           # I really need to think of a better error message this is a place holder until I figure something out
           jmvcore::reject("Effect Sizes, Sampling Variances, and Study Label fields must be populated to run analysis", code='')
         }
+        if (is.null(self$options$slab) == TRUE){
+          
+          ready <- FALSE
+          # I really need to think of a better error message this is a place holder until I figure something out
+          jmvcore::reject("Study Label fields must be populated to run analysis", code='')
+        }
         if (ready == TRUE) {
           
           if (self$options$includemods == TRUE) {
@@ -280,6 +286,9 @@ metaDVClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           
           ready <- FALSE
         }
+        if (is.null(image$state$yi) || is.null(image$state$vi) == TRUE){
+          ready <- FALSE
+        }
         if (ready == TRUE) {
           
           #plot <- metafor::forest(plotData$yi, plotData$vi, addcred=addcred, addfit=addfit)
@@ -297,6 +306,9 @@ metaDVClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         if (is.null(self$options$effectSize) || is.null(self$options$samplingVariances) || is.null(self$options$slab) == TRUE){
           #if (is.null(self$options$effectSize) == TRUE){
           
+          ready <- FALSE
+        }
+        if (is.null(imageFUN$state$yi) || is.null(imageFUN$state$vi) == TRUE){
           ready <- FALSE
         }
         if (ready == TRUE) {

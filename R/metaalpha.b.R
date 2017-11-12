@@ -30,6 +30,12 @@ metaAlphaClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           # I really need to think of a better error message this is a place holder until I figure something out
           jmvcore::reject("Cronbach's Alpha, Number of Items, Sample Size and Study Label fields must be populated to run analysis", code='')
         }
+        if (is.null(self$options$slab) == TRUE){
+          
+          ready <- FALSE
+          # I really need to think of a better error message this is a place holder until I figure something out
+          jmvcore::reject("Study Label fields must be populated to run analysis", code='')
+        }
         if (ready == TRUE) {
           
           if (self$options$includemods == TRUE) {
@@ -257,6 +263,9 @@ metaAlphaClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           
           ready <- FALSE
         }
+        if (is.null(image$state$yi) || is.null(image$state$vi) == TRUE){
+          ready <- FALSE
+        }
         if (ready == TRUE) {
           
           #plot <- metafor::forest(plotData$yi, plotData$vi, addcred=addcred, addfit=addfit)
@@ -274,6 +283,9 @@ metaAlphaClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         if (is.null(self$options$ai) || is.null(self$options$mi) || is.null(self$options$ni) == TRUE){
           #if (is.null(self$options$rcor) == TRUE){
           
+          ready <- FALSE
+        }
+        if (is.null(imageFUN$state$yi) || is.null(imageFUN$state$vi) == TRUE){
           ready <- FALSE
         }
         if (ready == TRUE) {

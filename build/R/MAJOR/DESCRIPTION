@@ -9,4 +9,4 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports: jmvcore (>= 0.5.5), R6, metafor, gsl, MAc, ggplot2
-Built: R 3.4.1; ; 2017-11-10 23:08:19 UTC; windows
+Built: R 3.4.1; ; 2017-11-12 03:09:57 UTC; windows
