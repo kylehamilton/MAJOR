@@ -10,7 +10,6 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             samplingVariances = NULL,
             slab = NULL,
             moderatorcor = NULL,
-            includemods = FALSE,
             methodmetacor = "REML",
             level = 95,
             showModelFit = FALSE,
@@ -56,10 +55,6 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "continuous"),
                 permitted=list(
                     "continuous"))
-            private$..includemods <- jmvcore::OptionBool$new(
-                "includemods",
-                includemods,
-                default=FALSE)
             private$..methodmetacor <- jmvcore::OptionList$new(
                 "methodmetacor",
                 methodmetacor,
@@ -140,7 +135,6 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..samplingVariances)
             self$.addOption(private$..slab)
             self$.addOption(private$..moderatorcor)
-            self$.addOption(private$..includemods)
             self$.addOption(private$..methodmetacor)
             self$.addOption(private$..level)
             self$.addOption(private$..showModelFit)
@@ -159,7 +153,6 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         samplingVariances = function() private$..samplingVariances$value,
         slab = function() private$..slab$value,
         moderatorcor = function() private$..moderatorcor$value,
-        includemods = function() private$..includemods$value,
         methodmetacor = function() private$..methodmetacor$value,
         level = function() private$..level$value,
         showModelFit = function() private$..showModelFit$value,
@@ -177,7 +170,6 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..samplingVariances = NA,
         ..slab = NA,
         ..moderatorcor = NA,
-        ..includemods = NA,
         ..methodmetacor = NA,
         ..level = NA,
         ..showModelFit = NA,
@@ -416,7 +408,6 @@ metaDVBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param samplingVariances .
 #' @param slab .
 #' @param moderatorcor .
-#' @param includemods .
 #' @param methodmetacor .
 #' @param level .
 #' @param showModelFit .
@@ -454,7 +445,6 @@ metaDV <- function(
     samplingVariances,
     slab,
     moderatorcor,
-    includemods = FALSE,
     methodmetacor = "REML",
     level = 95,
     showModelFit = FALSE,
@@ -476,7 +466,6 @@ metaDV <- function(
         samplingVariances = samplingVariances,
         slab = slab,
         moderatorcor = moderatorcor,
-        includemods = includemods,
         methodmetacor = methodmetacor,
         level = level,
         showModelFit = showModelFit,

@@ -26,7 +26,7 @@ MetaCorrClass <- R6::R6Class(
         method2 <- self$options$methodmetacor
         cormeasure <- self$options$cormeasure
         slab <- self$options$slab
-        includemods <- self$options$includemods
+        #includemods <- self$options$includemods
         addcred <- self$options$addcred
         addfit <- self$options$addfit
         showweights <- self$options$showweights
@@ -50,7 +50,7 @@ MetaCorrClass <- R6::R6Class(
         }
         if (ready == TRUE) {
           
-          if (self$options$includemods == TRUE) {
+          if (is.null(self$options$moderatorcor) == FALSE){
             data <- data.frame(ri = self$data[[self$options$rcor]], ni = self$data[[self$options$samplesize]], mods = self$data[[self$options$moderatorcor]], slab = self$data[[self$options$slab]])
             data[[ri]] <- jmvcore::toNumeric(data[[ri]])
             data[[ni]] <- jmvcore::toNumeric(data[[ni]])
@@ -61,7 +61,7 @@ MetaCorrClass <- R6::R6Class(
             data[[ni]] <- jmvcore::toNumeric(data[[ni]])
           }
           
-          if (self$options$includemods == TRUE) {
+          if (is.null(self$options$moderatorcor) == FALSE){
             res <- metafor::rma(ri=ri, ni=ni, method=method2, measure=cormeasure, mods= cbind(mods), data=data, slab=slab, level=level)
           } else {
             res <- metafor::rma(ri=ri, ni=ni, method=method2, measure=cormeasure, data=data, slab=slab, level=level)
@@ -192,11 +192,18 @@ MetaCorrClass <- R6::R6Class(
           tau2EstimatorName = "Paule-Mandel"
         }
           
-          if (self$options$includemods == TRUE){
+          # if (self$options$includemods == TRUE){
+          # titleMix <- paste("Mixed-Effects Model (k = ",res$k,")",sep="")
+          # titleMixNote <- paste("Tau\u00B2 Estimator: ",tau2EstimatorName, sep="")
+          # table$setTitle(title=titleMix)
+          # table$setNote("mixnote",titleMixNote)
+        
+          if (is.null(self$options$moderatorcor) == FALSE){
           titleMix <- paste("Mixed-Effects Model (k = ",res$k,")",sep="")
           titleMixNote <- paste("Tau\u00B2 Estimator: ",tau2EstimatorName, sep="")
           table$setTitle(title=titleMix)
           table$setNote("mixnote",titleMixNote)
+        
         } else if (self$options$methodmetacor == "FE"){
           titleFix <- paste("Fixed-Effects Model (k = ",res$k,")",sep="")
           table$setTitle(title=titleFix)
@@ -208,7 +215,7 @@ MetaCorrClass <- R6::R6Class(
           table$setNote("rannote",titleRanNote)
         }
         
-        if (self$options$includemods == TRUE) {
+        if (is.null(self$options$moderatorcor) == FALSE){
           
           modCILB <- round(res$ci.lb[2], 3)
           modCIUB <- round(res$ci.ub[2], 3)
@@ -245,7 +252,7 @@ MetaCorrClass <- R6::R6Class(
         ISquStat <- paste(round(res$I2, 2),"%",sep="")
         HSquStat <- round(res$H2, 4)
 
-        if (self$options$includemods == TRUE) {
+        if (is.null(self$options$moderatorcor) == FALSE){
         RSquStat <- paste(round(res$R2, 2),"%",sep="")
         } else {
         RSquStat <- NULL

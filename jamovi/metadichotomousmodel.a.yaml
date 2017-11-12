@@ -45,11 +45,6 @@ options:
       permitted: [continuous]
       type: Variable
 
-    - name: includemods
-      title: Include moderator
-      type: Bool
-      default: FALSE
-
     - name: methodmetamdms
       title: Model estimator
       type: List

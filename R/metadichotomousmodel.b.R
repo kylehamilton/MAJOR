@@ -12,7 +12,7 @@ metaDichotomousModelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         n2i <- self$options$n2i
         mods <- self$options$moderatorcor
         slab <- self$options$slab
-        includemods <- self$options$includemods
+        #includemods <- self$options$includemods
         addcred <- self$options$addcred
         addfit <- self$options$addfit
         showweights <- self$options$showweights
@@ -40,7 +40,7 @@ metaDichotomousModelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
         if (ready == TRUE) {
           
-          if (self$options$includemods == TRUE) {
+          if (is.null(self$options$moderatorcor) == FALSE){
             data <- data.frame(ai = self$data[[self$options$ai]], n1i = self$data[[self$options$n1i]], ci = self$data[[self$options$ci]], n2i = self$data[[self$options$n2i]], mods = self$data[[self$options$moderatorcor]], slab = self$data[[self$options$slab]])
             data[[ai]] <- jmvcore::toNumeric(data[[ai]])
             data[[n1i]] <- jmvcore::toNumeric(data[[n1i]])
@@ -79,7 +79,7 @@ metaDichotomousModelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             }
           }
           
-          if (self$options$includemods == TRUE) {
+          if (is.null(self$options$moderatorcor) == FALSE){
             res <- metafor::rma(ai=ai, n1i=n1i, ci=ci, n2i=n2i, mods=mods, method=method2, measure=mdmseasure, data=data, slab=slab, level=level)
             if (is.list(res) == FALSE){
               jmvcore::reject("Check sample size and incident data", code='')
@@ -198,7 +198,7 @@ metaDichotomousModelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             tau2EstimatorName = "Paule-Mandel"
           }
           
-          if (self$options$includemods == TRUE){
+          if (is.null(self$options$moderatorcor) == FALSE){
             titleMix <- paste("Mixed-Effects Model (k = ",res$k,")",sep="")
             titleMixNote <- paste("Tau\u00B2 Estimator: ",tau2EstimatorName, sep="")
             table$setTitle(title=titleMix)
@@ -214,7 +214,7 @@ metaDichotomousModelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             table$setNote("rannote",titleRanNote)
           }
           
-          if (self$options$includemods == TRUE) {
+          if (is.null(self$options$moderatorcor) == FALSE){
             
             modCILB <- round(res$ci.lb[2], 3)
             modCIUB <- round(res$ci.ub[2], 3)
@@ -251,7 +251,7 @@ metaDichotomousModelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           ISquStat <- paste(round(res$I2, 2),"%",sep="")
           HSquStat <- round(res$H2, 4)
           
-          if (self$options$includemods == TRUE) {
+          if (is.null(self$options$moderatorcor) == FALSE){
             RSquStat <- paste(round(res$R2, 2),"%",sep="")
           } else {
             RSquStat <- NULL

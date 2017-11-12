@@ -13,7 +13,7 @@ metaProportionClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         method2 <- self$options$methodmetacor
         cormeasure <- self$options$cormeasure
         slab <- self$options$slab
-        includemods <- self$options$includemods
+        #includemods <- self$options$includemods
         addcred <- self$options$addcred
         addfit <- self$options$addfit
         showweights <- self$options$showweights
@@ -38,7 +38,7 @@ metaProportionClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         }
         if (ready == TRUE) {
           
-          if (self$options$includemods == TRUE) {
+          if (is.null(self$options$moderatorcor) == FALSE){
             data <- data.frame(xi = self$data[[self$options$xi]], ni = self$data[[self$options$ni]], mods = self$data[[self$options$moderatorcor]], slab = self$data[[self$options$slab]])
             data[[xi]] <- jmvcore::toNumeric(data[[xi]])
             data[[ni]] <- jmvcore::toNumeric(data[[ni]])
@@ -63,7 +63,7 @@ metaProportionClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
           }
           
-          if (self$options$includemods == TRUE) {
+          if (is.null(self$options$moderatorcor) == FALSE){
             res <- metafor::rma(xi=xi, ni=ni, method=method2, measure=cormeasure, mods=mods, data=data, slab=slab, level=level)
           } else {
             res <- metafor::rma(xi=xi, ni=ni, method=method2, measure=cormeasure, data=data, slab=slab, level=level)
@@ -194,7 +194,7 @@ metaProportionClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             tau2EstimatorName = "Paule-Mandel"
           }
           
-          if (self$options$includemods == TRUE){
+          if (is.null(self$options$moderatorcor) == FALSE){
             titleMix <- paste("Mixed-Effects Model (k = ",res$k,")",sep="")
             titleMixNote <- paste("Tau\u00B2 Estimator: ",tau2EstimatorName, sep="")
             table$setTitle(title=titleMix)
@@ -210,7 +210,7 @@ metaProportionClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             table$setNote("rannote",titleRanNote)
           }
           
-          if (self$options$includemods == TRUE) {
+          if (is.null(self$options$moderatorcor) == FALSE){
             
             modCILB <- round(res$ci.lb[2], 3)
             modCIUB <- round(res$ci.ub[2], 3)
@@ -247,7 +247,7 @@ metaProportionClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           ISquStat <- paste(round(res$I2, 2),"%",sep="")
           HSquStat <- round(res$H2, 4)
           
-          if (self$options$includemods == TRUE) {
+          if (is.null(self$options$moderatorcor) == FALSE){
             RSquStat <- paste(round(res$R2, 2),"%",sep="")
           } else {
             RSquStat <- NULL

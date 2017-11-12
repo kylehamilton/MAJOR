@@ -44,17 +44,12 @@ children:
             maxItemCount: 1
             isTarget: true
       - type: TargetLayoutBox
-        label: Moderator
+        label: Moderator (optional)
         children:
           - type: VariablesListBox
             name: moderatorcor
             maxItemCount: 1
             isTarget: true
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: CheckBox
-        name: includemods
   - type: CollapseBox
     label: Model Options
     collapsed: true

@@ -14,7 +14,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           sd2i <- self$options$sd2i
           mods <- self$options$moderatorcor
           slab <- self$options$slab
-          includemods <- self$options$includemods
+          #includemods <- self$options$includemods
           addcred <- self$options$addcred
           addfit <- self$options$addfit
           showweights <- self$options$showweights
@@ -41,7 +41,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           }
           if (ready == TRUE) {
             
-            if (self$options$includemods == TRUE) {
+            if (is.null(self$options$moderatorcor) == FALSE){
               data <- data.frame(n1i = self$data[[self$options$n1i]], m1i = self$data[[self$options$m1i]], sd1i = self$data[[self$options$sd1i]], n2i = self$data[[self$options$n2i]],  m2i = self$data[[self$options$m2i]], sd2i = self$data[[self$options$sd2i]], mods = self$data[[self$options$moderatorcor]], slab = self$data[[self$options$slab]])
               data[[n1i]] <- jmvcore::toNumeric(data[[n1i]])
               data[[m1i]] <- jmvcore::toNumeric(data[[m1i]])
@@ -60,7 +60,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore')) R6::R6Class(
               data[[sd2i]] <- jmvcore::toNumeric(data[[sd2i]])
             }
             
-            if (self$options$includemods == TRUE) {
+            if (is.null(self$options$moderatorcor) == FALSE){
               res <- metafor::rma(n1i=n1i, n2i=n2i, m1i=m1i, m2i=m2i, sd1i=sd1i, sd2i=sd2i, mods=mods, method=method2, measure=mdmseasure, data=data, slab=slab, level=level)
             } else {
               res <- metafor::rma(n1i=n1i, n2i=n2i, m1i=m1i, m2i=m2i, sd1i=sd1i, sd2i=sd2i, method=method2, measure=mdmseasure, data=data, slab=slab, level=level)
@@ -165,7 +165,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore')) R6::R6Class(
               tau2EstimatorName = "Paule-Mandel"
             }
             
-            if (self$options$includemods == TRUE){
+            if (is.null(self$options$moderatorcor) == FALSE){
               titleMix <- paste("Mixed-Effects Model (k = ",res$k,")",sep="")
               titleMixNote <- paste("Tau\u00B2 Estimator: ",tau2EstimatorName, sep="")
               table$setTitle(title=titleMix)
@@ -181,7 +181,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore')) R6::R6Class(
               table$setNote("rannote",titleRanNote)
             }
             
-            if (self$options$includemods == TRUE) {
+            if (is.null(self$options$moderatorcor) == FALSE){
               
               modCILB <- round(res$ci.lb[2], 3)
               modCIUB <- round(res$ci.ub[2], 3)
@@ -218,7 +218,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             ISquStat <- paste(round(res$I2, 2),"%",sep="")
             HSquStat <- round(res$H2, 4)
             
-            if (self$options$includemods == TRUE) {
+            if (is.null(self$options$moderatorcor) == FALSE){
               RSquStat <- paste(round(res$R2, 2),"%",sep="")
             } else {
               RSquStat <- NULL

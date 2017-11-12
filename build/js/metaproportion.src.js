@@ -3,7 +3,7 @@
 
 'use strict';
 
-const options = [{"name":"data","type":"Data"},{"name":"xi","title":"Frequencies of the event","suggested":["continuous"],"permitted":["continuous"],"type":"Variable"},{"name":"ni","title":"Total sample sizes","suggested":["continuous"],"permitted":["continuous"],"type":"Variable"},{"name":"slab","title":"Study label","suggested":["nominaltext"],"type":"Variable"},{"name":"moderatorcor","title":"Moderator","suggested":["continuous"],"permitted":["continuous"],"type":"Variable"},{"name":"includemods","title":"Include moderator","type":"Bool","default":false},{"name":"methodmetacor","title":"Model estimator","type":"List","options":[{"name":"DL","title":"DerSimonian-Laird"},{"name":"HE","title":"Hedges"},{"name":"HS","title":"Hunter-Schmidt"},{"name":"SJ","title":"Sidik-Jonkman"},{"name":"ML","title":"Maximum-Likelihood"},{"name":"REML","title":"Restricted Maximum-Likelihood"},{"name":"EB","title":"Empirical Bayes"},{"name":"PM","title":"Paule-Mandel"},{"name":"FE","title":"Fixed-Effect"}],"default":"REML"},{"name":"cormeasure","title":"Effect size model measures","type":"List","options":[{"name":"PR","title":"Raw proportion"},{"name":"PLN","title":"Log transformed proportion"},{"name":"PLO","title":"Logit transformed proportion"},{"name":"PAS","title":"Arcsine square root transformed proportion"},{"name":"PFT","title":"Freeman-Tukey double arcsine transformed proportion"}],"default":"PR"},{"name":"level","type":"Number","title":"Confidence interval level","min":50,"max":99.9,"default":95},{"name":"showModelFit","title":"Display model fit","type":"Bool","default":false},{"name":"addcred","title":"Prediction interval","type":"Bool","default":false},{"name":"addfit","title":"Summary estimate","type":"Bool","default":true},{"name":"showweights","title":"Model fitting weights","type":"Bool","default":false},{"name":"xAxisTitle","title":"x-axis title","type":"String"},{"name":"forestOrder","title":"Study order","type":"List","options":[{"name":"obs","title":"Observed effect sizes"},{"name":"fit","title":"Fitted values"},{"name":"prec","title":"Sampling variances"},{"name":"resid","title":"Residuals"},{"name":"abs.resid","title":"Absolute residuals"}],"default":"fit"},{"name":"fsntype","title":"Fail-Safe N method","type":"List","options":[{"name":"Rosenthal","title":"Rosenthal"},{"name":"Orwin","title":"Orwin"},{"name":"Rosenberg","title":"Rosenberg"}],"default":"Rosenthal"},{"name":"yaxis","title":"Funnel plot y-axis options","type":"List","options":[{"name":"sei","title":"Standard error"},{"name":"vi","title":"Sampling variance"},{"name":"ni","title":"Sample size"},{"name":"sqrtni","title":"Square root sample size"},{"name":"lni","title":"Log of the sample size"}],"default":"sei"},{"name":"yaxisInv","title":"Funnel plot y-axis inverse","type":"Bool","default":false},{"name":"enhanceFunnel","title":"Contour-Enhanced","type":"Bool","default":false}];
+const options = [{"name":"data","type":"Data"},{"name":"xi","title":"Frequencies of the event","suggested":["continuous"],"permitted":["continuous"],"type":"Variable"},{"name":"ni","title":"Total sample sizes","suggested":["continuous"],"permitted":["continuous"],"type":"Variable"},{"name":"slab","title":"Study label","suggested":["nominaltext"],"type":"Variable"},{"name":"moderatorcor","title":"Moderator","suggested":["continuous"],"permitted":["continuous"],"type":"Variable"},{"name":"methodmetacor","title":"Model estimator","type":"List","options":[{"name":"DL","title":"DerSimonian-Laird"},{"name":"HE","title":"Hedges"},{"name":"HS","title":"Hunter-Schmidt"},{"name":"SJ","title":"Sidik-Jonkman"},{"name":"ML","title":"Maximum-Likelihood"},{"name":"REML","title":"Restricted Maximum-Likelihood"},{"name":"EB","title":"Empirical Bayes"},{"name":"PM","title":"Paule-Mandel"},{"name":"FE","title":"Fixed-Effect"}],"default":"REML"},{"name":"cormeasure","title":"Effect size model measures","type":"List","options":[{"name":"PR","title":"Raw proportion"},{"name":"PLN","title":"Log transformed proportion"},{"name":"PLO","title":"Logit transformed proportion"},{"name":"PAS","title":"Arcsine square root transformed proportion"},{"name":"PFT","title":"Freeman-Tukey double arcsine transformed proportion"}],"default":"PR"},{"name":"level","type":"Number","title":"Confidence interval level","min":50,"max":99.9,"default":95},{"name":"showModelFit","title":"Display model fit","type":"Bool","default":false},{"name":"addcred","title":"Prediction interval","type":"Bool","default":false},{"name":"addfit","title":"Summary estimate","type":"Bool","default":true},{"name":"showweights","title":"Model fitting weights","type":"Bool","default":false},{"name":"xAxisTitle","title":"x-axis title","type":"String"},{"name":"forestOrder","title":"Study order","type":"List","options":[{"name":"obs","title":"Observed effect sizes"},{"name":"fit","title":"Fitted values"},{"name":"prec","title":"Sampling variances"},{"name":"resid","title":"Residuals"},{"name":"abs.resid","title":"Absolute residuals"}],"default":"fit"},{"name":"fsntype","title":"Fail-Safe N method","type":"List","options":[{"name":"Rosenthal","title":"Rosenthal"},{"name":"Orwin","title":"Orwin"},{"name":"Rosenberg","title":"Rosenberg"}],"default":"Rosenthal"},{"name":"yaxis","title":"Funnel plot y-axis options","type":"List","options":[{"name":"sei","title":"Standard error"},{"name":"vi","title":"Sampling variance"},{"name":"ni","title":"Sample size"},{"name":"sqrtni","title":"Square root sample size"},{"name":"lni","title":"Log of the sample size"}],"default":"sei"},{"name":"yaxisInv","title":"Funnel plot y-axis inverse","type":"Bool","default":false},{"name":"enhanceFunnel","title":"Contour-Enhanced","type":"Bool","default":false}];
 
 const view = View.extend({
     jus: "2.0",
@@ -64,7 +64,7 @@ view.layout = ui.extend({
 				},
 				{
 					type: DefaultControls.TargetLayoutBox,
-					label: "Moderator",
+					label: "Moderator (optional)",
 					controls: [
 						{
 							type: DefaultControls.VariablesListBox,
@@ -73,16 +73,6 @@ view.layout = ui.extend({
 							isTarget: true
 						}
 					]
-				}
-			]
-		},
-		{
-			type: DefaultControls.LayoutBox,
-			margin: "large",
-			controls: [
-				{
-					type: DefaultControls.CheckBox,
-					name: "includemods"
 				}
 			]
 		},

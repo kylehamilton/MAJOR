@@ -12,7 +12,6 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             n2i = NULL,
             slab = NULL,
             moderatorcor = NULL,
-            includemods = FALSE,
             methodmetamdms = "REML",
             mdmsmeasure = "OR",
             level = 95,
@@ -73,10 +72,6 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "continuous"),
                 permitted=list(
                     "continuous"))
-            private$..includemods <- jmvcore::OptionBool$new(
-                "includemods",
-                includemods,
-                default=FALSE)
             private$..methodmetamdms <- jmvcore::OptionList$new(
                 "methodmetamdms",
                 methodmetamdms,
@@ -168,7 +163,6 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..n2i)
             self$.addOption(private$..slab)
             self$.addOption(private$..moderatorcor)
-            self$.addOption(private$..includemods)
             self$.addOption(private$..methodmetamdms)
             self$.addOption(private$..mdmsmeasure)
             self$.addOption(private$..level)
@@ -190,7 +184,6 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         n2i = function() private$..n2i$value,
         slab = function() private$..slab$value,
         moderatorcor = function() private$..moderatorcor$value,
-        includemods = function() private$..includemods$value,
         methodmetamdms = function() private$..methodmetamdms$value,
         mdmsmeasure = function() private$..mdmsmeasure$value,
         level = function() private$..level$value,
@@ -211,7 +204,6 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..n2i = NA,
         ..slab = NA,
         ..moderatorcor = NA,
-        ..includemods = NA,
         ..methodmetamdms = NA,
         ..mdmsmeasure = NA,
         ..level = NA,
@@ -453,7 +445,6 @@ metaDichotomousModelBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param n2i .
 #' @param slab .
 #' @param moderatorcor .
-#' @param includemods .
 #' @param methodmetamdms .
 #' @param mdmsmeasure .
 #' @param level .
@@ -494,7 +485,6 @@ metaDichotomousModel <- function(
     n2i,
     slab,
     moderatorcor,
-    includemods = FALSE,
     methodmetamdms = "REML",
     mdmsmeasure = "OR",
     level = 95,
@@ -519,7 +509,6 @@ metaDichotomousModel <- function(
         n2i = n2i,
         slab = slab,
         moderatorcor = moderatorcor,
-        includemods = includemods,
         methodmetamdms = methodmetamdms,
         mdmsmeasure = mdmsmeasure,
         level = level,

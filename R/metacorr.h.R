@@ -10,7 +10,6 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             samplesize = NULL,
             slab = NULL,
             moderatorcor = NULL,
-            includemods = FALSE,
             methodmetacor = "REML",
             cormeasure = "ZCOR",
             level = 95,
@@ -57,10 +56,6 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "continuous"),
                 permitted=list(
                     "continuous"))
-            private$..includemods <- jmvcore::OptionBool$new(
-                "includemods",
-                includemods,
-                default=FALSE)
             private$..methodmetacor <- jmvcore::OptionList$new(
                 "methodmetacor",
                 methodmetacor,
@@ -149,7 +144,6 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..samplesize)
             self$.addOption(private$..slab)
             self$.addOption(private$..moderatorcor)
-            self$.addOption(private$..includemods)
             self$.addOption(private$..methodmetacor)
             self$.addOption(private$..cormeasure)
             self$.addOption(private$..level)
@@ -169,7 +163,6 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         samplesize = function() private$..samplesize$value,
         slab = function() private$..slab$value,
         moderatorcor = function() private$..moderatorcor$value,
-        includemods = function() private$..includemods$value,
         methodmetacor = function() private$..methodmetacor$value,
         cormeasure = function() private$..cormeasure$value,
         level = function() private$..level$value,
@@ -188,7 +181,6 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..samplesize = NA,
         ..slab = NA,
         ..moderatorcor = NA,
-        ..includemods = NA,
         ..methodmetacor = NA,
         ..cormeasure = NA,
         ..level = NA,
@@ -428,7 +420,6 @@ MetaCorrBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param samplesize .
 #' @param slab .
 #' @param moderatorcor .
-#' @param includemods .
 #' @param methodmetacor .
 #' @param cormeasure .
 #' @param level .
@@ -467,7 +458,6 @@ MetaCorr <- function(
     samplesize,
     slab,
     moderatorcor,
-    includemods = FALSE,
     methodmetacor = "REML",
     cormeasure = "ZCOR",
     level = 95,
@@ -490,7 +480,6 @@ MetaCorr <- function(
         samplesize = samplesize,
         slab = slab,
         moderatorcor = moderatorcor,
-        includemods = includemods,
         methodmetacor = methodmetacor,
         cormeasure = cormeasure,
         level = level,
