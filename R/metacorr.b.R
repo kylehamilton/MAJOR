@@ -116,6 +116,16 @@ MetaCorrClass <- R6::R6Class(
           p=regtestPB$pval[1]
         ))
 
+        # Extracting the effect sizes and sampling variances:
+        effect <- res$yi
+        v <- res$vi
+        
+        # The weight-function model with no mean model:
+        wfRES <- weightr::weightfunct(effect, v)
+
+        
+        self$results$weightFunctionModel$setContent(wfRES)
+        
         #Model Fit 
         modelFitRICH <- self$results$modelFitRICH
         modelFitRICH$setRow(rowNo=1, values=list(

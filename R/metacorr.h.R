@@ -204,7 +204,8 @@ MetaCorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         modelFitRICH = function() private$.items[["modelFitRICH"]],
         plot = function() private$.items[["plot"]],
         pubBias = function() private$.items[["pubBias"]],
-        funplot = function() private$.items[["funplot"]]),
+        funplot = function() private$.items[["funplot"]],
+        weightFunctionModel = function() private$.items[["weightFunctionModel"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -391,7 +392,11 @@ MetaCorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 title="Funnel Plot",
                 width=600,
                 height=450,
-                renderFun=".funplot"))}))
+                renderFun=".funplot"))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="weightFunctionModel",
+                title="Weight-Function Model"))}))
 
 MetaCorrBase <- if (requireNamespace('jmvcore')) R6::R6Class(
     "MetaCorrBase",
@@ -443,6 +448,7 @@ MetaCorrBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$pubBias$rankRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$pubBias$regRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$funplot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$weightFunctionModel} \tab \tab \tab \tab \tab a preformatted \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
