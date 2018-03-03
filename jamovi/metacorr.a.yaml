@@ -97,7 +97,14 @@ options:
       title: Model fitting weights
       type: Bool
       default: FALSE
-
+      
+    - name: steps
+      title: x-axis steps
+      type: Number
+      min: 1
+      max: 999
+      default: 5
+      
     - name: xAxisTitle
       title: x-axis title
       type: String

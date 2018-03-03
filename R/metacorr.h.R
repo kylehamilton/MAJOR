@@ -17,6 +17,7 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             addcred = FALSE,
             addfit = TRUE,
             showweights = FALSE,
+            steps = 5,
             xAxisTitle = NULL,
             forestOrder = "fit",
             fsntype = "Rosenthal",
@@ -100,6 +101,12 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "showweights",
                 showweights,
                 default=FALSE)
+            private$..steps <- jmvcore::OptionNumber$new(
+                "steps",
+                steps,
+                min=1,
+                max=999,
+                default=5)
             private$..xAxisTitle <- jmvcore::OptionString$new(
                 "xAxisTitle",
                 xAxisTitle)
@@ -151,6 +158,7 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..addcred)
             self$.addOption(private$..addfit)
             self$.addOption(private$..showweights)
+            self$.addOption(private$..steps)
             self$.addOption(private$..xAxisTitle)
             self$.addOption(private$..forestOrder)
             self$.addOption(private$..fsntype)
@@ -170,6 +178,7 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         addcred = function() private$..addcred$value,
         addfit = function() private$..addfit$value,
         showweights = function() private$..showweights$value,
+        steps = function() private$..steps$value,
         xAxisTitle = function() private$..xAxisTitle$value,
         forestOrder = function() private$..forestOrder$value,
         fsntype = function() private$..fsntype$value,
@@ -188,6 +197,7 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..addcred = NA,
         ..addfit = NA,
         ..showweights = NA,
+        ..steps = NA,
         ..xAxisTitle = NA,
         ..forestOrder = NA,
         ..fsntype = NA,
@@ -432,6 +442,7 @@ MetaCorrBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param addcred .
 #' @param addfit .
 #' @param showweights .
+#' @param steps .
 #' @param xAxisTitle .
 #' @param forestOrder .
 #' @param fsntype .
@@ -471,6 +482,7 @@ MetaCorr <- function(
     addcred = FALSE,
     addfit = TRUE,
     showweights = FALSE,
+    steps = 5,
     xAxisTitle,
     forestOrder = "fit",
     fsntype = "Rosenthal",
@@ -493,6 +505,7 @@ MetaCorr <- function(
         addcred = addcred,
         addfit = addfit,
         showweights = showweights,
+        steps = steps,
         xAxisTitle = xAxisTitle,
         forestOrder = forestOrder,
         fsntype = fsntype,

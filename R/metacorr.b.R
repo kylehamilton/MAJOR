@@ -30,6 +30,7 @@ MetaCorrClass <- R6::R6Class(
         addcred <- self$options$addcred
         addfit <- self$options$addfit
         showweights <- self$options$showweights
+        steps <- self$options$steps
         level <- self$options$level
         #yaxis <- self$options$yaxis
         #data <- self$data
@@ -310,6 +311,7 @@ MetaCorrClass <- R6::R6Class(
         showweights <- self$options$showweights
         xlab <- self$options$xAxisTitle
         order <- self$options$forestOrder
+        steps <- self$options$steps
         ready <- TRUE
         if (is.null(self$options$rcor) || is.null(self$options$samplesize) || is.null(self$options$slab) == TRUE){
         #if (is.null(self$options$rcor) == TRUE){
@@ -322,7 +324,7 @@ MetaCorrClass <- R6::R6Class(
         if (ready == TRUE) {
         
         #plot <- metafor::forest(plotData$yi, plotData$vi, addcred=addcred, addfit=addfit)
-        plot <- metafor::forest(plotData, addcred=addcred, addfit=addfit, level=level, showweights=showweights, xlab=xlab, order=order)
+        plot <- metafor::forest(plotData, addcred=addcred, addfit=addfit, level=level, showweights=showweights, xlab=xlab, order=order, steps=steps)
         print(plot)
         TRUE}
       },
