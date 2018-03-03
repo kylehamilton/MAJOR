@@ -86,6 +86,9 @@ children:
             stretchFactor: 2
             useSingleCell: true
           - type: ComboBox
+            name: pchForest
+            useSingleCell: true
+          - type: ComboBox
             name: forestOrder
             useSingleCell: true
       - type: Label

@@ -19,6 +19,7 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             showweights = FALSE,
             steps = 5,
             xAxisTitle = NULL,
+            pchForest = "15",
             forestOrder = "fit",
             fsntype = "Rosenthal",
             yaxis = "sei",
@@ -110,6 +111,20 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             private$..xAxisTitle <- jmvcore::OptionString$new(
                 "xAxisTitle",
                 xAxisTitle)
+            private$..pchForest <- jmvcore::OptionList$new(
+                "pchForest",
+                pchForest,
+                options=list(
+                    "16",
+                    "18",
+                    "15",
+                    "17",
+                    "1",
+                    "5",
+                    "0",
+                    "2",
+                    "8"),
+                default="15")
             private$..forestOrder <- jmvcore::OptionList$new(
                 "forestOrder",
                 forestOrder,
@@ -160,6 +175,7 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..showweights)
             self$.addOption(private$..steps)
             self$.addOption(private$..xAxisTitle)
+            self$.addOption(private$..pchForest)
             self$.addOption(private$..forestOrder)
             self$.addOption(private$..fsntype)
             self$.addOption(private$..yaxis)
@@ -180,6 +196,7 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         showweights = function() private$..showweights$value,
         steps = function() private$..steps$value,
         xAxisTitle = function() private$..xAxisTitle$value,
+        pchForest = function() private$..pchForest$value,
         forestOrder = function() private$..forestOrder$value,
         fsntype = function() private$..fsntype$value,
         yaxis = function() private$..yaxis$value,
@@ -199,6 +216,7 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..showweights = NA,
         ..steps = NA,
         ..xAxisTitle = NA,
+        ..pchForest = NA,
         ..forestOrder = NA,
         ..fsntype = NA,
         ..yaxis = NA,
@@ -444,6 +462,7 @@ MetaCorrBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param showweights .
 #' @param steps .
 #' @param xAxisTitle .
+#' @param pchForest .
 #' @param forestOrder .
 #' @param fsntype .
 #' @param yaxis .
@@ -484,6 +503,7 @@ MetaCorr <- function(
     showweights = FALSE,
     steps = 5,
     xAxisTitle,
+    pchForest = "15",
     forestOrder = "fit",
     fsntype = "Rosenthal",
     yaxis = "sei",
@@ -507,6 +527,7 @@ MetaCorr <- function(
         showweights = showweights,
         steps = steps,
         xAxisTitle = xAxisTitle,
+        pchForest = pchForest,
         forestOrder = forestOrder,
         fsntype = fsntype,
         yaxis = yaxis,
