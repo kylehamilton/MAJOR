@@ -149,8 +149,4 @@ items:
       height: 450
       renderFun: .funplot
 
-    - name: weightFunctionModel
-      title: Weight-Function Model
-      type: Preformatted
-
 ...

@@ -209,7 +209,8 @@ view.layout = ui.extend({
 					controls: [
 						{
 							type: DefaultControls.ComboBox,
-							name: "fsntype"
+							name: "fsntype",
+							useSingleCell: true
 						}
 					]
 				}

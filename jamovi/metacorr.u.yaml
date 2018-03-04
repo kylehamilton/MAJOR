@@ -121,3 +121,4 @@ children:
         children:
           - type: ComboBox
             name: fsntype
+            useSingleCell: true

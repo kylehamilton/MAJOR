@@ -121,14 +121,23 @@ MetaCorrClass <- R6::R6Class(
         ))
 
         # Extracting the effect sizes and sampling variances:
-        effect <- res$yi
-        v <- res$vi
+        # effect <- res$yi
+        # v <- res$vi
         
         # The weight-function model with no mean model:
-        wfRES <- weightr::weightfunct(effect, v)
-
+        # wfRES <- weightr::weightfunct(effect, v)
+        # 
+        # 
+        # self$results$weightFunctionModel$setContent(wfRES)
+        # 
+        # #Show if checked, hide if unchecked
+        # if (self$options$showWF == TRUE) {
+        #   weightFunctionModel$setVisible(visible=TRUE)
+        # } else {
+        #   weightFunctionModel$setVisible(visible=FALSE)
+        # }
+        # 
         
-        self$results$weightFunctionModel$setContent(wfRES)
         
         #Model Fit 
         modelFitRICH <- self$results$modelFitRICH
@@ -333,6 +342,7 @@ MetaCorrClass <- R6::R6Class(
         print(plot)
         TRUE}
       },
+      
       #Funnel Plot Function
       .funplot=function(imageFUN, ...) {  # <-- the plot function
         plotDataFUN <- imageFUN$state
