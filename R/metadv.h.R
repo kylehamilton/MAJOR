@@ -16,7 +16,9 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             addcred = FALSE,
             addfit = TRUE,
             showweights = FALSE,
+            steps = 5,
             xAxisTitle = NULL,
+            pchForest = "15",
             forestOrder = "fit",
             fsntype = "Rosenthal",
             yaxis = "sei",
@@ -91,9 +93,29 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "showweights",
                 showweights,
                 default=FALSE)
+            private$..steps <- jmvcore::OptionNumber$new(
+                "steps",
+                steps,
+                min=1,
+                max=999,
+                default=5)
             private$..xAxisTitle <- jmvcore::OptionString$new(
                 "xAxisTitle",
                 xAxisTitle)
+            private$..pchForest <- jmvcore::OptionList$new(
+                "pchForest",
+                pchForest,
+                options=list(
+                    "16",
+                    "18",
+                    "15",
+                    "17",
+                    "1",
+                    "5",
+                    "0",
+                    "2",
+                    "8"),
+                default="15")
             private$..forestOrder <- jmvcore::OptionList$new(
                 "forestOrder",
                 forestOrder,
@@ -141,7 +163,9 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..addcred)
             self$.addOption(private$..addfit)
             self$.addOption(private$..showweights)
+            self$.addOption(private$..steps)
             self$.addOption(private$..xAxisTitle)
+            self$.addOption(private$..pchForest)
             self$.addOption(private$..forestOrder)
             self$.addOption(private$..fsntype)
             self$.addOption(private$..yaxis)
@@ -159,7 +183,9 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         addcred = function() private$..addcred$value,
         addfit = function() private$..addfit$value,
         showweights = function() private$..showweights$value,
+        steps = function() private$..steps$value,
         xAxisTitle = function() private$..xAxisTitle$value,
+        pchForest = function() private$..pchForest$value,
         forestOrder = function() private$..forestOrder$value,
         fsntype = function() private$..fsntype$value,
         yaxis = function() private$..yaxis$value,
@@ -176,7 +202,9 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..addcred = NA,
         ..addfit = NA,
         ..showweights = NA,
+        ..steps = NA,
         ..xAxisTitle = NA,
+        ..pchForest = NA,
         ..forestOrder = NA,
         ..fsntype = NA,
         ..yaxis = NA,
@@ -419,7 +447,9 @@ metaDVBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param addcred .
 #' @param addfit .
 #' @param showweights .
+#' @param steps .
 #' @param xAxisTitle .
+#' @param pchForest .
 #' @param forestOrder .
 #' @param fsntype .
 #' @param yaxis .
@@ -457,7 +487,9 @@ metaDV <- function(
     addcred = FALSE,
     addfit = TRUE,
     showweights = FALSE,
+    steps = 5,
     xAxisTitle,
+    pchForest = "15",
     forestOrder = "fit",
     fsntype = "Rosenthal",
     yaxis = "sei",
@@ -478,7 +510,9 @@ metaDV <- function(
         addcred = addcred,
         addfit = addfit,
         showweights = showweights,
+        steps = steps,
         xAxisTitle = xAxisTitle,
+        pchForest = pchForest,
         forestOrder = forestOrder,
         fsntype = fsntype,
         yaxis = yaxis,

@@ -89,10 +89,19 @@ children:
           - type: CheckBox
             name: showweights
           - type: TextBox
+            label: X-Axis Steps
+            name: steps
+            format: number
+            stretchFactor: 2
+            useSingleCell: true
+          - type: TextBox
             label: X-Axis Title
             name: xAxisTitle
             format: string
             stretchFactor: 2
+            useSingleCell: true
+          - type: ComboBox
+            name: pchForest
             useSingleCell: true
           - type: ComboBox
             name: forestOrder

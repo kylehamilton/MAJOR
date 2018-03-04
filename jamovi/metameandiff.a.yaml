@@ -124,10 +124,41 @@ options:
       type: Bool
       default: FALSE
 
+    - name: steps
+      title: x-axis steps
+      type: Number
+      min: 1
+      max: 999
+      default: 5
+      
     - name: xAxisTitle
       title: x-axis title
       type: String
 
+    - name: pchForest
+      title: Effect size points
+      type: List
+      options:
+        - name: "16"
+          title: Black Circle
+        - name: "18"
+          title: Black Diamond
+        - name: "15"
+          title: Black Square
+        - name: "17"
+          title: Black Triangle
+        - name: "1"
+          title: Empty Circle
+        - name: "5"
+          title: Empty Diamond
+        - name: "0"
+          title: Empty Square
+        - name: "2"
+          title: Empty Triangle
+        - name: "8"
+          title: Star
+      default: "15"
+      
     - name: forestOrder
       title: Study order
       type: List

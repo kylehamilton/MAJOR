@@ -21,6 +21,8 @@ metaDichotomousModelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         method2 <- self$options$methodmetamdms
         mdmseasure <- self$options$mdmsmeasure
         yaxis <- self$options$yaxis
+        steps <- self$options$steps
+        pchForest <- self$options$pchForest
         table <- self$results$textRICH
         
         
@@ -309,6 +311,9 @@ metaDichotomousModelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         showweights <- self$options$showweights
         xlab <- self$options$xAxisTitle
         order <- self$options$forestOrder
+        steps <- self$options$steps
+        pchForest <- self$options$pchForest
+        pch <- as.numeric(pchForest)
         ready <- TRUE
         if (is.null(self$options$ai) || is.null(self$options$n1i) || is.null(self$options$ci) || is.null(self$options$n2i) == TRUE){
           ready <- FALSE
@@ -319,7 +324,7 @@ metaDichotomousModelClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         if (ready == TRUE) {
 
           #plot <- metafor::forest(plotData$yi, plotData$vi, addcred=addcred, addfit=addfit)
-          plot <- metafor::forest(plotData, addcred=addcred, addfit=addfit, level=level, showweights=showweights, xlab=xlab, order=order)
+          plot <- metafor::forest(plotData, addcred=addcred, addfit=addfit, level=level, showweights=showweights, xlab=xlab, order=order, steps=steps, pch=pch)
           print(plot)
           TRUE}
       },

@@ -20,6 +20,8 @@ metaDVClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         level <- self$options$level
         #yaxis <- self$options$yaxis
         #data <- self$data
+        steps <- self$options$steps
+        pchForest <- self$options$pchForest
         table <- self$results$textRICH
         
         ready <- TRUE
@@ -290,6 +292,9 @@ metaDVClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         showweights <- self$options$showweights
         xlab <- self$options$xAxisTitle
         order <- self$options$forestOrder
+        steps <- self$options$steps
+        pchForest <- self$options$pchForest
+        pch <- as.numeric(pchForest)
         ready <- TRUE
         if (is.null(self$options$effectSize) || is.null(self$options$samplingVariances) || is.null(self$options$slab) == TRUE){
           #if (is.null(self$options$effectSize) == TRUE){
@@ -302,7 +307,7 @@ metaDVClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         if (ready == TRUE) {
           
           #plot <- metafor::forest(plotData$yi, plotData$vi, addcred=addcred, addfit=addfit)
-          plot <- metafor::forest(plotData, addcred=addcred, addfit=addfit, level=level, showweights=showweights, xlab=xlab, order=order)
+          plot <- metafor::forest(plotData, addcred=addcred, addfit=addfit, level=level, showweights=showweights, xlab=xlab, order=order, steps=steps, pch=pch)
           print(plot)
           TRUE}
       },
