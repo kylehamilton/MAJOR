@@ -71,6 +71,16 @@ options:
           title: Fisher's r-to-z transformed correlation coefficient
       default: ZCOR
 
+    - name: moderatorType
+      title: Moderator type
+      type: List
+      options:
+        - name: "CAT"
+          title: Categorical moderator
+        - name: "CON"
+          title: Continuous moderator
+      default: CON
+
     - name: level
       type: Number
       title: Confidence interval level

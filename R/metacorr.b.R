@@ -25,6 +25,7 @@ MetaCorrClass <- R6::R6Class(
         fsntype <- self$options$fsntype
         method2 <- self$options$methodmetacor
         cormeasure <- self$options$cormeasure
+        moderatorType <- self$options$moderatorType
         slab <- self$options$slab
         #includemods <- self$options$includemods
         addcred <- self$options$addcred
@@ -54,19 +55,31 @@ MetaCorrClass <- R6::R6Class(
         }
         if (ready == TRUE) {
           
-          if (is.null(self$options$moderatorcor) == FALSE){
-            data <- data.frame(ri = self$data[[self$options$rcor]], ni = self$data[[self$options$samplesize]], mods = self$data[[self$options$moderatorcor]], slab = self$data[[self$options$slab]])
+          if (is.null(self$options$moderatorcor) == FALSE) {
+            data <-
+              data.frame(
+                ri = self$data[[self$options$rcor]],
+                ni = self$data[[self$options$samplesize]],
+                mods = self$data[[self$options$moderatorcor]],
+                slab = self$data[[self$options$slab]]
+              )
             data[[ri]] <- jmvcore::toNumeric(data[[ri]])
             data[[ni]] <- jmvcore::toNumeric(data[[ni]])
             data[[mods]] <- jmvcore::toNumeric(data[[mods]])
           } else {
-            data <- data.frame(ri = self$data[[self$options$rcor]], ni = self$data[[self$options$samplesize]], slab = self$data[[self$options$slab]])
+            data <-
+              data.frame(ri = self$data[[self$options$rcor]],
+                         ni = self$data[[self$options$samplesize]],
+                         slab = self$data[[self$options$slab]])
             data[[ri]] <- jmvcore::toNumeric(data[[ri]])
             data[[ni]] <- jmvcore::toNumeric(data[[ni]])
           }
           
           if (is.null(self$options$moderatorcor) == FALSE){
             res <- metafor::rma(ri=ri, ni=ni, method=method2, measure=cormeasure, mods= cbind(mods), data=data, slab=slab, level=level)
+            if ((self$options$moderatorType) == "CAT"){
+              res <- metafor::rma(ri=ri, ni=ni, method=method2, measure=cormeasure, mods= ~ cbind(factor(mods)), data=data, slab=slab, level=level)
+            }  
           } else {
             res <- metafor::rma(ri=ri, ni=ni, method=method2, measure=cormeasure, data=data, slab=slab, level=level)
           }
