@@ -13,6 +13,7 @@ metaAlphaOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             moderatorcor = NULL,
             methodmetacor = "REML",
             cormeasure = "ARAW",
+            moderatorType = "CON",
             level = 95,
             showModelFit = FALSE,
             addcred = FALSE,
@@ -89,6 +90,13 @@ metaAlphaOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "ABI",
                     "ROM"),
                 default="ARAW")
+            private$..moderatorType <- jmvcore::OptionList$new(
+                "moderatorType",
+                moderatorType,
+                options=list(
+                    "CAT",
+                    "CON"),
+                default="CON")
             private$..level <- jmvcore::OptionNumber$new(
                 "level",
                 level,
@@ -178,6 +186,7 @@ metaAlphaOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..moderatorcor)
             self$.addOption(private$..methodmetacor)
             self$.addOption(private$..cormeasure)
+            self$.addOption(private$..moderatorType)
             self$.addOption(private$..level)
             self$.addOption(private$..showModelFit)
             self$.addOption(private$..addcred)
@@ -200,6 +209,7 @@ metaAlphaOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         moderatorcor = function() private$..moderatorcor$value,
         methodmetacor = function() private$..methodmetacor$value,
         cormeasure = function() private$..cormeasure$value,
+        moderatorType = function() private$..moderatorType$value,
         level = function() private$..level$value,
         showModelFit = function() private$..showModelFit$value,
         addcred = function() private$..addcred$value,
@@ -221,6 +231,7 @@ metaAlphaOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..moderatorcor = NA,
         ..methodmetacor = NA,
         ..cormeasure = NA,
+        ..moderatorType = NA,
         ..level = NA,
         ..showModelFit = NA,
         ..addcred = NA,
@@ -463,6 +474,7 @@ metaAlphaBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param moderatorcor .
 #' @param methodmetacor .
 #' @param cormeasure .
+#' @param moderatorType .
 #' @param level .
 #' @param showModelFit .
 #' @param addcred .
@@ -504,6 +516,7 @@ metaAlpha <- function(
     moderatorcor,
     methodmetacor = "REML",
     cormeasure = "ARAW",
+    moderatorType = "CON",
     level = 95,
     showModelFit = FALSE,
     addcred = FALSE,
@@ -529,6 +542,7 @@ metaAlpha <- function(
         moderatorcor = moderatorcor,
         methodmetacor = methodmetacor,
         cormeasure = cormeasure,
+        moderatorType = moderatorType,
         level = level,
         showModelFit = showModelFit,
         addcred = addcred,

@@ -47,6 +47,9 @@ children:
           - type: ComboBox
             name: methodmetacor
             useSingleCell: true
+          - type: ComboBox
+            name: moderatorType
+            useSingleCell: true
           - type: TextBox
             name: level
             format: number

@@ -75,6 +75,16 @@ options:
           title: Freeman-Tukey double arcsine transformed proportion
       default: PR
 
+    - name: moderatorType
+      title: Moderator type
+      type: List
+      options:
+        - name: "CAT"
+          title: Categorical moderator
+        - name: "CON"
+          title: Continuous moderator
+      default: CON
+      
     - name: level
       type: Number
       title: Confidence interval level

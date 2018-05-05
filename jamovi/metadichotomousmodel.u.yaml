@@ -65,6 +65,9 @@ children:
                 name: methodmetamdms
               - type: ComboBox
                 name: mdmsmeasure
+          - type: ComboBox
+            name: moderatorType
+            useSingleCell: true
           - type: TextBox
             name: level
             format: number

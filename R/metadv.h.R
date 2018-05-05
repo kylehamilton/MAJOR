@@ -11,6 +11,7 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             slab = NULL,
             moderatorcor = NULL,
             methodmetacor = "REML",
+            moderatorType = "CON",
             level = 95,
             showModelFit = FALSE,
             addcred = FALSE,
@@ -71,6 +72,13 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "PM",
                     "FE"),
                 default="REML")
+            private$..moderatorType <- jmvcore::OptionList$new(
+                "moderatorType",
+                moderatorType,
+                options=list(
+                    "CAT",
+                    "CON"),
+                default="CON")
             private$..level <- jmvcore::OptionNumber$new(
                 "level",
                 level,
@@ -158,6 +166,7 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..slab)
             self$.addOption(private$..moderatorcor)
             self$.addOption(private$..methodmetacor)
+            self$.addOption(private$..moderatorType)
             self$.addOption(private$..level)
             self$.addOption(private$..showModelFit)
             self$.addOption(private$..addcred)
@@ -178,6 +187,7 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         slab = function() private$..slab$value,
         moderatorcor = function() private$..moderatorcor$value,
         methodmetacor = function() private$..methodmetacor$value,
+        moderatorType = function() private$..moderatorType$value,
         level = function() private$..level$value,
         showModelFit = function() private$..showModelFit$value,
         addcred = function() private$..addcred$value,
@@ -197,6 +207,7 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..slab = NA,
         ..moderatorcor = NA,
         ..methodmetacor = NA,
+        ..moderatorType = NA,
         ..level = NA,
         ..showModelFit = NA,
         ..addcred = NA,
@@ -437,6 +448,7 @@ metaDVBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param slab .
 #' @param moderatorcor .
 #' @param methodmetacor .
+#' @param moderatorType .
 #' @param level .
 #' @param showModelFit .
 #' @param addcred .
@@ -476,6 +488,7 @@ metaDV <- function(
     slab,
     moderatorcor,
     methodmetacor = "REML",
+    moderatorType = "CON",
     level = 95,
     showModelFit = FALSE,
     addcred = FALSE,
@@ -499,6 +512,7 @@ metaDV <- function(
         slab = slab,
         moderatorcor = moderatorcor,
         methodmetacor = methodmetacor,
+        moderatorType = moderatorType,
         level = level,
         showModelFit = showModelFit,
         addcred = addcred,

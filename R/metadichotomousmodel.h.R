@@ -14,6 +14,7 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             moderatorcor = NULL,
             methodmetamdms = "REML",
             mdmsmeasure = "OR",
+            moderatorType = "CON",
             level = 95,
             showModelFit = FALSE,
             addcred = FALSE,
@@ -97,6 +98,13 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "AS",
                     "PETO"),
                 default="OR")
+            private$..moderatorType <- jmvcore::OptionList$new(
+                "moderatorType",
+                moderatorType,
+                options=list(
+                    "CAT",
+                    "CON"),
+                default="CON")
             private$..level <- jmvcore::OptionNumber$new(
                 "level",
                 level,
@@ -187,6 +195,7 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..moderatorcor)
             self$.addOption(private$..methodmetamdms)
             self$.addOption(private$..mdmsmeasure)
+            self$.addOption(private$..moderatorType)
             self$.addOption(private$..level)
             self$.addOption(private$..showModelFit)
             self$.addOption(private$..addcred)
@@ -210,6 +219,7 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         moderatorcor = function() private$..moderatorcor$value,
         methodmetamdms = function() private$..methodmetamdms$value,
         mdmsmeasure = function() private$..mdmsmeasure$value,
+        moderatorType = function() private$..moderatorType$value,
         level = function() private$..level$value,
         showModelFit = function() private$..showModelFit$value,
         addcred = function() private$..addcred$value,
@@ -232,6 +242,7 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..moderatorcor = NA,
         ..methodmetamdms = NA,
         ..mdmsmeasure = NA,
+        ..moderatorType = NA,
         ..level = NA,
         ..showModelFit = NA,
         ..addcred = NA,
@@ -475,6 +486,7 @@ metaDichotomousModelBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param moderatorcor .
 #' @param methodmetamdms .
 #' @param mdmsmeasure .
+#' @param moderatorType .
 #' @param level .
 #' @param showModelFit .
 #' @param addcred .
@@ -517,6 +529,7 @@ metaDichotomousModel <- function(
     moderatorcor,
     methodmetamdms = "REML",
     mdmsmeasure = "OR",
+    moderatorType = "CON",
     level = 95,
     showModelFit = FALSE,
     addcred = FALSE,
@@ -543,6 +556,7 @@ metaDichotomousModel <- function(
         moderatorcor = moderatorcor,
         methodmetamdms = methodmetamdms,
         mdmsmeasure = mdmsmeasure,
+        moderatorType = moderatorType,
         level = level,
         showModelFit = showModelFit,
         addcred = addcred,
