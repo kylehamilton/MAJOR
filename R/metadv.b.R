@@ -10,7 +10,7 @@ metaDVClass <- if (requireNamespace('jmvcore'))
       .run = function() {
         yi <- self$options$effectSize
         vi <- self$options$samplingVariances
-        mods <- self$options$moderatorcor
+        moderator <- self$options$moderatorcor
         fsntype <- self$options$fsntype
         method2 <- self$options$methodmetacor
         #cormeasure <- self$options$cormeasure
@@ -50,12 +50,12 @@ metaDVClass <- if (requireNamespace('jmvcore'))
               data.frame(
                 yi = self$data[[self$options$effectSize]],
                 vi = self$data[[self$options$samplingVariances]],
-                mods = self$data[[self$options$moderatorcor]],
+                moderator = self$data[[self$options$moderatorcor]],
                 slab = self$data[[self$options$slab]]
               )
             data[[yi]] <- jmvcore::toNumeric(data[[yi]])
             data[[vi]] <- jmvcore::toNumeric(data[[vi]])
-            data[[mods]] <- jmvcore::toNumeric(data[[mods]])
+            data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
           } else {
             data <-
               data.frame(yi = self$data[[self$options$effectSize]],
@@ -71,7 +71,7 @@ metaDVClass <- if (requireNamespace('jmvcore'))
                 yi = yi,
                 vi = vi,
                 method = method2,
-                mods = cbind(mods),
+                mods = moderator,
                 data = data,
                 slab = slab,
                 level = level
@@ -82,7 +82,7 @@ metaDVClass <- if (requireNamespace('jmvcore'))
                   yi = yi,
                   vi = vi,
                   method = method2,
-                  mods = ~ cbind(factor(mods)),
+                  mods = ~ factor(moderator),
                   data = data,
                   slab = slab,
                   level = level

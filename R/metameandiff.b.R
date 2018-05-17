@@ -14,7 +14,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         n2i <- self$options$n2i
         m2i <- self$options$m2i
         sd2i <- self$options$sd2i
-        mods <- self$options$moderatorcor
+        moderator <- self$options$moderatorcor
         slab <- self$options$slab
         #includemods <- self$options$includemods
         addcred <- self$options$addcred
@@ -59,7 +59,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
                 n2i = self$data[[self$options$n2i]],
                 m2i = self$data[[self$options$m2i]],
                 sd2i = self$data[[self$options$sd2i]],
-                mods = self$data[[self$options$moderatorcor]],
+                moderator = self$data[[self$options$moderatorcor]],
                 slab = self$data[[self$options$slab]]
               )
             data[[n1i]] <- jmvcore::toNumeric(data[[n1i]])
@@ -68,7 +68,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             data[[n2i]] <- jmvcore::toNumeric(data[[n2i]])
             data[[m2i]] <- jmvcore::toNumeric(data[[m2i]])
             data[[sd2i]] <- jmvcore::toNumeric(data[[sd2i]])
-            data[[mods]] <- jmvcore::toNumeric(data[[mods]])
+            data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
           } else {
             data <-
               data.frame(
@@ -97,7 +97,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
                 m2i = m2i,
                 sd1i = sd1i,
                 sd2i = sd2i,
-                mods = mods,
+                mods = moderator,
                 method = method2,
                 measure = mdmseasure,
                 data = data,
@@ -113,7 +113,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
                   m2i = m2i,
                   sd1i = sd1i,
                   sd2i = sd2i,
-                  mods = ~ cbind(factor(mods)),
+                  mods = ~ factor(moderator),
                   method = method2,
                   measure = mdmseasure,
                   data = data,

@@ -22,7 +22,7 @@ MetaCorrClass <- R6::R6Class(
     .run = function() {
       ri <- self$options$rcor
       ni <- self$options$samplesize
-      mods <- self$options$moderatorcor
+      moderator <- self$options$moderatorcor
       fsntype <- self$options$fsntype
       method2 <- self$options$methodmetacor
       cormeasure <- self$options$cormeasure
@@ -64,12 +64,13 @@ MetaCorrClass <- R6::R6Class(
             data.frame(
               ri = self$data[[self$options$rcor]],
               ni = self$data[[self$options$samplesize]],
-              mods = self$data[[self$options$moderatorcor]],
+              moderator = self$data[[self$options$moderatorcor]],
               slab = self$data[[self$options$slab]]
             )
           data[[ri]] <- jmvcore::toNumeric(data[[ri]])
           data[[ni]] <- jmvcore::toNumeric(data[[ni]])
-          data[[mods]] <- jmvcore::toNumeric(data[[mods]])
+          data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
+          data <- data %>% drop_na(moderator)
         } else {
           data <-
             data.frame(ri = self$data[[self$options$rcor]],
@@ -77,28 +78,31 @@ MetaCorrClass <- R6::R6Class(
                        slab = self$data[[self$options$slab]])
           data[[ri]] <- jmvcore::toNumeric(data[[ri]])
           data[[ni]] <- jmvcore::toNumeric(data[[ni]])
+          data <- data %>% drop_na(moderator)
         }
         
         if (is.null(self$options$moderatorcor) == FALSE) {
+          data <- data %>% drop_na(moderator)
           res <-
             metafor::rma(
               ri = ri,
               ni = ni,
               method = method2,
               measure = cormeasure,
-              mods = cbind(mods),
+              mods = moderator,
               data = data,
               slab = slab,
               level = level
             )
           if ((self$options$moderatorType) == "CAT") {
+            data <- data %>% drop_na(moderator)
             res <-
               metafor::rma(
                 ri = ri,
                 ni = ni,
                 method = method2,
                 measure = cormeasure,
-                mods = ~ cbind(factor(mods)),
+                mods = ~ factor(moderator),
                 data = data,
                 slab = slab,
                 level = level

@@ -3,7 +3,7 @@ name:  MetaCorr
 title: Correlation Coefficients
 menuGroup: MAJOR
 menuSubgroup: Meta Analysis
-version: '1.0.0'
+version: '1.0.2'
 jas: '1.1'
 
 options:

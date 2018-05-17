@@ -1,12 +1,12 @@
 Package: MAJOR
 Type: Package
 Title: MAJOR: Meta-Analysis for JAMOVI
-Version: 1.0.1
+Version: 1.0.2
 Author: W. Kyle Hamilton
 Maintainer: W. Kyle Hamilton <kyle.hamilton@gmail.com>
 Description: This module allows you to run a meta-analysis and is based on the R package Metafor by Wolfgang Viechtbauer.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: jmvcore (>= 0.5.5), R6, metafor, weightr
-Built: R 3.4.1; ; 2018-05-05 03:37:08 UTC; windows
+Imports: jmvcore (>= 0.5.5), R6, metafor, tidyr
+Built: R 3.4.1; ; 2018-05-17 04:35:13 UTC; windows

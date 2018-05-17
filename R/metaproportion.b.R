@@ -10,7 +10,7 @@ metaProportionClass <- if (requireNamespace('jmvcore'))
       .run = function() {
         xi <- self$options$xi
         ni <- self$options$ni
-        mods <- self$options$moderatorcor
+        moderator <- self$options$moderatorcor
         fsntype <- self$options$fsntype
         method2 <- self$options$methodmetacor
         cormeasure <- self$options$cormeasure
@@ -49,12 +49,12 @@ metaProportionClass <- if (requireNamespace('jmvcore'))
               data.frame(
                 xi = self$data[[self$options$xi]],
                 ni = self$data[[self$options$ni]],
-                mods = self$data[[self$options$moderatorcor]],
+                moderator = self$data[[self$options$moderatorcor]],
                 slab = self$data[[self$options$slab]]
               )
             data[[xi]] <- jmvcore::toNumeric(data[[xi]])
             data[[ni]] <- jmvcore::toNumeric(data[[ni]])
-            data[[mods]] <- jmvcore::toNumeric(data[[mods]])
+            data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
             data$checkG1 <- 0
             data$checkG1 <- data$ni - data$xi
             if (data$checkG1 < 0) {
@@ -87,7 +87,7 @@ metaProportionClass <- if (requireNamespace('jmvcore'))
                 ni = ni,
                 method = method2,
                 measure = cormeasure,
-                mods = mods,
+                mods = moderator,
                 data = data,
                 slab = slab,
                 level = level
@@ -99,7 +99,7 @@ metaProportionClass <- if (requireNamespace('jmvcore'))
                   ni = ni,
                   method = method2,
                   measure = cormeasure,
-                  mods = ~ cbind(factor(mods)),
+                  mods = ~ factor(moderator),
                   data = data,
                   slab = slab,
                   level = level

@@ -11,7 +11,7 @@ metaAlphaClass <- if (requireNamespace('jmvcore'))
         ai <- self$options$ai
         mi <- self$options$mi
         ni <- self$options$ni
-        mods <- self$options$moderatorcor
+        moderator <- self$options$moderatorcor
         slab <- self$options$slab
         #includemods <- self$options$includemods
         addcred <- self$options$addcred
@@ -50,13 +50,13 @@ metaAlphaClass <- if (requireNamespace('jmvcore'))
                 ai = self$data[[self$options$ai]],
                 mi = self$data[[self$options$mi]],
                 ni = self$data[[self$options$ni]],
-                mods = self$data[[self$options$moderatorcor]],
+                moderator = self$data[[self$options$moderatorcor]],
                 slab = self$data[[self$options$slab]]
               )
             data[[ai]] <- jmvcore::toNumeric(data[[ai]])
             data[[mi]] <- jmvcore::toNumeric(data[[mi]])
             data[[ni]] <- jmvcore::toNumeric(data[[ni]])
-            data[[mods]] <- jmvcore::toNumeric(data[[mods]])
+            data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
           } else {
             data <-
               data.frame(
@@ -76,7 +76,7 @@ metaAlphaClass <- if (requireNamespace('jmvcore'))
                 ai = ai,
                 ni = ni,
                 mi = mi,
-                mods = mods,
+                mods = moderator,
                 method = method2,
                 measure = mdmseasure,
                 data = data,
@@ -89,7 +89,7 @@ metaAlphaClass <- if (requireNamespace('jmvcore'))
                   ai = ai,
                   ni = ni,
                   mi = mi,
-                  mods = ~ cbind(factor(mods)),
+                  mods = ~ factor(moderator),
                   method = method2,
                   measure = mdmseasure,
                   data = data,

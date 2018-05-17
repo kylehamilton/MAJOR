@@ -440,7 +440,7 @@ MetaCorrBase <- if (requireNamespace('jmvcore')) R6::R6Class(
             super$initialize(
                 package = 'MAJOR',
                 name = 'MetaCorr',
-                version = c(1,0,0),
+                version = c(1,0,2),
                 options = options,
                 results = MetaCorrResults$new(options=options),
                 data = data,

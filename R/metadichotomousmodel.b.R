@@ -13,7 +13,7 @@ metaDichotomousModelClass <-
           n1i <- self$options$n1i
           ci <- self$options$ci
           n2i <- self$options$n2i
-          mods <- self$options$moderatorcor
+          moderator <- self$options$moderatorcor
           slab <- self$options$slab
           #includemods <- self$options$includemods
           addcred <- self$options$addcred
@@ -56,14 +56,14 @@ metaDichotomousModelClass <-
                   n1i = self$data[[self$options$n1i]],
                   ci = self$data[[self$options$ci]],
                   n2i = self$data[[self$options$n2i]],
-                  mods = self$data[[self$options$moderatorcor]],
+                  moderator = self$data[[self$options$moderatorcor]],
                   slab = self$data[[self$options$slab]]
                 )
               data[[ai]] <- jmvcore::toNumeric(data[[ai]])
               data[[n1i]] <- jmvcore::toNumeric(data[[n1i]])
               data[[ci]] <- jmvcore::toNumeric(data[[ci]])
               data[[n2i]] <- jmvcore::toNumeric(data[[n2i]])
-              data[[mods]] <- jmvcore::toNumeric(data[[mods]])
+              data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
               data$checkG1 <- 0
               data$checkG2 <- 0
               data$checkG1 <- data$n1i - data$ai
@@ -122,7 +122,7 @@ metaDichotomousModelClass <-
                   n1i = n1i,
                   ci = ci,
                   n2i = n2i,
-                  mods = mods,
+                  mods = moderator,
                   method = method2,
                   measure = mdmseasure,
                   data = data,
@@ -136,7 +136,7 @@ metaDichotomousModelClass <-
                     n1i = n1i,
                     ci = ci,
                     n2i = n2i,
-                    mods = ~ cbind(factor(mods)),
+                    mods = ~ factor(moderator),
                     method = method2,
                     measure = mdmseasure,
                     data = data,
