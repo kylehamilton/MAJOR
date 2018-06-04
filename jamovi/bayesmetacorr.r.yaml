@@ -1,0 +1,31 @@
+---
+name:  bayesmetacorr
+title: Correlation Coefficients
+jrs:   '1.1'
+
+items:
+
+    - name:  textRICH
+      type: Table
+      title: "Random-Effects Model - Posterior Summary"
+      rows:  6
+      columns:
+        - name: Labels
+          title: ''
+          type: text
+        - name: Tau
+          type: number
+        - name: Mu
+          type: number
+        - name: Theta
+          type: number
+
+    - name: plot
+      title: Forest Plot
+      type: Image
+      width:  600
+      height: 450
+      renderFun: .plot
+    
+
+...

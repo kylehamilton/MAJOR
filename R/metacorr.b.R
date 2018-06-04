@@ -70,7 +70,10 @@ MetaCorrClass <- R6::R6Class(
           data[[ri]] <- jmvcore::toNumeric(data[[ri]])
           data[[ni]] <- jmvcore::toNumeric(data[[ni]])
           data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
-          data <- data %>% drop_na(moderator)
+          #data <- as.data.frame((jmvcore::naOmit(data$moderator)))
+          data <- data[!is.na(data$moderator),]
+          rownames(data) <- NULL
+          #data <- data %>% drop_na(moderator)
         } else {
           data <-
             data.frame(ri = self$data[[self$options$rcor]],
@@ -78,11 +81,15 @@ MetaCorrClass <- R6::R6Class(
                        slab = self$data[[self$options$slab]])
           data[[ri]] <- jmvcore::toNumeric(data[[ri]])
           data[[ni]] <- jmvcore::toNumeric(data[[ni]])
-          data <- data %>% drop_na(moderator)
+          #data <- data[!is.na(data$moderator),]
+          #rownames(data) <- NULL
+          #data <- data %>% drop_na(moderator)
         }
         
         if (is.null(self$options$moderatorcor) == FALSE) {
-          data <- data %>% drop_na(moderator)
+          data <- data[!is.na(data$moderator),]
+          rownames(data) <- NULL
+          #data <- data %>% drop_na(moderator)
           res <-
             metafor::rma(
               ri = ri,
@@ -95,7 +102,9 @@ MetaCorrClass <- R6::R6Class(
               level = level
             )
           if ((self$options$moderatorType) == "CAT") {
-            data <- data %>% drop_na(moderator)
+            data <- data[!is.na(data$moderator),]
+            rownames(data) <- NULL
+            #data <- data %>% drop_na(moderator)
             res <-
               metafor::rma(
                 ri = ri,

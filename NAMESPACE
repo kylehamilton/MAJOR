@@ -1,4 +1,4 @@
 exportPattern("^[[:alpha:]]+")
 
 import(metafor)
-import(tidyr)
+import(bayesmeta)

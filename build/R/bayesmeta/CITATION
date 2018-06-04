@@ -1,0 +1,11 @@
+bibentry(bibtype     = "article",
+         title       = "Bayesian random-effects meta-analysis using the bayesmeta {R}~package",
+         author      = person("Christian", "R\"{o}ver"),
+         journal     = "arXiv preprint 1711.08683",
+         year        = 2017,
+         month       = 11,
+         url         = "http://www.arxiv.org/abs/1711.08683",
+         textVersion = paste("Christian Roever (2017).",
+                             "Bayesian random-effects meta-analysis using the bayesmeta R package.",
+                             "arXiv preprint 1711.08683,",
+                             "URL: http://www.arxiv.org/abs/1711.08683"))

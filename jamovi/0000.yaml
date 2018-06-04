@@ -46,5 +46,11 @@ analyses:
     menuGroup: MAJOR
     menuTitle: Reliability Generalization
     menuSubgroup: Meta Analysis
+  - title: Correlation Coefficients
+    name: bayesmetacorr
+    ns: MAJOR
+    menuGroup: MAJOR
+    menuTitle: Correlation Coefficients
+    menuSubgroup: Bayesian Meta Analysis
 
 ...

@@ -1,0 +1,231 @@
+---
+title: "An introduction to meta-analysis using the bayesmeta package"
+author: "Christian Röver"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{bayesmeta introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+---
+
+The `bayesmeta` package provides a collection of functions to facilitate easy Bayesian inference in the generic random-effects meta-analysis model. It allows to derive the posterior distribution of the two parameters (effect and heterogeneity), and provides the functionality to evaluate joint and marginal posterior probability distributions, predictive distributions, shrinkage, etc. This document demonstrates the `bayesmeta` package's usage in a worked-out example.
+
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(collapse=TRUE)
+```
+
+# The problem
+## Estimates and standard errors
+
+In the meta-analysis context one is faced with the problem of having to merge results from individual experiments (or studies or sources,...) to a joint result. The problem is most commonly formulated in terms of **estimates** (or **effect sizes**) and associated **standard errors**. For example, have a look at the following data set:
+
+```{r}
+library("bayesmeta")
+data("Rubin1981")
+print(Rubin1981)
+```
+
+The data set summarizes the results from a study on the effects of coaching programs at eight different schools. In order to compare the schools' success, students filled out standardized questionnaires before and after the coaching, and each school's mean increase in the score (the "effect" column) along with the standard error (the "stderr" column) was recorded. You may also consult the help (via `help("Rubin1981")`) for more details.
+
+The problem in general is that we have several numbers with associated uncertainties given, and that we want to combine these into a joint (*average* or *mean*) result, while also accounting for potential extra variability (heterogeneity) between these. The individual estimates may for example correspond to different studies that were performed, or to subgroups of a larger sample. In the present example we are interested in the effect of coaching in general, while the data we have are at the level of individual schools, which may not be sufficiently homogeneous for "naive" pooling.
+
+## Computing effect sizes
+
+Quite often estimates along with their standard errors are not given right away, so one has to determine these oneself. For example, study results are often summarized in terms of a contingency table like the following one; here patients were exposed to two different therapies, and the number of patients experiencing certain events were counted in both groups:
+
+|                            | event | no event | total |
+|----------------------------|------:|---------:|------:|
+| therapy A ("experimental") |   14  |       47 |    61 |
+| therapy B ("control")      |   15  |        5 |    20 |
+
+One of the columns is actually redundant here, as it is determined by the remaining two; the experiment's outcome may hence be summarized through 4 numbers.
+You can now compute for example the *logarithmic odds ratio* (log-OR) as an effect size in order to quantify the difference between the two treatment groups. The log-OR would be given by $\log\bigl(\frac{14 \times 5}{47 \times 15}\bigr)$, and you may also proceed and determine the associated standard error. 
+
+Calculation of common effect sizes like the log-OR along with standard errors however is already implemented, for example in the `metafor` or `compute.es` packages, so it is easiest to utilize these.
+The data from the above table is actually taken from another meta analysis example:
+
+```{r}
+data("CrinsEtAl2014")
+print(CrinsEtAl2014[,c(1,10,12,13,15)])
+```
+
+The above example appears in the first row here. This data set contains the results from six such studies, along with information on other covariates and additional endpoints. Again, you can check the help (via `help("CrinsEtAl2014")`) for more details on this data set.
+The log-ORs may for example be computed using the `metafor` package's `escalc()` function:
+```{r, message=FALSE}
+library("metafor")
+crins.es <- escalc(measure="OR",
+                   ai=exp.AR.events,  n1i=exp.total,
+                   ci=cont.AR.events, n2i=cont.total,
+                   slab=publication, data=CrinsEtAl2014)
+print(crins.es[,c("publication", "yi", "vi")])
+```
+The effect sizes and (squared!) standard errors are provided in the "yi" and "vi" columns.
+
+In addition to log-ORs, a whole range of other effect sizes exist (like standardized differences, relative risks, measures based on correlations, etc.). For more details see also the references below, or the `metafor` or `compute.es` documentations.
+
+
+## The random effects model
+
+When we estimate a parameter (like the percentages or log-ORs in the previous example), such estimates are always associated with some uncertainty that may be expressed in terms of a standard error. Suppose that there is a parameter $\mu$ that we want to estimate. We have an estimate $y$ that is associated with a standard error $\sigma$. A simple model to capture the estimation process would be to assume
+  $$ y \sim \mbox{Normal}(\mu, \sigma^2) \mbox{,}$$
+i.e., our estimate $y$ comes about as a normal random variable with mean $\mu$ and variance $\sigma^2$. In our model, we have one unknown (the true "effect" $\mu$), and our known data are $y$ and $\sigma$.
+In the meta-analysis context, we usually have *several* estimates $y_i$ (with standard errors $\sigma_i$ and $i=1,\ldots,k$) for the same parameter available, so an obvious generalization would be to assume
+  $$ y_i \sim \mbox{Normal}(\mu, \sigma_i^2) \mbox{.}$$
+This is in fact the so-called **fixed-effect model**.
+We still have one unknown parameter ($\mu$), and the data consist of $2k$ numbers, $y_1,\ldots,y_k$ and $\sigma_1,\ldots,\sigma_k$.
+
+However, it is often reasonable to assume that the different estimates ($y_i$) may differ slightly from each other, by more than what can be attributed to the estimation uncertainty (given by the $\sigma_i$) alone. This additional ("between-study") variability, the **heterogeneity**, may be modeled by another variance component. The idea is that each estimate $y_i$ estimates a *study-specific* parameter $\theta_i$, while these study specific means $\theta_i$ again vary around the common "overall" mean $\mu$. The additional variation is expressed via the heterogeneity variance $\tau^2$:
+$$ y_i \sim \mbox{Normal}(\theta_i, \sigma_i^2) \mbox{,}$$
+$$ \theta_i \sim \mbox{Normal}(\mu, \tau^2) \mbox{.}$$
+This adds another $k+1$ unknowns, the study-specific means $\theta_i$ and the heterogeneity $\tau$, to the model. The model may however often be simplified again (if one is not interested in the study-specific means $\theta_i$ *per se*) by integrating over the $\theta_i$ and expressing the model in the equivalent form
+$$ y_i \sim \mbox{Normal}(\mu, \sigma_i^2 + \tau^2) \mbox{.}$$
+This is the **random-effects model**. The additional parameter $\tau$ captures differences *between* the estimates (or between studies,...) that are beyond the mere estimation uncertainty. As one might imagine, the heterogeneity is often hard to estimate, since the information on $\tau$ in the data is very limited, especially when the number of estimates ($k$) is small. In the special case of $\tau=0$, the random effects model again simplifies to the fixed-effect model.
+
+
+# Parameter estimation in the random effects model
+## The technical side
+### Prior & posterior
+Our information on the parameters is provided through the *posterior (probability) distribution*, associating parameter values with probabilities *given our data at hand*. From **Bayes' theorem** we know that our knowledge about the probable parameter values depends on 
+
+  * the *likelihood* (the data, and the model that we assume for the data), and 
+  * our *prior information* (any other information external to our data).
+
+In order to proceed, we have to specify both. Here we are concerned with the *random effects model* as specified above; this determines our likelihood function. For technical reasons we will also assume that *a priori* the effect and heterogeneity parameters are independent, so that their joint probability density function may be written as
+$$ p(\mu, \tau) = p(\mu) \times p(\tau) $$
+and we can specify the priors $p(\mu)$ and $p(\tau)$ separately.
+
+### Prior information for the effect parameter $\mu$
+The prior distribution for $\mu$ expresses what we know about the effect *before considering the data*. Again for technical reasons we restrict ourselves to two choices here: either a normal distribution (with pre-specified mean and variance parameters), or an (improper) uniform distribution on the complete real line.
+If, for example, we want to assign 95% probability to a particular interval $[a,b]$, then we could use a prior mean of $\frac{a+b}{2}$ and a standard deviation of $\approx \frac{b-a}{4}$. Increasing the standard deviation will (in a sense) usually lead to a "more conservative" or "less informative" prior distribution. The uniform prior may be seen as the limiting case of indefinitely increasing prior variance. 
+
+### Prior information for the heterogeneity parameter $\tau$
+The prior distribution for the heterogeneity parameter needs to be specified in terms of its (prior) density function. Popular choices here are e.g. half-normal distributions, or heavier-tailed variants like half-Student-t or half-Cauchy distributions.
+Again, an (improper) uniform prior may be an option, but this must be used with much caution. As its density does not integrate to one, the derived results may in turn also be invalid; this is especially the case for very small values of $k$.
+
+### Inference
+The posterior density is denoted by $p(\mu, \tau | y, \sigma)$. This is the *conditional distribution* of $\mu$ and $\tau$ *given* the values of $y$ and $\sigma$, which here are our ($k$-dimensional) vectors of estimates $y_i$ and associated standard errors $\sigma_i$. The posterior density effectively results as the product of the prior density $p(\mu,\tau)$ and the likelihood function $p(y|\sigma,\mu,\tau)$. Having this (joint, 2-dimensional) density alone, however, is of little practical use. Usually, one is mainly interested in the effect $\mu$, while the heterogeneity $\tau$ constitutes a nuisance parameter that needs to be accounted for, but that is not of primary interest. In order infer the effect $\mu$, one needs to integrate over the posterior distribution:
+$$ p(\mu | y, \sigma) = \int p(\mu, \tau | y, \sigma) \, \mathrm{d}\sigma \mbox{.} $$
+The resulting *marginal distribution* of $\mu$ then expresses the (posterior) information about the effect. In order to quantify this information, what is of interest are numbers like the expectation, standard deviation, or quantiles of this distribution; these again result as integrals over the marginal density. The `bayesmeta` package provides functions to evaluate all these integrals of interest. 
+
+
+## The practical side
+### A simple example
+Consider again the 8-schools example (see also above). We have 8 mean differences (increase in score) given, along with the associated standard errors. Suppose we were interested in estimating the mean score across all 8 schools. First we need to specify our prior information about the two unknowns (mean effect $\mu$ and heterogeneity $\tau$). From the description (check `help("Rubin1981")`) we know that the original (total) scores should be centered around 500 and range between 200 and 800. To be conservative (and to take a "neutral" position), let us assume a normal prior for $\mu$ centered around a mean of 0, with a standard deviation of 50 for the score differences (score increase after coaching). We also know little about the variation to be expected between schools. Again from the description we know that individual students' results have a standard deviation of around 100, so it seems safe to assume that schools will not differ from each other by much more than, say, 25. We will then use a half-Cauchy prior with scale 25 for the heterogeneity $\tau$.
+
+In order to implement the analysis we use the `bayesmeta()` function, which actually provides the main functionality of this package. We have to provide it with the data and our prior specifications. For the effect prior ($p(\mu)$) we only need to specify the normal parameters (mean and standard deviation). For the heterogeneity prior ($p(\tau)$) we need to provide the prior *density function*. The following function call will execute the analysis:
+```{r}
+data("Rubin1981")
+taupriordensity <- function(t){dhalfcauchy(t, scale=25)}
+schools.example.1 <- bayesmeta(y     = Rubin1981[,"effect"],
+                               sigma = Rubin1981[,"stderr"],
+                               label = Rubin1981[,"school"],
+                               mu.prior.mean=0, mu.prior.sd=50,
+                               tau.prior=taupriordensity)
+```
+The computation may take a few seconds. We can then have a look at the results. A simple `print()` call will already provide a comprehensive summary:
+```{r}
+print(schools.example.1)
+```
+First we see the number (and labels) of the provided estimates.
+We see the prior specifications, and some first point estimates, the "classical" maximum likelihood (ML) parameter estimates, as well as the maximum-a-posteriori (MAP) estimates for $\mu$ and $\tau$. There are "joint" estimates (based on the joint likelihood or joint posterior density) as well as "marginal" estimates (based on marginal likelihood or posterior density). Most importantly, the section "marginal posterior summary" lists characteristics of the marginal posterior distributions of $\tau$ and $\mu$. We can see that the estimated mean score increase is roughly at 8 points with a 95% interval ranging from -2 to 18.
+
+A simple summary of the data and analysis results is given by the *forest plot*, which may be generated by
+```{r, fig.width=6.0, fig.height=3.5}
+forestplot(schools.example.1)
+```
+
+The forest plot shows the eight provided estimates ($y_i$) with their 95% confidence intervals (the 8 black horizonal lines labelled "A"--"H" on the right) along with the combined estimate (the diamond at the bottom, centered at the posterior median and spanning the 95% interval) and a predictive interval (the bar at the bottom, spanning the 95% prediction interval). The prediction interval is always longer than the posterior interval for the effect $\mu$, and it indicates the expected range for a "new" estimate ($\theta_{k+1}$, a "9th school" in this example). The eight original data points $y_i$ are only imprecise estimates of the parameters $\theta_i$. The performed analysis allows to update our information on the $\theta_i$; these *shrinkage estimates* are shown along with the original data as grey horizontal lines. As the name suggests, these are usually *shrunk* towards the overall mean to some degree. You can change the appearance of the forest plot (e.g., by adding data columns or omitting shrinkage or prediction intervals); see also the `forestplot.bayesmeta` help.
+
+The posterior distribution may be illustrated further by calling the `plot()` function; this will generate 4 plots:
+```{r, eval=FALSE}
+plot(schools.example.1, prior=TRUE)
+```
+```{r, fig.width=6.0, fig.height=7.0, echo=FALSE}
+par(mfrow=c(2,2))
+plot(schools.example.1, prior=TRUE)
+par(mfrow=c(1,1))
+```
+
+The first plot is another simple forest plot, showing the 8 estimates along with the combined estimate (diamond) and prediction interval (bar).
+
+The second plot illustrates the joint posterior density of both parameters $\mu$ and $\tau$; a darker shading indicates higher posterior density values. The red contour lines show (approximate) 90%, 95% and 99% confidence regions for the joint distribution. The solid blue line traces the conditional posterior expectation value $\mathrm{E}[\mu|\tau,y,\sigma]$, and the dashed lines enclose the corresponding 95% interval as a function of $\tau$. The green lines indicate marginal posterior median and 95% intervals for both parameters.
+
+The third and fourth plot show the marginal density functions of $\mu$ and $\tau$, respectively. The posterior median and (highest posterior density) 95% interval are also indicated by a vertical line and a darker shading. When the "`prior=TRUE`" option is used (as in this example), the dashed line also shows the prior density in comparison.
+
+From the last two plots one can see that -- within the range of the posterior distribution -- the prior density appears almost "flat". So an obvious question is what happens if we simply take the prior to be uniform; this is achieved by simply using the default options for the prior:
+```{r}
+schools.example.2 <- bayesmeta(y     = Rubin1981[,"effect"],
+                               sigma = Rubin1981[,"stderr"],
+                               label = Rubin1981[,"school"])
+```
+We can now compare the results from the two similar analyses:
+```{r}
+print(schools.example.1$summary)
+print(schools.example.2$summary)
+```
+The `$summary` element of the `bayesmeta()` result contains the estimates that were already shown above; the additional "theta" column refers to the predictive distribution (for a "$k+1$th" estimate, an additional "9th school" in this example). The differing prior specifications lead to very similar conclusions in this case, but, as usual, the (improper) uniform priors have to be used with caution.
+
+### More detailed analysis
+The object returned by the `bayesmeta()` function contains a number of elements; we have seen use of the `$summary` element in the above example already. Have a look at the documentation (`help("bayesmeta")`, and the "Value" section therein) for the exact details. Some of the returned elements are *functions*, so you can, for example, evaluate and compare the **posterior densities** (of both $\mu$ or $\tau$). Consider the previous example; for the different prior settings we got different posteriors. You can compare the posterior densities (which are provided in the results' `...$dposterior()` elements) like this:
+```{r, fig.width=5.0, fig.height=5.0}
+# evaluate posterior densities:
+x <- seq(from=-10, to=30, length=100)
+plot(x, schools.example.1$dposterior(mu=x), type="l", col="red",
+     xlab=expression("effect "*mu), ylab="posterior density")
+lines(x, schools.example.2$dposterior(mu=x), type="l", col="blue", lty="dashed")
+abline(h=0, col="darkgrey")
+```
+
+You can see (again) that the results barely differ.
+In this example `schools.example.1$dposterior` is a `function()` that may take either a `mu=...` or a `tau=...` argument, depending on whether you want the marginal posterior density of $\mu$ or $\tau$.
+
+The naming pattern may be familiar from other distributions that you know in R: for the normal distribution, you can get density, **cumulative distribution function (CDF)** or quantile function (inverse CDF) by calling the `dnorm()`, `pnorm()` or `qnorm()` functions. It works analogously here: say you were interested in the posterior probability that the mean effect $\mu$ is actually positive. For this, you have to evaluate the posterior CDF of $\mu$ at $\mu=0$, which is given by the `...$pposterior()` element:
+```{r}
+# posterior probability of mu > 0:
+1 - schools.example.1$pposterior(mu=0)
+```
+
+The **quantile function (inverse CDF)** is given by the `...$qposterior()` element; if you are interested in a 95% posterior upper limit on the probable effect magnitude $\mu$, you may call
+```{r}
+# 95% posterior upper limit on the effect mu:
+schools.example.1$qposterior(mu.p=0.95)
+```
+Or, analogously, if you are interested in the heterogeneity parameter $\tau$:
+```{r}
+# 95% posterior upper limit on the heterogeneity tau:
+schools.example.1$qposterior(tau.p=0.95)
+```
+
+You can also derive **credible intervals** for the parameters from the posterior distribution; for this you can use the `...$post.interval()` function:
+```{r}
+# 95% credible intervals for the effect mu:
+schools.example.1$post.interval(mu.level=0.95)
+```
+The intervals are (by default) determined to be the shortest possible intervals for the given credibility level. You can see the difference by explicitly requesting a "central" interval that is determined via 2.5% and 97.5% quantiles; the difference is most obvious for asymmetric distributions like the heterogeneity parameter's distribution:
+```{r}
+# 95% credible intervals for the effect mu:
+schools.example.1$post.interval(tau.level=0.95)
+schools.example.1$post.interval(tau.level=0.95, method="central")
+schools.example.1$qposterior(tau.p=c(0.025, 0.975))
+```
+You can compare this to the above plot of the heterogeneity parameter's posterior density; a central interval leaves 2.5% probability in each (left and right) tail of the distribution, while the shortest possible interval in this case is a one-sided interval.
+
+We can also investigate the 8 studies' **shrinkage estimates** further. Consider for example the first school (labelled "A"), which appeared to perform best in terms of their students' score improvement. Having seen the remaining schools' results indicates that the true value is probably not quite as extreme, but rather somewhat lower (see also the forest plot above). We can look at the top 3 of the 8 shrinkage estimates by checking out the `...$theta` element:
+```{r}
+schools.example.1$theta[,c("A","G","H")]
+```
+You can see the original data ($y_i$ and $\sigma_i$) along with a summary of the posterior distribution for the corresponding study-specific mean $\theta_i$. You can again use e.g. the `...$dposterior()` and `...$post.interval()` functions to extract posterior density and credibility intervals by supplying the `individual` argument (see the `bayesmeta` help for more details).
+
+# References
+  * C. Röver. Bayesian random-effects meta-analysis using the bayesmeta R package. *arXiv preprint 1711.08683* (submitted for publication), http://www.arxiv.org/abs/1711.08683 , 2017.
+  * L. V. Hedges, I. Olkin. *Statistical methods for meta-analysis*. Academic Press, 1985.
+  * J. Hartung, G. Knapp, B. K. Sinha. *Statistical meta-analysis with applications*. Wiley, 2008.
+  * J. P. T. Higgins, S. Green (eds.). Cochrane handbook for systematic reviews of interventions. http://handbook.cochrane.org/, 2011.
+  * J. L. Fleiss. The statistical basis of meta-analysis. *Statistical Methods in Medical Research*, 2(2):121--145, 1993.
+  * A. Gelman, J. B. Carlin, H. S. Stern, D. B. Dunson, A. Vehtari, D. B. Rubin. *Bayesian Data Analysis*. Chapman & Hall / CRC, 2014.
+  * D. J. Spiegelhalter, K. R. Abrams, J. P. Myles. *Bayesian approaches to clinical trials and health-care evaluation*. Wiley & Sons, 2004.

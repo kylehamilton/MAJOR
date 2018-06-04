@@ -1,7 +1,7 @@
 exportPattern("^[[:alpha:]]+")
 
 import(metafor)
-import(tidyr)
+import(bayesmeta)
 export(MetaCorr)
 export(MetaCorrClass)
 export(MetaCorrOptions)
@@ -25,3 +25,7 @@ export(metaProportionOptions)
 export(metaAlpha)
 export(metaAlphaClass)
 export(metaAlphaOptions)
+
+export(bayesmetacorr)
+export(bayesmetacorrClass)
+export(bayesmetacorrOptions)

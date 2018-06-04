@@ -1,0 +1,72 @@
+NEWS for the forestplot package
+
+Changes for 1.7.2
+-----------------
+* Fixed bug when automatic lower/upper are to be identified and the data contains NA
+
+Changes for 1.7.1
+-----------------
+* Fixed bug reported related to legends on SO: http://stackoverflow.com/questions/43217570/forestplot-want-to-give-legend-for-each-4-colums
+
+Changes for 1.7
+-----------------
+* Fixed bug when mergin gpar() with font & fontface options (thanks Katherine T. Mills)
+* Fixed input bug with 3-dim array
+* Improved autodetection of upper and lower intervals
+
+Changes for 1.6
+-----------------
+* Changed forestplot function to S3 style (thanks Christian Röver)
+* Fixed bug with alignment for summary elements
+* When any of the inputs is missing for a line the line is skipped (issue #5)
+* Added checkmate for argument validation
+* Added option of just specifying the rows that the CI should be applied to (issue #7)
+* Added fpDrawBarCI (thanks Christian Röver)
+* Fixed xlog bug
+* Added a colgap option
+* Bug fix for plots wider than the div (Thanks Michael Obeda for reporting)
+
+Changes for 1.5
+-----------------
+* Changed new_page to default to TRUE
+* Removed warnings for compatibility
+* Fixed so that squared multiline tables should now follow color behavior
+
+Changes for 1.4
+-----------------
+* Added a bug fix for when number of colors isn't equal to the dimension of the input causing the box not to be drawn
+* Fixed bug concerning vertical offset for clippers
+
+Changes for 1.3
+---------------
+* Fixed bug when specifying graphwidth
+* Added ability to tailor the tick text
+* Added vertices example to vignette
+
+Changes for 1.2
+---------------
+* Line-type can be specified
+* Line endings can now be marked by a T vertice, this default for all line types other than 1
+* The arrow height defaults to the same height as the vertices
+* Added a grid option
+* Improved documentation
+
+Changes for 1.1
+-----------------
+* Multiple lines can now have NA values
+* Added ability to position the graph
+* Added ability to generate horizontal lines
+* Minor documentation changes
+
+Changes for 1.0
+---------------
+* Separation from the Gmisc-package
+* Name change - forestplot2 is now just forestplot in order to allow a deprecated call
+  within the Gmisc package without generating a conflict
+* The fontfamily arguments are now embedded in the txt_gp that takes input from the
+  fpTxtGp function. The fonts for the labels/summaries can be specified down to the
+  cell level.
+* If provided a vector of length two for the zero argumente you get an area for the zero-effect
+* There is a maximum colgap length for the box corresponding to the box height
+* confintNormalFn, confintSummaryFn, legendMarkerFn are now called fn.ci_norm, fn.ci_sum, fn.legend
+* Argument main in forestplot has changed to title
