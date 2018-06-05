@@ -43,12 +43,26 @@ options:
       title: Heterogeneity prior
       type: List
       options:
+        - name: "halfCauchy"
+          title: Half Cauchy
+        - name: "halfNormal"
+          title: Half Normal
         - name: "uniform"
           title: Uniform prior
         - name: "sqrt"
           title: Square root of a uniform prior
-        - name: "halfCauchy"
-          title: Half Cauchy prior
+        - name: "normal"
+          title: Normal prior
+        - name: "Jeffreys"
+          title: Jeffreys prior
+        - name: "conventional"
+          title: Conventional prior
+        - name: "DuMouchel"
+          title: DuMouchel prior
+        - name: "shrinkage"
+          title: Uniform shrinkage prior
+        - name: "I2"
+          title: Relative heterogeneity uniform prior
       default: "uniform"
       
     - name: scalePrior
@@ -65,7 +79,7 @@ options:
         - name: "uniform"
           title: Uniform prior
         - name: "normal"
-          title: Normal prior distribution
+          title: Normal prior
       default: "uniform"
       
     - name: muMeanPrior

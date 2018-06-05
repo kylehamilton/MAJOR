@@ -53,9 +53,16 @@ bayesmetacorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "tauPrior",
                 tauPrior,
                 options=list(
+                    "halfCauchy",
+                    "halfNormal",
                     "uniform",
                     "sqrt",
-                    "halfCauchy"),
+                    "normal",
+                    "Jeffreys",
+                    "conventional",
+                    "DuMouchel",
+                    "shrinkage",
+                    "I2"),
                 default="uniform")
             private$..scalePrior <- jmvcore::OptionNumber$new(
                 "scalePrior",
@@ -153,28 +160,28 @@ bayesmetacorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 options=options,
                 name="plot",
                 title="Forest Plot",
-                width=600,
+                width=900,
                 height=600,
                 renderFun=".plot"))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plotPDTau",
                 title="Marginal Posterior Density Plots (\u03C4)",
-                width=600,
+                width=900,
                 height=600,
                 renderFun=".plotPDTau"))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plotPDMu",
                 title="Marginal Posterior Density Plots (\u03BC)",
-                width=600,
+                width=900,
                 height=600,
                 renderFun=".plotPDMu"))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plotJPD",
                 title="Joint Posterior Density of Heterogeneity (\u03C4) and Effect (\u03BC)",
-                width=600,
+                width=900,
                 height=600,
                 renderFun=".plotJPD"))}))
 

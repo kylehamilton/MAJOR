@@ -57,12 +57,24 @@ bayesmetacorrClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             
             if (self$options$tauPrior == "halfCauchy") {
               taupriordensity <- function(t){dhalfcauchy(t, scale=scalePrior)}
+            } else if (self$options$tauPrior == "halfNormal") {
+              taupriordensity <- function(t){dhalfnormal(t, scale=scalePrior)}
             } else if (self$options$tauPrior == "uniform") {
               taupriordensity <- "uniform"
             } else if (self$options$tauPrior == "sqrt") {
               taupriordensity <- "sqrt"
+            } else if (self$options$tauPrior == "Jeffreys") {
+              taupriordensity <- "Jeffreys"
+            } else if (self$options$tauPrior == "conventional") {
+              taupriordensity <- "conventional"
+            } else if (self$options$tauPrior == "DuMouchel") {
+              taupriordensity <- "DuMouchel"
+            } else if (self$options$tauPrior == "shrinkage") {
+              taupriordensity <- "shrinkage"
+            } else if (self$options$tauPrior == "I2") {
+              taupriordensity <- "I2"
             }
-            
+
             
             if (self$options$muPrior == "normal") {
               resBayes <- bayesmeta::bayesmeta(dat,
@@ -156,6 +168,7 @@ bayesmetacorrClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           imageJPD$setState(res1)
         }  
       },
+      
       #Forest Plot Function
       .plot = function(image, ...) {
         # <-- the plot function
