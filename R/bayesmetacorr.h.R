@@ -10,15 +10,11 @@ bayesmetacorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             samplesize = NULL,
             slab = NULL,
             cormeasure = "ZCOR",
-            level = 95,
-            showModelFit = FALSE,
-            addcred = FALSE,
-            addfit = TRUE,
-            showweights = FALSE,
-            steps = 5,
-            xAxisTitle = NULL,
-            pchForest = "15",
-            forestOrder = "fit", ...) {
+            tauPrior = "uniform",
+            scalePrior = 10,
+            muPrior = "uniform",
+            muMeanPrior = 0.5,
+            muStandardDeviationPrior = 0.2, ...) {
 
             super$initialize(
                 package='MAJOR',
@@ -53,111 +49,80 @@ bayesmetacorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "UCOR",
                     "ZCOR"),
                 default="ZCOR")
-            private$..level <- jmvcore::OptionNumber$new(
-                "level",
-                level,
-                min=50,
-                max=99.9,
-                default=95)
-            private$..showModelFit <- jmvcore::OptionBool$new(
-                "showModelFit",
-                showModelFit,
-                default=FALSE)
-            private$..addcred <- jmvcore::OptionBool$new(
-                "addcred",
-                addcred,
-                default=FALSE)
-            private$..addfit <- jmvcore::OptionBool$new(
-                "addfit",
-                addfit,
-                default=TRUE)
-            private$..showweights <- jmvcore::OptionBool$new(
-                "showweights",
-                showweights,
-                default=FALSE)
-            private$..steps <- jmvcore::OptionNumber$new(
-                "steps",
-                steps,
-                min=1,
-                max=999,
-                default=5)
-            private$..xAxisTitle <- jmvcore::OptionString$new(
-                "xAxisTitle",
-                xAxisTitle)
-            private$..pchForest <- jmvcore::OptionList$new(
-                "pchForest",
-                pchForest,
+            private$..tauPrior <- jmvcore::OptionList$new(
+                "tauPrior",
+                tauPrior,
                 options=list(
-                    "16",
-                    "18",
-                    "15",
-                    "17",
-                    "1",
-                    "5",
-                    "0",
-                    "2",
-                    "8"),
-                default="15")
-            private$..forestOrder <- jmvcore::OptionList$new(
-                "forestOrder",
-                forestOrder,
+                    "uniform",
+                    "sqrt",
+                    "halfCauchy"),
+                default="uniform")
+            private$..scalePrior <- jmvcore::OptionNumber$new(
+                "scalePrior",
+                scalePrior,
+                min=0.01,
+                max=100,
+                default=10)
+            private$..muPrior <- jmvcore::OptionList$new(
+                "muPrior",
+                muPrior,
                 options=list(
-                    "obs",
-                    "fit",
-                    "prec",
-                    "resid",
-                    "abs.resid"),
-                default="fit")
+                    "uniform",
+                    "normal"),
+                default="uniform")
+            private$..muMeanPrior <- jmvcore::OptionNumber$new(
+                "muMeanPrior",
+                muMeanPrior,
+                min=0.01,
+                max=100,
+                default=0.5)
+            private$..muStandardDeviationPrior <- jmvcore::OptionNumber$new(
+                "muStandardDeviationPrior",
+                muStandardDeviationPrior,
+                min=0.01,
+                max=100,
+                default=0.2)
 
             self$.addOption(private$..rcor)
             self$.addOption(private$..samplesize)
             self$.addOption(private$..slab)
             self$.addOption(private$..cormeasure)
-            self$.addOption(private$..level)
-            self$.addOption(private$..showModelFit)
-            self$.addOption(private$..addcred)
-            self$.addOption(private$..addfit)
-            self$.addOption(private$..showweights)
-            self$.addOption(private$..steps)
-            self$.addOption(private$..xAxisTitle)
-            self$.addOption(private$..pchForest)
-            self$.addOption(private$..forestOrder)
+            self$.addOption(private$..tauPrior)
+            self$.addOption(private$..scalePrior)
+            self$.addOption(private$..muPrior)
+            self$.addOption(private$..muMeanPrior)
+            self$.addOption(private$..muStandardDeviationPrior)
         }),
     active = list(
         rcor = function() private$..rcor$value,
         samplesize = function() private$..samplesize$value,
         slab = function() private$..slab$value,
         cormeasure = function() private$..cormeasure$value,
-        level = function() private$..level$value,
-        showModelFit = function() private$..showModelFit$value,
-        addcred = function() private$..addcred$value,
-        addfit = function() private$..addfit$value,
-        showweights = function() private$..showweights$value,
-        steps = function() private$..steps$value,
-        xAxisTitle = function() private$..xAxisTitle$value,
-        pchForest = function() private$..pchForest$value,
-        forestOrder = function() private$..forestOrder$value),
+        tauPrior = function() private$..tauPrior$value,
+        scalePrior = function() private$..scalePrior$value,
+        muPrior = function() private$..muPrior$value,
+        muMeanPrior = function() private$..muMeanPrior$value,
+        muStandardDeviationPrior = function() private$..muStandardDeviationPrior$value),
     private = list(
         ..rcor = NA,
         ..samplesize = NA,
         ..slab = NA,
         ..cormeasure = NA,
-        ..level = NA,
-        ..showModelFit = NA,
-        ..addcred = NA,
-        ..addfit = NA,
-        ..showweights = NA,
-        ..steps = NA,
-        ..xAxisTitle = NA,
-        ..pchForest = NA,
-        ..forestOrder = NA)
+        ..tauPrior = NA,
+        ..scalePrior = NA,
+        ..muPrior = NA,
+        ..muMeanPrior = NA,
+        ..muStandardDeviationPrior = NA)
 )
 
 bayesmetacorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         textRICH = function() private$.items[["textRICH"]],
-        plot = function() private$.items[["plot"]]),
+        plot = function() private$.items[["plot"]],
+        plotPDTau = function() private$.items[["plotPDTau"]],
+        plotPDMu = function() private$.items[["plotPDMu"]],
+        plotJPD = function() private$.items[["plotJPD"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -189,8 +154,29 @@ bayesmetacorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 name="plot",
                 title="Forest Plot",
                 width=600,
-                height=450,
-                renderFun=".plot"))}))
+                height=600,
+                renderFun=".plot"))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plotPDTau",
+                title="Marginal Posterior Density Plots (\u03C4)",
+                width=600,
+                height=600,
+                renderFun=".plotPDTau"))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plotPDMu",
+                title="Marginal Posterior Density Plots (\u03BC)",
+                width=600,
+                height=600,
+                renderFun=".plotPDMu"))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plotJPD",
+                title="Joint Posterior Density of Heterogeneity (\u03C4) and Effect (\u03BC)",
+                width=600,
+                height=600,
+                renderFun=".plotJPD"))}))
 
 bayesmetacorrBase <- if (requireNamespace('jmvcore')) R6::R6Class(
     "bayesmetacorrBase",
@@ -219,19 +205,18 @@ bayesmetacorrBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param samplesize .
 #' @param slab .
 #' @param cormeasure .
-#' @param level .
-#' @param showModelFit .
-#' @param addcred .
-#' @param addfit .
-#' @param showweights .
-#' @param steps .
-#' @param xAxisTitle .
-#' @param pchForest .
-#' @param forestOrder .
+#' @param tauPrior .
+#' @param scalePrior .
+#' @param muPrior .
+#' @param muMeanPrior .
+#' @param muStandardDeviationPrior .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$textRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plotPDTau} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plotPDMu} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plotJPD} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -247,15 +232,11 @@ bayesmetacorr <- function(
     samplesize,
     slab,
     cormeasure = "ZCOR",
-    level = 95,
-    showModelFit = FALSE,
-    addcred = FALSE,
-    addfit = TRUE,
-    showweights = FALSE,
-    steps = 5,
-    xAxisTitle,
-    pchForest = "15",
-    forestOrder = "fit") {
+    tauPrior = "uniform",
+    scalePrior = 10,
+    muPrior = "uniform",
+    muMeanPrior = 0.5,
+    muStandardDeviationPrior = 0.2) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('bayesmetacorr requires jmvcore to be installed (restart may be required)')
@@ -265,15 +246,11 @@ bayesmetacorr <- function(
         samplesize = samplesize,
         slab = slab,
         cormeasure = cormeasure,
-        level = level,
-        showModelFit = showModelFit,
-        addcred = addcred,
-        addfit = addfit,
-        showweights = showweights,
-        steps = steps,
-        xAxisTitle = xAxisTitle,
-        pchForest = pchForest,
-        forestOrder = forestOrder)
+        tauPrior = tauPrior,
+        scalePrior = scalePrior,
+        muPrior = muPrior,
+        muMeanPrior = muMeanPrior,
+        muStandardDeviationPrior = muStandardDeviationPrior)
 
     results <- bayesmetacorrResults$new(
         options = options)

@@ -10,12 +10,12 @@ bayesmetacorrClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         ni <- self$options$samplesize
         cormeasure <- self$options$cormeasure
         slab <- self$options$slab
-        addcred <- self$options$addcred
-        addfit <- self$options$addfit
-        showweights <- self$options$showweights
-        steps <- self$options$steps
-        pchForest <- self$options$pchForest
-        level <- self$options$level
+        scalePrior <- self$options$scalePrior
+        tauPrior <- self$options$tauPrior
+        muPrior <- self$options$muPrior
+        muMeanPrior <- self$options$muMeanPrior
+        muStandardDeviationPrior <- self$options$muStandardDeviationPrior
+        #level <- self$options$level
         table <- self$results$textRICH
         
         ready <- TRUE
@@ -54,9 +54,28 @@ bayesmetacorrClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             dat$sei <- NULL
             dat$sei <- sqrt(dat$vi)
             
-            resBayes <- bayesmeta::bayesmeta(dat,
-                                        label = dat$authors,
-                                        tau.prior = "uniform")
+            
+            if (self$options$tauPrior == "halfCauchy") {
+              taupriordensity <- function(t){dhalfcauchy(t, scale=scalePrior)}
+            } else if (self$options$tauPrior == "uniform") {
+              taupriordensity <- "uniform"
+            } else if (self$options$tauPrior == "sqrt") {
+              taupriordensity <- "sqrt"
+            }
+            
+            
+            if (self$options$muPrior == "normal") {
+              resBayes <- bayesmeta::bayesmeta(dat,
+                                               label = dat$authors,
+                                               mu.prior.mean=muMeanPrior,
+                                               mu.prior.sd=muStandardDeviationPrior,
+                                               tau.prior=taupriordensity)
+            } else if (self$options$muPrior == "uniform") {
+              resBayes <- bayesmeta::bayesmeta(dat,
+                                               label = dat$authors,
+                                               tau.prior=taupriordensity)
+            }
+
             res <- resBayes
           
 
@@ -117,36 +136,31 @@ bayesmetacorrClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           )
           
 
-            # titleRan <- paste("Random-Effects Model (k = ", res$k, ")", sep = "")
-            # titleRanNote <-
-            #   paste("Tau\u00B2 Estimator: ", tau2EstimatorName, sep = "")
-            # table$setTitle(title = titleRan)
-            # table$setNote("rannote", titleRanNote)
+          # plotPosteriorDensity <-
+          #   plot(
+          #     resBayes
+          #     #which = "3",
+          #   )
+          res1 <- res
           
           image <- self$results$plot
           image$setState(resBayes)
-          # imagePD <- self$results$plotPD
-          # imagePD$setState(resBayes)
+          
+          imagePDTau <- self$results$plotPDTau
+          imagePDTau$setState(res)
         
+          imagePDMu <- self$results$plotPDMu
+          imagePDMu$setState(res1)
+          
+          imageJPD <- self$results$plotJPD
+          imageJPD$setState(res1)
         }  
       },
       #Forest Plot Function
       .plot = function(image, ...) {
         # <-- the plot function
         plotData <- image$state
-        #StudyID <- self$options$studylabels
-        #yi <- self$options$yi
-        #vi <- self$options$vi
-        #res <- metafor::rma(yi=yi, vi=vi, data=self$data)
-        # addcred <- self$options$addcred
-        # addfit <- self$options$addfit
-        # level <- self$options$level
-        # showweights <- self$options$showweights
-        # xlab <- self$options$xAxisTitle
-        # order <- self$options$forestOrder
-        # steps <- self$options$steps
-        # pchForest <- self$options$pchForest
-        # pch <- as.numeric(pchForest)
+        
         ready <- TRUE
         if (is.null(self$options$rcor) ||
             is.null(self$options$samplesize) ||
@@ -155,63 +169,58 @@ bayesmetacorrClass <- if (requireNamespace('jmvcore')) R6::R6Class(
           
           ready <- FALSE
         }
-        # if (is.null(image$state$yi) ||
-        #     is.null(image$state$vi) == TRUE) {
-        #   ready <- FALSE
-        # }
+
         if (ready == TRUE) {
-          plot <-
-            metafor::forest(
-              plotData
-              # plotData,
-              # addcred = addcred,
-              # addfit = addfit,
-              # level = level,
-              # showweights = showweights,
-              # xlab = xlab,
-              # order = order,
-              # steps = steps,
-              # pch = pch
-            )
+          plot <- (forestplot::forestplot(plotData))
           print(plot)
           TRUE
         }
-      # },
+       },
+      #}
+      .plotPDTau = function(imagePDTau, ...) {
+        # <-- the plot function
+        plotDataPD <- imagePDTau$state
+        ready <- TRUE
+        if (is.null(self$options$rcor) ||
+            is.null(self$options$samplesize) ||
+            is.null(self$options$slab) == TRUE) {
+          ready <- FALSE
+        }
+        if (ready == TRUE) {
+          plotPDTau <- plot(plotDataPD, which="3")
+          print(plotPDTau)
+          TRUE
+        }
+      },
+      .plotPDMu = function(imagePDMu, ...) {
+        # <-- the plot function
+        plotDataPD1 <- imagePDMu$state
+        ready <- TRUE
+        if (is.null(self$options$rcor) ||
+            is.null(self$options$samplesize) ||
+            is.null(self$options$slab) == TRUE) {
+          ready <- FALSE
+        }
+        if (ready == TRUE) {
+          plotPDMu <- plot(plotDataPD1, which="4")
+          print(plotPDMu)
+          TRUE
+        }
+      },
+      .plotJPD = function(imageJPD, ...) {
+        # <-- the plot function
+        plotDataJPD <- imageJPD$state
+        ready <- TRUE
+        if (is.null(self$options$rcor) ||
+            is.null(self$options$samplesize) ||
+            is.null(self$options$slab) == TRUE) {
+          ready <- FALSE
+        }
+        if (ready == TRUE) {
+          plotJPD <- plot(plotDataJPD, which="2")
+          print(plotJPD)
+          TRUE
+        }
       }
-      # .plotPD = function(imagePD, ...) {
-      #   # <-- the plot function
-      #   plotDataPD <- imagePD$state
-      #   #StudyID <- self$options$studylabels
-      #   #yi <- self$options$yi
-      #   #vi <- self$options$vi
-      #   #res <- metafor::rma(yi=yi, vi=vi, data=self$data)
-      #   # addcred <- self$options$addcred
-      #   # addfit <- self$options$addfit
-      #   # level <- self$options$level
-      #   # showweights <- self$options$showweights
-      #   # xlab <- self$options$xAxisTitle
-      #   # order <- self$options$forestOrder
-      #   # steps <- self$options$steps
-      #   # pchForest <- self$options$pchForest
-      #   # pch <- as.numeric(pchForest)
-      #   ready <- TRUE
-      #   if (is.null(self$options$rcor) ||
-      #       is.null(self$options$samplesize) ||
-      #       is.null(self$options$slab) == TRUE) {
-      #     ready <- FALSE
-      #   }
-      #   if (ready == TRUE) {
-      #     plotPosteriorDensity <-
-      #       bayesmeta::plot.bayesmeta(
-      #         plotDataPD,
-      #         prior=TRUE,
-      #         title = ("Posterior density"),
-      #         xlim = c(0,1),
-      #         ylim = c(0,1)
-      #       )
-      #     print(PDPlot)
-      #     TRUE
-      #   }
-      # }
     )
 )

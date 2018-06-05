@@ -38,83 +38,50 @@ options:
         - name: "ZCOR"
           title: Fisher's r-to-z transformed correlation coefficient
       default: ZCOR
-
-    - name: level
-      type: Number
-      title: Confidence interval level
-      min: 50
-      max: 99.9
-      default: 95
-
-    - name: showModelFit
-      title: Display model fit
-      type: Bool
-      default: FALSE
-
-    - name: addcred
-      title: Prediction interval
-      type: Bool
-      default: FALSE
-
-    - name: addfit
-      title: Summary estimate
-      type: Bool
-      default: TRUE
-
-    - name: showweights
-      title: Model fitting weights
-      type: Bool
-      default: FALSE
       
-    - name: steps
-      title: x-axis steps
-      type: Number
-      min: 1
-      max: 999
-      default: 5
-      
-    - name: xAxisTitle
-      title: x-axis title
-      type: String
-      
-    - name: pchForest
-      title: Effect size points
+    - name: tauPrior
+      title: Heterogeneity prior
       type: List
       options:
-        - name: "16"
-          title: Black Circle
-        - name: "18"
-          title: Black Diamond
-        - name: "15"
-          title: Black Square
-        - name: "17"
-          title: Black Triangle
-        - name: "1"
-          title: Empty Circle
-        - name: "5"
-          title: Empty Diamond
-        - name: "0"
-          title: Empty Square
-        - name: "2"
-          title: Empty Triangle
-        - name: "8"
-          title: Star
-      default: "15"
+        - name: "uniform"
+          title: Uniform prior
+        - name: "sqrt"
+          title: Square root of a uniform prior
+        - name: "halfCauchy"
+          title: Half Cauchy prior
+      default: "uniform"
       
-    - name: forestOrder
-      title: Study order
+    - name: scalePrior
+      title: Scale parameter
+      type: Number
+      min: 0.01
+      max: 100
+      default: 10
+
+    - name: muPrior
+      title: Effect prior
       type: List
       options:
-        - name: "obs"
-          title: Observed effect sizes
-        - name: "fit"
-          title: Fitted values
-        - name: "prec"
-          title: Sampling variances
-        - name: "resid"
-          title: Residuals
-        - name: "abs.resid"
-          title: Absolute residuals
-      default: fit
+        - name: "uniform"
+          title: Uniform prior
+        - name: "normal"
+          title: Normal prior distribution
+      default: "uniform"
+      
+    - name: muMeanPrior
+      title: Mean effect
+      type: Number
+      min: 0.01
+      max: 100
+      default: 0.5
+      
+    - name: muStandardDeviationPrior
+      title: Standard deviation prior
+      type: Number
+      min: 0.01
+      max: 100
+      default: 0.2
+
+
 
 ...

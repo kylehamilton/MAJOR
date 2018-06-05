@@ -40,43 +40,33 @@ children:
           - type: ComboBox
             name: cormeasure
             useSingleCell: true
-          - type: TextBox
-            name: level
-            format: number
-            inputPattern: '[0-9]+'
-            useSingleCell: true
-            suffix: '%'
-          - type: CheckBox
-            name: showModelFit
   - type: CollapseBox
-    label: Plots
+    label: Prior Specification
     collapsed: true
     stretchFactor: 1
     children:
       - type: Label
-        label: Forest Plot
+        label: Tau Prior Specification
         children:
-          - type: CheckBox
-            name: addcred
-          - type: CheckBox
-            name: addfit
-          - type: CheckBox
-            name: showweights
+          - type: ComboBox
+            name: tauPrior
+            useSingleCell: true
           - type: TextBox
-            label: X-Axis Steps
-            name: steps
+            label: Scale parameter
+            name: scalePrior
             format: number
             stretchFactor: 2
             useSingleCell: true
+      - type: Label
+        label: Effect Prior Specification
+        children:
+          - type: ComboBox
+            name: muPrior
           - type: TextBox
-            label: X-Axis Title
-            name: xAxisTitle
-            format: string
-            stretchFactor: 2
-            useSingleCell: true
-          - type: ComboBox
-            name: pchForest
-            useSingleCell: true
-          - type: ComboBox
-            name: forestOrder
-            useSingleCell: true
+            name: muMeanPrior
+            format: number
+            inputPattern: '[0-9]+'
+          - type: TextBox
+            name: muStandardDeviationPrior
+            format: number
+            inputPattern: '[0-9]+'
