@@ -73,7 +73,7 @@ options:
           title: Raw alpha values
         - name: "AHW"
           title: Transformed alpha values (Hakstian & Whalen, 1976)
-        - name: "ABI"
+        - name: "ABT"
           title: Transformed alpha values (Bonett, 2002)
         - name: "ROM"
           title: Log transformed ratio of means
