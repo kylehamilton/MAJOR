@@ -28,19 +28,19 @@ bayesmetacorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..samplesize <- jmvcore::OptionVariable$new(
                 "samplesize",
                 samplesize,
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..slab <- jmvcore::OptionVariable$new(
                 "slab",
                 slab,
                 suggested=list(
-                    "nominaltext"))
+                    "nominal"))
             private$..cormeasure <- jmvcore::OptionList$new(
                 "cormeasure",
                 cormeasure,
@@ -248,6 +248,17 @@ bayesmetacorr <- function(
     if ( ! requireNamespace('jmvcore'))
         stop('bayesmetacorr requires jmvcore to be installed (restart may be required)')
 
+    if ( ! missing(rcor)) rcor <- jmvcore::resolveQuo(jmvcore::enquo(rcor))
+    if ( ! missing(samplesize)) samplesize <- jmvcore::resolveQuo(jmvcore::enquo(samplesize))
+    if ( ! missing(slab)) slab <- jmvcore::resolveQuo(jmvcore::enquo(slab))
+    if (missing(data))
+        data <- jmvcore::marshalData(
+            parent.frame(),
+            `if`( ! missing(rcor), rcor, NULL),
+            `if`( ! missing(samplesize), samplesize, NULL),
+            `if`( ! missing(slab), slab, NULL))
+
+
     options <- bayesmetacorrOptions$new(
         rcor = rcor,
         samplesize = samplesize,
@@ -258,9 +269,6 @@ bayesmetacorr <- function(
         muPrior = muPrior,
         muMeanPrior = muMeanPrior,
         muStandardDeviationPrior = muStandardDeviationPrior)
-
-    results <- bayesmetacorrResults$new(
-        options = options)
 
     analysis <- bayesmetacorrClass$new(
         options = options,

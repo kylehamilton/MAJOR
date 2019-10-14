@@ -65,8 +65,6 @@ children:
           - type: TextBox
             name: muMeanPrior
             format: number
-            inputPattern: '[0-9]+'
           - type: TextBox
             name: muStandardDeviationPrior
             format: number
-            inputPattern: '[0-9]+'

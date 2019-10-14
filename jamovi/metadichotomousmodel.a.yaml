@@ -4,7 +4,7 @@ title: Dichotomous Models
 menuGroup: MAJOR
 menuSubgroup: Meta Analysis
 version: '1.0.0'
-jas: '1.1'
+jas: '1.2'
 
 options:
     - name: data
@@ -13,36 +13,36 @@ options:
     - name: ai
       title: Number of incidents in experimental group
       suggested: [continuous]
-      permitted: [continuous]
+      permitted: [numeric]
       type: Variable
 
     - name: n1i
       title: Total sample size for experimental group
       suggested: [continuous]
-      permitted: [continuous]
+      permitted: [numeric]
       type: Variable
 
     - name: ci
       title: Number of incidents in control group
       suggested: [continuous]
-      permitted: [continuous]
+      permitted: [numeric]
       type: Variable
 
     - name: n2i
       title: Total sample size for control group
       suggested: [continuous]
-      permitted: [continuous]
+      permitted: [numeric]
       type: Variable
 
     - name: slab
       title: Study label
-      suggested: [nominaltext]
+      suggested: [nominal]
       type: Variable
 
     - name: moderatorcor
       title: Moderator
       suggested: [continuous]
-      permitted: [continuous]
+      permitted: [numeric]
       type: Variable
 
     - name: methodmetamdms

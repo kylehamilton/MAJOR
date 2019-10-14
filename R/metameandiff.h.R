@@ -43,54 +43,54 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..m1i <- jmvcore::OptionVariable$new(
                 "m1i",
                 m1i,
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..sd1i <- jmvcore::OptionVariable$new(
                 "sd1i",
                 sd1i,
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..n2i <- jmvcore::OptionVariable$new(
                 "n2i",
                 n2i,
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..m2i <- jmvcore::OptionVariable$new(
                 "m2i",
                 m2i,
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..sd2i <- jmvcore::OptionVariable$new(
                 "sd2i",
                 sd2i,
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..slab <- jmvcore::OptionVariable$new(
                 "slab",
                 slab,
                 suggested=list(
-                    "nominaltext"))
+                    "nominal"))
             private$..moderatorcor <- jmvcore::OptionVariable$new(
                 "moderatorcor",
                 moderatorcor,
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..methodmetacor <- jmvcore::OptionList$new(
                 "methodmetacor",
                 methodmetacor,
@@ -573,6 +573,27 @@ metaMeanDiff <- function(
     if ( ! requireNamespace('jmvcore'))
         stop('metaMeanDiff requires jmvcore to be installed (restart may be required)')
 
+    if ( ! missing(n1i)) n1i <- jmvcore::resolveQuo(jmvcore::enquo(n1i))
+    if ( ! missing(m1i)) m1i <- jmvcore::resolveQuo(jmvcore::enquo(m1i))
+    if ( ! missing(sd1i)) sd1i <- jmvcore::resolveQuo(jmvcore::enquo(sd1i))
+    if ( ! missing(n2i)) n2i <- jmvcore::resolveQuo(jmvcore::enquo(n2i))
+    if ( ! missing(m2i)) m2i <- jmvcore::resolveQuo(jmvcore::enquo(m2i))
+    if ( ! missing(sd2i)) sd2i <- jmvcore::resolveQuo(jmvcore::enquo(sd2i))
+    if ( ! missing(slab)) slab <- jmvcore::resolveQuo(jmvcore::enquo(slab))
+    if ( ! missing(moderatorcor)) moderatorcor <- jmvcore::resolveQuo(jmvcore::enquo(moderatorcor))
+    if (missing(data))
+        data <- jmvcore::marshalData(
+            parent.frame(),
+            `if`( ! missing(n1i), n1i, NULL),
+            `if`( ! missing(m1i), m1i, NULL),
+            `if`( ! missing(sd1i), sd1i, NULL),
+            `if`( ! missing(n2i), n2i, NULL),
+            `if`( ! missing(m2i), m2i, NULL),
+            `if`( ! missing(sd2i), sd2i, NULL),
+            `if`( ! missing(slab), slab, NULL),
+            `if`( ! missing(moderatorcor), moderatorcor, NULL))
+
+
     options <- metaMeanDiffOptions$new(
         n1i = n1i,
         m1i = m1i,
@@ -598,9 +619,6 @@ metaMeanDiff <- function(
         yaxis = yaxis,
         yaxisInv = yaxisInv,
         enhanceFunnel = enhanceFunnel)
-
-    results <- metaMeanDiffResults$new(
-        options = options)
 
     analysis <- metaMeanDiffClass$new(
         options = options,

@@ -41,40 +41,40 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..n1i <- jmvcore::OptionVariable$new(
                 "n1i",
                 n1i,
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..ci <- jmvcore::OptionVariable$new(
                 "ci",
                 ci,
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..n2i <- jmvcore::OptionVariable$new(
                 "n2i",
                 n2i,
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..slab <- jmvcore::OptionVariable$new(
                 "slab",
                 slab,
                 suggested=list(
-                    "nominaltext"))
+                    "nominal"))
             private$..moderatorcor <- jmvcore::OptionVariable$new(
                 "moderatorcor",
                 moderatorcor,
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..methodmetamdms <- jmvcore::OptionList$new(
                 "methodmetamdms",
                 methodmetamdms,
@@ -547,6 +547,23 @@ metaDichotomousModel <- function(
     if ( ! requireNamespace('jmvcore'))
         stop('metaDichotomousModel requires jmvcore to be installed (restart may be required)')
 
+    if ( ! missing(ai)) ai <- jmvcore::resolveQuo(jmvcore::enquo(ai))
+    if ( ! missing(n1i)) n1i <- jmvcore::resolveQuo(jmvcore::enquo(n1i))
+    if ( ! missing(ci)) ci <- jmvcore::resolveQuo(jmvcore::enquo(ci))
+    if ( ! missing(n2i)) n2i <- jmvcore::resolveQuo(jmvcore::enquo(n2i))
+    if ( ! missing(slab)) slab <- jmvcore::resolveQuo(jmvcore::enquo(slab))
+    if ( ! missing(moderatorcor)) moderatorcor <- jmvcore::resolveQuo(jmvcore::enquo(moderatorcor))
+    if (missing(data))
+        data <- jmvcore::marshalData(
+            parent.frame(),
+            `if`( ! missing(ai), ai, NULL),
+            `if`( ! missing(n1i), n1i, NULL),
+            `if`( ! missing(ci), ci, NULL),
+            `if`( ! missing(n2i), n2i, NULL),
+            `if`( ! missing(slab), slab, NULL),
+            `if`( ! missing(moderatorcor), moderatorcor, NULL))
+
+
     options <- metaDichotomousModelOptions$new(
         ai = ai,
         n1i = n1i,
@@ -570,9 +587,6 @@ metaDichotomousModel <- function(
         yaxis = yaxis,
         yaxisInv = yaxisInv,
         enhanceFunnel = enhanceFunnel)
-
-    results <- metaDichotomousModelResults$new(
-        options = options)
 
     analysis <- metaDichotomousModelClass$new(
         options = options,

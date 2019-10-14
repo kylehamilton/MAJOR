@@ -4,7 +4,7 @@ title: Mean Differences (n, M, SD)
 menuGroup: MAJOR
 menuSubgroup: Meta Analysis
 version: '1.0.0'
-jas: '1.1'
+jas: '1.2'
 
 options:
     - name: data
@@ -13,48 +13,48 @@ options:
     - name: n1i
       title: Group one sample size
       suggested: [continuous]
-      permitted: [continuous]
+      permitted: [numeric]
       type: Variable
 
     - name: m1i
       title: Group one mean
       suggested: [continuous]
-      permitted: [continuous]
+      permitted: [numeric]
       type: Variable
 
     - name: sd1i
       title: Group one standard deviation
       suggested: [continuous]
-      permitted: [continuous]
+      permitted: [numeric]
       type: Variable
 
     - name: n2i
       title: Group two sample size
       suggested: [continuous]
-      permitted: [continuous]
+      permitted: [numeric]
       type: Variable
 
     - name: m2i
       title: Group two mean
       suggested: [continuous]
-      permitted: [continuous]
+      permitted: [numeric]
       type: Variable
 
     - name: sd2i
       title: Group two standard deviation
       suggested: [continuous]
-      permitted: [continuous]
+      permitted: [numeric]
       type: Variable
 
     - name: slab
       title: Study label
-      suggested: [nominaltext]
+      suggested: [nominal]
       type: Variable
 
     - name: moderatorcor
       title: Moderator
       suggested: [continuous]
-      permitted: [continuous]
+      permitted: [numeric]
       type: Variable
 
     - name: methodmetacor

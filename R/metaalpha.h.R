@@ -40,33 +40,33 @@ metaAlphaOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..mi <- jmvcore::OptionVariable$new(
                 "mi",
                 mi,
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..ni <- jmvcore::OptionVariable$new(
                 "ni",
                 ni,
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..slab <- jmvcore::OptionVariable$new(
                 "slab",
                 slab,
                 suggested=list(
-                    "nominaltext"))
+                    "nominal"))
             private$..moderatorcor <- jmvcore::OptionVariable$new(
                 "moderatorcor",
                 moderatorcor,
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..methodmetacor <- jmvcore::OptionList$new(
                 "methodmetacor",
                 methodmetacor,
@@ -87,7 +87,7 @@ metaAlphaOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 options=list(
                     "ARAW",
                     "AHW",
-                    "ABI",
+                    "ABT",
                     "ROM"),
                 default="ARAW")
             private$..moderatorType <- jmvcore::OptionList$new(
@@ -534,6 +534,21 @@ metaAlpha <- function(
     if ( ! requireNamespace('jmvcore'))
         stop('metaAlpha requires jmvcore to be installed (restart may be required)')
 
+    if ( ! missing(ai)) ai <- jmvcore::resolveQuo(jmvcore::enquo(ai))
+    if ( ! missing(mi)) mi <- jmvcore::resolveQuo(jmvcore::enquo(mi))
+    if ( ! missing(ni)) ni <- jmvcore::resolveQuo(jmvcore::enquo(ni))
+    if ( ! missing(slab)) slab <- jmvcore::resolveQuo(jmvcore::enquo(slab))
+    if ( ! missing(moderatorcor)) moderatorcor <- jmvcore::resolveQuo(jmvcore::enquo(moderatorcor))
+    if (missing(data))
+        data <- jmvcore::marshalData(
+            parent.frame(),
+            `if`( ! missing(ai), ai, NULL),
+            `if`( ! missing(mi), mi, NULL),
+            `if`( ! missing(ni), ni, NULL),
+            `if`( ! missing(slab), slab, NULL),
+            `if`( ! missing(moderatorcor), moderatorcor, NULL))
+
+
     options <- metaAlphaOptions$new(
         ai = ai,
         mi = mi,
@@ -556,9 +571,6 @@ metaAlpha <- function(
         yaxis = yaxis,
         yaxisInv = yaxisInv,
         enhanceFunnel = enhanceFunnel)
-
-    results <- metaAlphaResults$new(
-        options = options)
 
     analysis <- metaAlphaClass$new(
         options = options,

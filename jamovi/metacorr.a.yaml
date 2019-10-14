@@ -4,7 +4,7 @@ title: Correlation Coefficients
 menuGroup: MAJOR
 menuSubgroup: Meta Analysis
 version: '1.0.2'
-jas: '1.1'
+jas: '1.2'
 
 options:
     - name: data
@@ -13,24 +13,24 @@ options:
     - name: rcor
       title: Correlations
       suggested: [continuous]
-      permitted: [continuous]
+      permitted: [numeric]
       type: Variable
 
     - name: samplesize
       title: Sample sizes
       suggested: [continuous]
-      permitted: [continuous]
+      permitted: [numeric]
       type: Variable
 
     - name: slab
       title: Study label
-      suggested: [nominaltext]
+      suggested: [nominal]
       type: Variable
 
     - name: moderatorcor
       title: Moderator
       suggested: [continuous]
-      permitted: [continuous]
+      permitted: [numeric]
       type: Variable
 
     - name: methodmetacor

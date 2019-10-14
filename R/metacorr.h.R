@@ -39,26 +39,26 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..samplesize <- jmvcore::OptionVariable$new(
                 "samplesize",
                 samplesize,
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..slab <- jmvcore::OptionVariable$new(
                 "slab",
                 slab,
                 suggested=list(
-                    "nominaltext"))
+                    "nominal"))
             private$..moderatorcor <- jmvcore::OptionVariable$new(
                 "moderatorcor",
                 moderatorcor,
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..methodmetacor <- jmvcore::OptionList$new(
                 "methodmetacor",
                 methodmetacor,
@@ -520,6 +520,19 @@ MetaCorr <- function(
     if ( ! requireNamespace('jmvcore'))
         stop('MetaCorr requires jmvcore to be installed (restart may be required)')
 
+    if ( ! missing(rcor)) rcor <- jmvcore::resolveQuo(jmvcore::enquo(rcor))
+    if ( ! missing(samplesize)) samplesize <- jmvcore::resolveQuo(jmvcore::enquo(samplesize))
+    if ( ! missing(slab)) slab <- jmvcore::resolveQuo(jmvcore::enquo(slab))
+    if ( ! missing(moderatorcor)) moderatorcor <- jmvcore::resolveQuo(jmvcore::enquo(moderatorcor))
+    if (missing(data))
+        data <- jmvcore::marshalData(
+            parent.frame(),
+            `if`( ! missing(rcor), rcor, NULL),
+            `if`( ! missing(samplesize), samplesize, NULL),
+            `if`( ! missing(slab), slab, NULL),
+            `if`( ! missing(moderatorcor), moderatorcor, NULL))
+
+
     options <- MetaCorrOptions$new(
         rcor = rcor,
         samplesize = samplesize,
@@ -541,9 +554,6 @@ MetaCorr <- function(
         yaxis = yaxis,
         yaxisInv = yaxisInv,
         enhanceFunnel = enhanceFunnel)
-
-    results <- MetaCorrResults$new(
-        options = options)
 
     analysis <- MetaCorrClass$new(
         options = options,

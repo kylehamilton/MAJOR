@@ -53,7 +53,6 @@ children:
           - type: TextBox
             name: level
             format: number
-            inputPattern: '[0-9]+'
             useSingleCell: true
             suffix: '%'
           - type: CheckBox

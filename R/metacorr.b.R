@@ -86,7 +86,7 @@ MetaCorrClass <- R6::R6Class(
           #data <- data %>% drop_na(moderator)
         }
         
-        if (is.null(self$options$moderatorcor) == FALSE) {
+        if (is.null(self$options$moderatorcor) == "CON") {
           data <- data[!is.na(data$moderator),]
           rownames(data) <- NULL
           #data <- data %>% drop_na(moderator)

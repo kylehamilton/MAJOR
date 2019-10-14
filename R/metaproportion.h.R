@@ -39,26 +39,26 @@ metaProportionOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..ni <- jmvcore::OptionVariable$new(
                 "ni",
                 ni,
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..slab <- jmvcore::OptionVariable$new(
                 "slab",
                 slab,
                 suggested=list(
-                    "nominaltext"))
+                    "nominal"))
             private$..moderatorcor <- jmvcore::OptionVariable$new(
                 "moderatorcor",
                 moderatorcor,
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..methodmetacor <- jmvcore::OptionList$new(
                 "methodmetacor",
                 methodmetacor,
@@ -522,6 +522,19 @@ metaProportion <- function(
     if ( ! requireNamespace('jmvcore'))
         stop('metaProportion requires jmvcore to be installed (restart may be required)')
 
+    if ( ! missing(xi)) xi <- jmvcore::resolveQuo(jmvcore::enquo(xi))
+    if ( ! missing(ni)) ni <- jmvcore::resolveQuo(jmvcore::enquo(ni))
+    if ( ! missing(slab)) slab <- jmvcore::resolveQuo(jmvcore::enquo(slab))
+    if ( ! missing(moderatorcor)) moderatorcor <- jmvcore::resolveQuo(jmvcore::enquo(moderatorcor))
+    if (missing(data))
+        data <- jmvcore::marshalData(
+            parent.frame(),
+            `if`( ! missing(xi), xi, NULL),
+            `if`( ! missing(ni), ni, NULL),
+            `if`( ! missing(slab), slab, NULL),
+            `if`( ! missing(moderatorcor), moderatorcor, NULL))
+
+
     options <- metaProportionOptions$new(
         xi = xi,
         ni = ni,
@@ -543,9 +556,6 @@ metaProportion <- function(
         yaxis = yaxis,
         yaxisInv = yaxisInv,
         enhanceFunnel = enhanceFunnel)
-
-    results <- metaProportionResults$new(
-        options = options)
 
     analysis <- metaProportionClass$new(
         options = options,

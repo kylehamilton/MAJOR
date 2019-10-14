@@ -38,26 +38,26 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..samplingVariances <- jmvcore::OptionVariable$new(
                 "samplingVariances",
                 samplingVariances,
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..slab <- jmvcore::OptionVariable$new(
                 "slab",
                 slab,
                 suggested=list(
-                    "nominaltext"))
+                    "nominal"))
             private$..moderatorcor <- jmvcore::OptionVariable$new(
                 "moderatorcor",
                 moderatorcor,
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous"))
+                    "numeric"))
             private$..methodmetacor <- jmvcore::OptionList$new(
                 "methodmetacor",
                 methodmetacor,
@@ -506,6 +506,19 @@ metaDV <- function(
     if ( ! requireNamespace('jmvcore'))
         stop('metaDV requires jmvcore to be installed (restart may be required)')
 
+    if ( ! missing(effectSize)) effectSize <- jmvcore::resolveQuo(jmvcore::enquo(effectSize))
+    if ( ! missing(samplingVariances)) samplingVariances <- jmvcore::resolveQuo(jmvcore::enquo(samplingVariances))
+    if ( ! missing(slab)) slab <- jmvcore::resolveQuo(jmvcore::enquo(slab))
+    if ( ! missing(moderatorcor)) moderatorcor <- jmvcore::resolveQuo(jmvcore::enquo(moderatorcor))
+    if (missing(data))
+        data <- jmvcore::marshalData(
+            parent.frame(),
+            `if`( ! missing(effectSize), effectSize, NULL),
+            `if`( ! missing(samplingVariances), samplingVariances, NULL),
+            `if`( ! missing(slab), slab, NULL),
+            `if`( ! missing(moderatorcor), moderatorcor, NULL))
+
+
     options <- metaDVOptions$new(
         effectSize = effectSize,
         samplingVariances = samplingVariances,
@@ -526,9 +539,6 @@ metaDV <- function(
         yaxis = yaxis,
         yaxisInv = yaxisInv,
         enhanceFunnel = enhanceFunnel)
-
-    results <- metaDVResults$new(
-        options = options)
 
     analysis <- metaDVClass$new(
         options = options,
