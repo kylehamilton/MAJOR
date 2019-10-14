@@ -49,123 +49,171 @@ metaDichotomousModelClass <-
           }
           
           if (ready == TRUE) {
-            if (is.null(self$options$moderatorcor) == FALSE) {
-              data <-
-                data.frame(
-                  ai = self$data[[self$options$ai]],
-                  n1i = self$data[[self$options$n1i]],
-                  ci = self$data[[self$options$ci]],
-                  n2i = self$data[[self$options$n2i]],
-                  moderator = self$data[[self$options$moderatorcor]],
-                  slab = self$data[[self$options$slab]]
-                )
-              data[[ai]] <- jmvcore::toNumeric(data[[ai]])
-              data[[n1i]] <- jmvcore::toNumeric(data[[n1i]])
-              data[[ci]] <- jmvcore::toNumeric(data[[ci]])
-              data[[n2i]] <- jmvcore::toNumeric(data[[n2i]])
-              data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
-              data$checkG1 <- 0
-              data$checkG2 <- 0
-              data$checkG1 <- data$n1i - data$ai
-              data$checkG2 <- data$n2i - data$ci
-              if (data$checkG1 < 0) {
-                #ready <- FALSE
-                jmvcore::reject(
-                  "Number of incidents in the experimental group is higher than the associated sample size group, check your data ",
-                  code = ''
-                )
-              }
-              if (data$checkG2 < 0) {
-                #ready <- FALSE
-                jmvcore::reject(
-                  "Number of incidents in the control group is higher than the associated sample size group, check your data ",
-                  code = ''
-                )
-              }
-            } else {
-              data <-
-                data.frame(
-                  ai = self$data[[self$options$ai]],
-                  n1i = self$data[[self$options$n1i]],
-                  ci = self$data[[self$options$ci]],
-                  n2i = self$data[[self$options$n2i]],
-                  slab = self$data[[self$options$slab]]
-                )
-              data[[ai]] <- jmvcore::toNumeric(data[[ai]])
-              data[[n1i]] <- jmvcore::toNumeric(data[[n1i]])
-              data[[ci]] <- jmvcore::toNumeric(data[[ci]])
-              data[[n2i]] <- jmvcore::toNumeric(data[[n2i]])
-              data$checkG1 <- 0
-              data$checkG2 <- 0
-              data$checkG1 <- data$n1i - data$ai
-              data$checkG2 <- data$n2i - data$ci
-              if (data$checkG1 < 0) {
-                #ready <- FALSE
-                jmvcore::reject(
-                  "Number of incidents in the experimental group is higher than the associated sample size group, check your data ",
-                  code = ''
-                )
-              }
-              if (data$checkG2 < 0) {
-                #ready <- FALSE
-                jmvcore::reject(
-                  "Number of incidents in the control group is higher than the associated sample size group, check your data ",
-                  code = ''
-                )
-              }
-            }
-            
-            if (is.null(self$options$moderatorcor) == FALSE) {
-              res <-
-                metafor::rma(
-                  ai = ai,
-                  n1i = n1i,
-                  ci = ci,
-                  n2i = n2i,
-                  mods = moderator,
-                  method = method2,
-                  measure = mdmseasure,
-                  data = data,
-                  slab = slab,
-                  level = level
-                )
-              if ((self$options$moderatorType) == "CAT") {
-                res <-
-                  metafor::rma(
-                    ai = ai,
-                    n1i = n1i,
-                    ci = ci,
-                    n2i = n2i,
-                    mods = ~ factor(moderator),
-                    method = method2,
-                    measure = mdmseasure,
-                    data = data,
-                    slab = slab,
-                    level = level
+              if ((self$options$moderatorType) == "NON")
+                if (is.null(self$options$moderatorcor) == FALSE) {
+                  ready <- FALSE
+                  # I really need to think of a better error message this is a place holder until I figure something out
+                  jmvcore::reject("Must Remove Moderator Variable", code =
+                                    '')
+                }
+                data <-
+                  data.frame(
+                    ai = self$data[[self$options$ai]],
+                    n1i = self$data[[self$options$n1i]],
+                    ci = self$data[[self$options$ci]],
+                    n2i = self$data[[self$options$n2i]],
+                    slab = self$data[[self$options$slab]]
                   )
+              data[[ai]] <- jmvcore::toNumeric(data[[ai]])
+              data[[n1i]] <- jmvcore::toNumeric(data[[n1i]])
+              data[[ci]] <- jmvcore::toNumeric(data[[ci]])
+              data[[n2i]] <- jmvcore::toNumeric(data[[n2i]])
+              data$checkG1 <- 0
+              data$checkG2 <- 0
+              data$checkG1 <- data$n1i - data$ai
+              data$checkG2 <- data$n2i - data$ci
+              if (data$checkG1 < 0) {
+                #ready <- FALSE
+                jmvcore::reject(
+                  "Number of incidents in the experimental group is higher than the associated sample size group, check your data ",
+                  code = ''
+                )
               }
-              if (is.list(res) == FALSE) {
-                jmvcore::reject("Check sample size and incident data", code = '')
-              }
-              
-            } else {
-              res <-
-                try(metafor::rma(
-                  ai = ai,
-                  n1i = n1i,
-                  ci = ci,
-                  n2i = n2i,
-                  method = method2,
-                  measure = mdmseasure,
-                  data = data,
-                  slab = slab,
-                  level = level
-                ))
-              if (is.list(res) == FALSE) {
-                jmvcore::reject("Check sample size and incident data", code = '')
+              if (data$checkG2 < 0) {
+                #ready <- FALSE
+                jmvcore::reject(
+                  "Number of incidents in the control group is higher than the associated sample size group, check your data ",
+                  code = ''
+                )
               }
             }
-            
+            res <-
+              metafor::rma(
+                ai = ai,
+                n1i = n1i,
+                ci = ci,
+                n2i = n2i,
+                method = method2,
+                measure = mdmseasure,
+                data = data,
+                slab = slab,
+                level = level
+              )
+            if (is.list(res) == FALSE) {
+              jmvcore::reject("Check sample size and incident data", code = '')
+            }
+          
+        if (self$options$moderatorType == "CON") {
+          if (is.null(self$options$moderatorcor) == TRUE) {
+            ready <- FALSE
+            # I really need to think of a better error message this is a place holder until I figure something out
+            jmvcore::reject("Must Supply a Moderator Variable", code =
+                              '')
+          }
+            data <-
+              data.frame(
+                ai = self$data[[self$options$ai]],
+                n1i = self$data[[self$options$n1i]],
+                ci = self$data[[self$options$ci]],
+                n2i = self$data[[self$options$n2i]],
+                moderator = self$data[[self$options$moderatorcor]],
+                slab = self$data[[self$options$slab]]
+              )
+            data[[ai]] <- jmvcore::toNumeric(data[[ai]])
+            data[[n1i]] <- jmvcore::toNumeric(data[[n1i]])
+            data[[ci]] <- jmvcore::toNumeric(data[[ci]])
+            data[[n2i]] <- jmvcore::toNumeric(data[[n2i]])
+            data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
+            data$checkG1 <- 0
+            data$checkG2 <- 0
+            data$checkG1 <- data$n1i - data$ai
+            data$checkG2 <- data$n2i - data$ci
+            if (data$checkG1 < 0) {
+              #ready <- FALSE
+              jmvcore::reject(
+                "Number of incidents in the experimental group is higher than the associated sample size group, check your data ",
+                code = ''
+              )
+            }
+            if (data$checkG2 < 0) {
+              #ready <- FALSE
+              jmvcore::reject(
+                "Number of incidents in the control group is higher than the associated sample size group, check your data ",
+                code = ''
+              )
+            }
+            res <-
+              metafor::rma(
+                ai = ai,
+                n1i = n1i,
+                ci = ci,
+                n2i = n2i,
+                mods = moderator,
+                method = method2,
+                measure = mdmseasure,
+                data = data,
+                slab = slab,
+                level = level
+              )}
+        if (self$options$moderatorType == "CAT") {
+          if (is.null(self$options$moderatorcor) == TRUE) {
+            ready <- FALSE
+            # I really need to think of a better error message this is a place holder until I figure something out
+            jmvcore::reject("Must Supply a Moderator Variable", code =
+                              '')
+          }
+            data <-
+              data.frame(
+                ai = self$data[[self$options$ai]],
+                n1i = self$data[[self$options$n1i]],
+                ci = self$data[[self$options$ci]],
+                n2i = self$data[[self$options$n2i]],
+                moderator = self$data[[self$options$moderatorcor]],
+                slab = self$data[[self$options$slab]]
+              )
+            data[[ai]] <- jmvcore::toNumeric(data[[ai]])
+            data[[n1i]] <- jmvcore::toNumeric(data[[n1i]])
+            data[[ci]] <- jmvcore::toNumeric(data[[ci]])
+            data[[n2i]] <- jmvcore::toNumeric(data[[n2i]])
+            data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
+            data$checkG1 <- 0
+            data$checkG2 <- 0
+            data$checkG1 <- data$n1i - data$ai
+            data$checkG2 <- data$n2i - data$ci
+            if (data$checkG1 < 0) {
+              #ready <- FALSE
+              jmvcore::reject(
+                "Number of incidents in the experimental group is higher than the associated sample size group, check your data ",
+                code = ''
+              )
+            }
+            if (data$checkG2 < 0) {
+              #ready <- FALSE
+              jmvcore::reject(
+                "Number of incidents in the control group is higher than the associated sample size group, check your data ",
+                code = ''
+              )
+            }
+            res <-
+              metafor::rma(
+                ai = ai,
+                n1i = n1i,
+                ci = ci,
+                n2i = n2i,
+                mods = ~ factor(moderator),
+                method = method2,
+                measure = mdmseasure,
+                data = data,
+                slab = slab,
+                level = level
+              )
+          }
+          if (is.list(res) == FALSE) {
+            jmvcore::reject("Check sample size and incident data", code = '')
+          }
+          
+         
+        
             # else if (message == 'missing value where TRUE/FALSE needed')
             #   message <- 'One or both variables contain infinite values'
             # if (is.character(res)== TRUE)
@@ -396,7 +444,7 @@ metaDichotomousModelClass <-
             imageFUN$setState(res)
             
             # }}))
-          }
+          #}
         },
         #Forest Plot Function
         .plot = function(image, ...) {

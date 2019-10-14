@@ -14,7 +14,7 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             moderatorcor = NULL,
             methodmetamdms = "REML",
             mdmsmeasure = "OR",
-            moderatorType = "CON",
+            moderatorType = "NON",
             level = 95,
             showModelFit = FALSE,
             addcred = FALSE,
@@ -102,9 +102,10 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "moderatorType",
                 moderatorType,
                 options=list(
+                    "NON",
                     "CAT",
                     "CON"),
-                default="CON")
+                default="NON")
             private$..level <- jmvcore::OptionNumber$new(
                 "level",
                 level,
@@ -529,7 +530,7 @@ metaDichotomousModel <- function(
     moderatorcor,
     methodmetamdms = "REML",
     mdmsmeasure = "OR",
-    moderatorType = "CON",
+    moderatorType = "NON",
     level = 95,
     showModelFit = FALSE,
     addcred = FALSE,
