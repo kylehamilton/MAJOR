@@ -58,8 +58,71 @@ MetaCorrClass <- R6::R6Class(
         jmvcore::reject("Study Label fields must be populated to run analysis", code =
                           '')
       }
-      if (ready == TRUE) {
-        if (is.null(self$options$moderatorcor) == FALSE) {
+     # if (ready == TRUE) {
+        # if (is.null(self$options$moderatorcor) == FALSE) {
+          # data <-
+          #   data.frame(
+          #     ri = self$data[[self$options$rcor]],
+          #     ni = self$data[[self$options$samplesize]],
+          #     moderator = self$data[[self$options$moderatorcor]],
+          #     slab = self$data[[self$options$slab]]
+          #   )
+          # data[[ri]] <- jmvcore::toNumeric(data[[ri]])
+          # data[[ni]] <- jmvcore::toNumeric(data[[ni]])
+          # data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
+          #data <- as.data.frame((jmvcore::naOmit(data$moderator)))
+          #data <- data[!is.na(data$moderator),]
+          #rownames(data) <- NULL
+      # }
+      #   data <- data %>% drop_na(moderator)
+      #   } else {
+      #     data <-
+      #       data.frame(ri = self$data[[self$options$rcor]],
+      #                  ni = self$data[[self$options$samplesize]],
+      #                  slab = self$data[[self$options$slab]])
+      #     data[[ri]] <- jmvcore::toNumeric(data[[ri]])
+      #     data[[ni]] <- jmvcore::toNumeric(data[[ni]])
+          #data <- data[!is.na(data$moderator),]
+          #rownames(data) <- NULL
+          #data <- data %>% drop_na(moderator)
+        #}
+        
+        if (ready == TRUE) {
+          if (self$options$moderatorType == "NON") {
+            if (is.null(self$options$moderatorcor) == FALSE) {
+              ready <- FALSE
+              # I really need to think of a better error message this is a place holder until I figure something out
+              jmvcore::reject("Must Remove Moderator Variable", code =
+                                '')
+            }
+            data <-
+              data.frame(ri = self$data[[self$options$rcor]],
+                         ni = self$data[[self$options$samplesize]],
+                         slab = self$data[[self$options$slab]])
+            data[[ri]] <- jmvcore::toNumeric(data[[ri]])
+            data[[ni]] <- jmvcore::toNumeric(data[[ni]])
+            
+           res <-
+            metafor::rma(
+              ri = ri,
+              ni = ni,
+              method = method2,
+              measure = cormeasure,
+              data = data,
+              slab = slab,
+              level = level)
+          }
+          
+        if (self$options$moderatorType == "CON") {
+          if (is.null(self$options$moderatorcor) == TRUE) {
+            ready <- FALSE
+            # I really need to think of a better error message this is a place holder until I figure something out
+            jmvcore::reject("Must Supply a Moderator Variable", code =
+                              '')
+          }
+          #data <- data[!is.na(data$moderator),]
+          #rownames(data) <- NULL
+          #data <- data %>% drop_na(moderator)
           data <-
             data.frame(
               ri = self$data[[self$options$rcor]],
@@ -70,26 +133,7 @@ MetaCorrClass <- R6::R6Class(
           data[[ri]] <- jmvcore::toNumeric(data[[ri]])
           data[[ni]] <- jmvcore::toNumeric(data[[ni]])
           data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
-          #data <- as.data.frame((jmvcore::naOmit(data$moderator)))
-          data <- data[!is.na(data$moderator),]
-          rownames(data) <- NULL
-          #data <- data %>% drop_na(moderator)
-        } else {
-          data <-
-            data.frame(ri = self$data[[self$options$rcor]],
-                       ni = self$data[[self$options$samplesize]],
-                       slab = self$data[[self$options$slab]])
-          data[[ri]] <- jmvcore::toNumeric(data[[ri]])
-          data[[ni]] <- jmvcore::toNumeric(data[[ni]])
-          #data <- data[!is.na(data$moderator),]
-          #rownames(data) <- NULL
-          #data <- data %>% drop_na(moderator)
-        }
-        
-        if (is.null(self$options$moderatorcor) == "CON") {
-          data <- data[!is.na(data$moderator),]
-          rownames(data) <- NULL
-          #data <- data %>% drop_na(moderator)
+          
           res <-
             metafor::rma(
               ri = ri,
@@ -100,11 +144,29 @@ MetaCorrClass <- R6::R6Class(
               data = data,
               slab = slab,
               level = level
-            )
+            )}
+          
           if ((self$options$moderatorType) == "CAT") {
-            data <- data[!is.na(data$moderator),]
-            rownames(data) <- NULL
+            if (is.null(self$options$moderatorcor) == TRUE) {
+              ready <- FALSE
+              # I really need to think of a better error message this is a place holder until I figure something out
+              jmvcore::reject("Must Supply a Moderator Variable", code =
+                                '')
+            }
+            #data <- data[!is.na(data$moderator),]
+            #rownames(data) <- NULL
             #data <- data %>% drop_na(moderator)
+            data <-
+              data.frame(
+                ri = self$data[[self$options$rcor]],
+                ni = self$data[[self$options$samplesize]],
+                moderator = self$data[[self$options$moderatorcor]],
+                slab = self$data[[self$options$slab]]
+              )
+            data[[ri]] <- jmvcore::toNumeric(data[[ri]])
+            data[[ni]] <- jmvcore::toNumeric(data[[ni]])
+            data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
+            
             res <-
               metafor::rma(
                 ri = ri,
@@ -115,21 +177,21 @@ MetaCorrClass <- R6::R6Class(
                 data = data,
                 slab = slab,
                 level = level
-              )
+              )}
           }
-        } else {
-          res <-
-            metafor::rma(
-              ri = ri,
-              ni = ni,
-              method = method2,
-              measure = cormeasure,
-              data = data,
-              slab = slab,
-              level = level
-            )
-        }
-        
+        # } else {
+        #   res <-
+        #     metafor::rma(
+        #       ri = ri,
+        #       ni = ni,
+        #       method = method2,
+        #       measure = cormeasure,
+        #       data = data,
+        #       slab = slab,
+        #       level = level
+        #     )
+        # }
+        #}
         #}
         
         # if (self$options$includemods == TRUE) {
@@ -396,7 +458,7 @@ MetaCorrClass <- R6::R6Class(
         imageFUN$setState(res)
         
         # }}))
-      }
+      #}
     },
     #Forest Plot Function
     .plot = function(image, ...) {
