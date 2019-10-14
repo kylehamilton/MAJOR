@@ -31,52 +31,96 @@ metaDVClass <- if (requireNamespace('jmvcore'))
         if (is.null(self$options$effectSize) ||
             is.null(self$options$samplingVariances) ||
             is.null(self$options$slab) == TRUE) {
-          ready <- FALSE
-          # I really need to think of a better error message this is a place holder until I figure something out
-          jmvcore::reject(
-            "Effect Sizes, Sampling Variances, and Study Label fields must be populated to run analysis",
-            code = ''
-          )
-        }
-        if (is.null(self$options$slab) == TRUE) {
-          ready <- FALSE
-          # I really need to think of a better error message this is a place holder until I figure something out
-          jmvcore::reject("Study Label fields must be populated to run analysis", code =
-                            '')
-        }
-        if (ready == TRUE) {
-          if (is.null(self$options$moderatorcor) == FALSE) {
-            data <-
-              data.frame(
-                yi = self$data[[self$options$effectSize]],
-                vi = self$data[[self$options$samplingVariances]],
-                moderator = self$data[[self$options$moderatorcor]],
-                slab = self$data[[self$options$slab]]
-              )
-            data[[yi]] <- jmvcore::toNumeric(data[[yi]])
-            data[[vi]] <- jmvcore::toNumeric(data[[vi]])
-            data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
-          } else {
-            data <-
-              data.frame(yi = self$data[[self$options$effectSize]],
-                         vi = self$data[[self$options$samplingVariances]],
-                         slab = self$data[[self$options$slab]])
-            data[[yi]] <- jmvcore::toNumeric(data[[yi]])
-            data[[vi]] <- jmvcore::toNumeric(data[[vi]])
+
+            ready <- FALSE
+            # I really need to think of a better error message this is a place holder until I figure something out
+            jmvcore::reject(
+              "Effect Sizes, Sampling Variances, and Study Label fields must be populated to run analysis",
+              code = ''
+            )
+          }
+          if (is.null(self$options$slab) == TRUE) {
+            ready <- FALSE
+            # I really need to think of a better error message this is a place holder until I figure something out
+            jmvcore::reject("Study Label fields must be populated to run analysis", code =
+                              '')
           }
           
-          if (is.null(self$options$moderatorcor) == FALSE) {
-            res <-
-              metafor::rma(
-                yi = yi,
-                vi = vi,
-                method = method2,
-                mods = moderator,
-                data = data,
-                slab = slab,
-                level = level
-              )
+          if (ready == TRUE) {
+            if (self$options$moderatorType == "NON") {
+              if (is.null(self$options$moderatorcor) == FALSE) {
+                ready <- FALSE
+                # I really need to think of a better error message this is a place holder until I figure something out
+                jmvcore::reject("Must Remove Moderator Variable", code =
+                                  '')
+              }
+              data <-
+                data.frame(yi = self$data[[self$options$effectSize]],
+                           vi = self$data[[self$options$samplingVariances]],
+                           slab = self$data[[self$options$slab]])
+              data[[yi]] <- jmvcore::toNumeric(data[[yi]])
+              data[[vi]] <- jmvcore::toNumeric(data[[vi]])
+              
+              res <-
+                metafor::rma(
+                  yi = yi,
+                  vi = vi,
+                  method = method2,
+                  data = data,
+                  slab = slab,
+                  level = level
+                )
+            }
+            
+            if (self$options$moderatorType == "CON") {
+              if (is.null(self$options$moderatorcor) == TRUE) {
+                ready <- FALSE
+                # I really need to think of a better error message this is a place holder until I figure something out
+                jmvcore::reject("Must Supply a Moderator Variable", code =
+                                  '')
+              }
+              
+              data <-
+                data.frame(
+                  yi = self$data[[self$options$effectSize]],
+                  vi = self$data[[self$options$samplingVariances]],
+                  moderator = self$data[[self$options$moderatorcor]],
+                  slab = self$data[[self$options$slab]]
+                )
+              data[[yi]] <- jmvcore::toNumeric(data[[yi]])
+              data[[vi]] <- jmvcore::toNumeric(data[[vi]])
+              data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
+              
+              res <-
+                metafor::rma(
+                  yi = yi,
+                  vi = vi,
+                  method = method2,
+                  mods = moderator,
+                  data = data,
+                  slab = slab,
+                  level = level
+                )}
+            
             if ((self$options$moderatorType) == "CAT") {
+              if (is.null(self$options$moderatorcor) == TRUE) {
+                ready <- FALSE
+                # I really need to think of a better error message this is a place holder until I figure something out
+                jmvcore::reject("Must Supply a Moderator Variable", code =
+                                  '')
+              }
+              
+              data <-
+                data.frame(
+                  yi = self$data[[self$options$effectSize]],
+                  vi = self$data[[self$options$samplingVariances]],
+                  moderator = self$data[[self$options$moderatorcor]],
+                  slab = self$data[[self$options$slab]]
+                )
+              data[[yi]] <- jmvcore::toNumeric(data[[yi]])
+              data[[vi]] <- jmvcore::toNumeric(data[[vi]])
+              data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
+              
               res <-
                 metafor::rma(
                   yi = yi,
@@ -86,18 +130,7 @@ metaDVClass <- if (requireNamespace('jmvcore'))
                   data = data,
                   slab = slab,
                   level = level
-                )
-            }
-          } else {
-            res <-
-              metafor::rma(
-                yi = yi,
-                vi = vi,
-                method = method2,
-                data = data,
-                slab = slab,
-                level = level
-              )
+                )}
           }
           
           #}
@@ -350,7 +383,7 @@ metaDVClass <- if (requireNamespace('jmvcore'))
           imageFUN$setState(res)
           
           # }}))
-        }
+        #}
       },
       #Forest Plot Function
       .plot = function(image, ...) {

@@ -16,7 +16,7 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             moderatorcor = NULL,
             methodmetacor = "REML",
             cormeasure = "SMD",
-            moderatorType = "CON",
+            moderatorType = "NON",
             level = 95,
             showModelFit = FALSE,
             addcred = FALSE,
@@ -118,9 +118,10 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "moderatorType",
                 moderatorType,
                 options=list(
+                    "NON",
                     "CAT",
                     "CON"),
-                default="CON")
+                default="NON")
             private$..level <- jmvcore::OptionNumber$new(
                 "level",
                 level,
@@ -555,7 +556,7 @@ metaMeanDiff <- function(
     moderatorcor,
     methodmetacor = "REML",
     cormeasure = "SMD",
-    moderatorType = "CON",
+    moderatorType = "NON",
     level = 95,
     showModelFit = FALSE,
     addcred = FALSE,

@@ -52,5 +52,10 @@ analyses:
     menuGroup: MAJOR
     menuTitle: Correlation Coefficients
     menuSubgroup: Bayesian Meta Analysis
+  - title: Mean Differences
+    name: bayesmetasmd
+    ns: MAJOR
+    menuGroup: MAJOR
+    menuTitle: Mean Differences
 
 ...

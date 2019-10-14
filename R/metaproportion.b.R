@@ -43,8 +43,50 @@ metaProportionClass <- if (requireNamespace('jmvcore'))
           jmvcore::reject("Study Label fields must be populated to run analysis", code =
                             '')
         }
+        
+        
         if (ready == TRUE) {
-          if (is.null(self$options$moderatorcor) == FALSE) {
+          if (self$options$moderatorType == "NON") {
+            if (is.null(self$options$moderatorcor) == FALSE) {
+              ready <- FALSE
+              # I really need to think of a better error message this is a place holder until I figure something out
+              jmvcore::reject("Must Remove Moderator Variable", code =
+                                '')
+            }
+            data <-
+              data.frame(xi = self$data[[self$options$xi]],
+                         ni = self$data[[self$options$ni]],
+                         slab = self$data[[self$options$slab]])
+            data[[xi]] <- jmvcore::toNumeric(data[[xi]])
+            data[[ni]] <- jmvcore::toNumeric(data[[ni]])
+            data$checkG1 <- 0
+            data$checkG1 <- data$ni - data$xi
+            if (data$checkG1 < 0) {
+              #ready <- FALSE
+              jmvcore::reject("Number of incidents is higher than the sample size , check your data ",
+                              code = '')
+            }
+            
+            res <-
+              metafor::rma(
+                xi = xi,
+                ni = ni,
+                method = method2,
+                measure = cormeasure,
+                data = data,
+                slab = slab,
+                level = level
+              )
+          }
+          
+          if (self$options$moderatorType == "CON") {
+            if (is.null(self$options$moderatorcor) == TRUE) {
+              ready <- FALSE
+              # I really need to think of a better error message this is a place holder until I figure something out
+              jmvcore::reject("Must Supply a Moderator Variable", code =
+                                '')
+            }
+            
             data <-
               data.frame(
                 xi = self$data[[self$options$xi]],
@@ -63,24 +105,6 @@ metaProportionClass <- if (requireNamespace('jmvcore'))
                               code = '')
             }
             
-          } else {
-            data <-
-              data.frame(xi = self$data[[self$options$xi]],
-                         ni = self$data[[self$options$ni]],
-                         slab = self$data[[self$options$slab]])
-            data[[xi]] <- jmvcore::toNumeric(data[[xi]])
-            data[[ni]] <- jmvcore::toNumeric(data[[ni]])
-            data$checkG1 <- 0
-            data$checkG1 <- data$ni - data$xi
-            if (data$checkG1 < 0) {
-              #ready <- FALSE
-              jmvcore::reject("Number of incidents is higher than the sample size , check your data ",
-                              code = '')
-            }
-            
-          }
-          
-          if (is.null(self$options$moderatorcor) == FALSE) {
             res <-
               metafor::rma(
                 xi = xi,
@@ -91,52 +115,45 @@ metaProportionClass <- if (requireNamespace('jmvcore'))
                 data = data,
                 slab = slab,
                 level = level
-              )
-            if ((self$options$moderatorType) == "CAT") {
-              res <-
-                metafor::rma(
-                  xi = xi,
-                  ni = ni,
-                  method = method2,
-                  measure = cormeasure,
-                  mods = ~ factor(moderator),
-                  data = data,
-                  slab = slab,
-                  level = level
-                )
+              )}
+          
+          if ((self$options$moderatorType) == "CAT") {
+            if (is.null(self$options$moderatorcor) == TRUE) {
+              ready <- FALSE
+              # I really need to think of a better error message this is a place holder until I figure something out
+              jmvcore::reject("Must Supply a Moderator Variable", code =
+                                '')
             }
-          } else {
+            data <-
+              data.frame(
+                xi = self$data[[self$options$xi]],
+                ni = self$data[[self$options$ni]],
+                moderator = self$data[[self$options$moderatorcor]],
+                slab = self$data[[self$options$slab]]
+              )
+            data[[xi]] <- jmvcore::toNumeric(data[[xi]])
+            data[[ni]] <- jmvcore::toNumeric(data[[ni]])
+            data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
+            data$checkG1 <- 0
+            data$checkG1 <- data$ni - data$xi
+            if (data$checkG1 < 0) {
+              #ready <- FALSE
+              jmvcore::reject("Number of incidents is higher than the sample size , check your data ",
+                              code = '')
+            }
+            
             res <-
               metafor::rma(
                 xi = xi,
                 ni = ni,
                 method = method2,
                 measure = cormeasure,
+                mods = ~ factor(moderator),
                 data = data,
                 slab = slab,
                 level = level
-              )
-          }
-          
-          #}
-          
-          # if (self$options$includemods == TRUE) {
-          #   data <- data.frame(ri = self$data[[self$options$rcor]], ni = self$data[[self$options$samplesize]], mods = self$data[[self$options$moderatorcor]], slab = self$data[[self$options$slab]])
-          #   data[[ri]] <- jmvcore::toNumeric(data[[ri]])
-          #   data[[ni]] <- jmvcore::toNumeric(data[[ni]])
-          #   data[[mods]] <- jmvcore::toNumeric(data[[mods]])
-          # } else {
-          #   data <- data.frame(ri = self$data[[self$options$rcor]], ni = self$data[[self$options$samplesize]], slab = self$data[[self$options$slab]])
-          #   data[[ri]] <- jmvcore::toNumeric(data[[ri]])
-          #   data[[ni]] <- jmvcore::toNumeric(data[[ni]])
-          # }
-          #
-          # if (self$options$includemods == TRUE) {
-          #   res <- metafor::rma(ri=ri, ni=ni, method=method2, measure=cormeasure, mods=mods, data=data, slab=slab, level=level)
-          # } else {
-          #   res <- metafor::rma(ri=ri, ni=ni, method=method2, measure=cormeasure, data=data, slab=slab, level=level)
-          # }
-          
+              )}
+        }
           
           #Pub Bias
           failsafePB <-
@@ -367,7 +384,7 @@ metaProportionClass <- if (requireNamespace('jmvcore'))
           imageFUN$setState(res)
           
           # }}))
-        }
+        #}
       },
       #Forest Plot Function
       .plot = function(image, ...) {

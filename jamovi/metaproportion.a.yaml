@@ -79,11 +79,13 @@ options:
       title: Moderator type
       type: List
       options:
+        - name: "NON"
+          title: No Moderator
         - name: "CAT"
           title: Categorical moderator
         - name: "CON"
           title: Continuous moderator
-      default: CON
+      default: NON
       
     - name: level
       type: Number

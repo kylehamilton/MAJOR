@@ -22,3 +22,6 @@ export(metaAlphaOptions)
 
 export(bayesmetacorrClass)
 export(bayesmetacorrOptions)
+
+export(bayesmetasmdClass)
+export(bayesmetasmdOptions)

@@ -49,8 +49,57 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           jmvcore::reject("Study Label fields must be populated to run analysis", code =
                             '')
         }
+        
+        
         if (ready == TRUE) {
-          if (is.null(self$options$moderatorcor) == FALSE) {
+          if (self$options$moderatorType == "NON") {
+            if (is.null(self$options$moderatorcor) == FALSE) {
+              ready <- FALSE
+              # I really need to think of a better error message this is a place holder until I figure something out
+              jmvcore::reject("Must Remove Moderator Variable", code =
+                                '')
+            }
+            data <-
+              data.frame(
+                n1i = self$data[[self$options$n1i]],
+                m1i = self$data[[self$options$m1i]],
+                sd1i = self$data[[self$options$sd1i]],
+                n2i = self$data[[self$options$n2i]],
+                m2i = self$data[[self$options$m2i]],
+                sd2i = self$data[[self$options$sd2i]],
+                slab = self$data[[self$options$slab]]
+              )
+            data[[n1i]] <- jmvcore::toNumeric(data[[n1i]])
+            data[[m1i]] <- jmvcore::toNumeric(data[[m1i]])
+            data[[sd1i]] <- jmvcore::toNumeric(data[[sd1i]])
+            data[[n2i]] <- jmvcore::toNumeric(data[[n2i]])
+            data[[m2i]] <- jmvcore::toNumeric(data[[m2i]])
+            data[[sd2i]] <- jmvcore::toNumeric(data[[sd2i]])
+            
+            res <-
+              metafor::rma(
+                n1i = n1i,
+                n2i = n2i,
+                m1i = m1i,
+                m2i = m2i,
+                sd1i = sd1i,
+                sd2i = sd2i,
+                method = method2,
+                measure = mdmseasure,
+                data = data,
+                slab = slab,
+                level = level
+              )
+          }
+          
+          if (self$options$moderatorType == "CON") {
+            if (is.null(self$options$moderatorcor) == TRUE) {
+              ready <- FALSE
+              # I really need to think of a better error message this is a place holder until I figure something out
+              jmvcore::reject("Must Supply a Moderator Variable", code =
+                                '')
+            }
+            
             data <-
               data.frame(
                 n1i = self$data[[self$options$n1i]],
@@ -69,26 +118,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             data[[m2i]] <- jmvcore::toNumeric(data[[m2i]])
             data[[sd2i]] <- jmvcore::toNumeric(data[[sd2i]])
             data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
-          } else {
-            data <-
-              data.frame(
-                n1i = self$data[[self$options$n1i]],
-                m1i = self$data[[self$options$m1i]],
-                sd1i = self$data[[self$options$sd1i]],
-                n2i = self$data[[self$options$n2i]],
-                m2i = self$data[[self$options$m2i]],
-                sd2i = self$data[[self$options$sd2i]],
-                slab = self$data[[self$options$slab]]
-              )
-            data[[n1i]] <- jmvcore::toNumeric(data[[n1i]])
-            data[[m1i]] <- jmvcore::toNumeric(data[[m1i]])
-            data[[sd1i]] <- jmvcore::toNumeric(data[[sd1i]])
-            data[[n2i]] <- jmvcore::toNumeric(data[[n2i]])
-            data[[m2i]] <- jmvcore::toNumeric(data[[m2i]])
-            data[[sd2i]] <- jmvcore::toNumeric(data[[sd2i]])
-          }
-          
-          if (is.null(self$options$moderatorcor) == FALSE) {
+            
             res <-
               metafor::rma(
                 n1i = n1i,
@@ -103,25 +133,34 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
                 data = data,
                 slab = slab,
                 level = level
-              )
-            if ((self$options$moderatorType) == "CAT") {
-              res <-
-                metafor::rma(
-                  n1i = n1i,
-                  n2i = n2i,
-                  m1i = m1i,
-                  m2i = m2i,
-                  sd1i = sd1i,
-                  sd2i = sd2i,
-                  mods = ~ factor(moderator),
-                  method = method2,
-                  measure = mdmseasure,
-                  data = data,
-                  slab = slab,
-                  level = level
-                )
+              )}
+          
+          if ((self$options$moderatorType) == "CAT") {
+            if (is.null(self$options$moderatorcor) == TRUE) {
+              ready <- FALSE
+              # I really need to think of a better error message this is a place holder until I figure something out
+              jmvcore::reject("Must Supply a Moderator Variable", code =
+                                '')
             }
-          } else {
+            data <-
+              data.frame(
+                n1i = self$data[[self$options$n1i]],
+                m1i = self$data[[self$options$m1i]],
+                sd1i = self$data[[self$options$sd1i]],
+                n2i = self$data[[self$options$n2i]],
+                m2i = self$data[[self$options$m2i]],
+                sd2i = self$data[[self$options$sd2i]],
+                moderator = self$data[[self$options$moderatorcor]],
+                slab = self$data[[self$options$slab]]
+              )
+            data[[n1i]] <- jmvcore::toNumeric(data[[n1i]])
+            data[[m1i]] <- jmvcore::toNumeric(data[[m1i]])
+            data[[sd1i]] <- jmvcore::toNumeric(data[[sd1i]])
+            data[[n2i]] <- jmvcore::toNumeric(data[[n2i]])
+            data[[m2i]] <- jmvcore::toNumeric(data[[m2i]])
+            data[[sd2i]] <- jmvcore::toNumeric(data[[sd2i]])
+            data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
+            
             res <-
               metafor::rma(
                 n1i = n1i,
@@ -130,14 +169,14 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
                 m2i = m2i,
                 sd1i = sd1i,
                 sd2i = sd2i,
+                mods = ~ factor(moderator),
                 method = method2,
                 measure = mdmseasure,
                 data = data,
                 slab = slab,
                 level = level
-              )
-          }
-          
+              )}
+        }
           
           #Pub Bias
           failsafePB <-
@@ -362,7 +401,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           imageFUN$setState(res)
           
           # }}))
-        }
+        #}
       },
       #Forest Plot Function
       .plot = function(image, ...) {

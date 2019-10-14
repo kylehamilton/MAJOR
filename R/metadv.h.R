@@ -11,7 +11,7 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             slab = NULL,
             moderatorcor = NULL,
             methodmetacor = "REML",
-            moderatorType = "CON",
+            moderatorType = "NON",
             level = 95,
             showModelFit = FALSE,
             addcred = FALSE,
@@ -76,9 +76,10 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "moderatorType",
                 moderatorType,
                 options=list(
+                    "NON",
                     "CAT",
                     "CON"),
-                default="CON")
+                default="NON")
             private$..level <- jmvcore::OptionNumber$new(
                 "level",
                 level,
@@ -488,7 +489,7 @@ metaDV <- function(
     slab,
     moderatorcor,
     methodmetacor = "REML",
-    moderatorType = "CON",
+    moderatorType = "NON",
     level = 95,
     showModelFit = FALSE,
     addcred = FALSE,
