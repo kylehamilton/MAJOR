@@ -26,6 +26,10 @@ metaDVClass <- if (requireNamespace('jmvcore'))
         pchForest <- self$options$pchForest
         table <- self$results$textRICH
         moderatorType <- self$options$moderatorType
+        lowerTOST <- self$options$lowerTOST
+        upperTOST <- self$options$upperTOST
+        alphaTOST <- self$options$alphaTOST
+        
         
         ready <- TRUE
         if (is.null(self$options$effectSize) ||
@@ -70,6 +74,9 @@ metaDVClass <- if (requireNamespace('jmvcore'))
                   slab = slab,
                   level = level
                 )
+              
+              resTOST <- TOSTER::TOSTmeta(ES=res$beta, se=res$se, low_eqbound_d=lowerTOST, high_eqbound_d=upperTOST, alpha=alphaTOST, verbose = FALSE)
+              
             }
             
             if (self$options$moderatorType == "CON") {
@@ -100,7 +107,11 @@ metaDVClass <- if (requireNamespace('jmvcore'))
                   data = data,
                   slab = slab,
                   level = level
-                )}
+                )
+              
+              resTOST <- TOSTER::TOSTmeta(ES=res$beta, se=res$se, low_eqbound_d=lowerTOST, high_eqbound_d=upperTOST, alpha=alphaTOST, verbose = FALSE)
+              
+              }
             
             if ((self$options$moderatorType) == "CAT") {
               if (is.null(self$options$moderatorcor) == TRUE) {
@@ -130,29 +141,26 @@ metaDVClass <- if (requireNamespace('jmvcore'))
                   data = data,
                   slab = slab,
                   level = level
-                )}
+                )
+              
+              resTOST <- TOSTER::TOSTmeta(ES=res$beta, se=res$se, low_eqbound_d=lowerTOST, high_eqbound_d=upperTOST, alpha=alphaTOST, verbose = FALSE)
+              
+              }
           }
           
-          #}
-          
-          # if (self$options$includemods == TRUE) {
-          #   data <- data.frame(ri = self$data[[self$options$effectSize]], ni = self$data[[self$options$samplingVariances]], mods = self$data[[self$options$moderatorcor]], slab = self$data[[self$options$slab]])
-          #   data[[ri]] <- jmvcore::toNumeric(data[[ri]])
-          #   data[[ni]] <- jmvcore::toNumeric(data[[ni]])
-          #   data[[mods]] <- jmvcore::toNumeric(data[[mods]])
-          # } else {
-          #   data <- data.frame(ri = self$data[[self$options$effectSize]], ni = self$data[[self$options$samplingVariances]], slab = self$data[[self$options$slab]])
-          #   data[[ri]] <- jmvcore::toNumeric(data[[ri]])
-          #   data[[ni]] <- jmvcore::toNumeric(data[[ni]])
-          # }
-          #
-          # if (self$options$includemods == TRUE) {
-          #   res <- metafor::rma(ri=ri, ni=ni, method=method2, measure=cormeasure, mods=mods, data=data, slab=slab, level=level)
-          # } else {
-          #   res <- metafor::rma(ri=ri, ni=ni, method=method2, measure=cormeasure, data=data, slab=slab, level=level)
-          # }
-          
-          
+        
+        TOSToutput <- self$results$pubBias$TOSToutput
+        TOSToutput$setRow(rowNo = 1,
+                       values = list(TOST_Z1 = resTOST$TOST_Z1[1],
+                                     TOST_p1 = resTOST$TOST_p1[1],
+                                     TOST_Z2 = resTOST$TOST_Z2[1],
+                                     TOST_p2 = resTOST$TOST_p2[1],
+                                     LL_CI_TOST = resTOST$LL_CI_TOST[1],
+                                     UL_CI_TOST = resTOST$UL_CI_TOST[1],
+                                     LL_CI_ZTEST = resTOST$LL_CI_ZTEST[1],
+                                     UL_CI_ZTEST = resTOST$UL_CI_ZTEST[1]))
+        
+        
           #Pub Bias
           failsafePB <-
             metafor::fsn(yi = res$yi,

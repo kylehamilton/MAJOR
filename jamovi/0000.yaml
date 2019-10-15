@@ -57,5 +57,6 @@ analyses:
     ns: MAJOR
     menuGroup: MAJOR
     menuTitle: Mean Differences
+    enuSubgroup: Bayesian Meta Analysis
 
 ...

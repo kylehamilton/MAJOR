@@ -1,4 +1,4 @@
-title: 'Effect Sizes and Sampling Variances'
+title: Effect Sizes and Sampling Variances
 name: metaDV
 jus: '2.0'
 stage: 0
@@ -120,3 +120,21 @@ children:
         children:
           - type: ComboBox
             name: fsntype
+  - type: LayoutBox
+    margin: large
+    children:
+      - type: TextBox
+        name: lowerTOST
+        format: number
+  - type: LayoutBox
+    margin: large
+    children:
+      - type: TextBox
+        name: upperTOST
+        format: number
+  - type: LayoutBox
+    margin: large
+    children:
+      - type: TextBox
+        name: alphaTOST
+        format: number

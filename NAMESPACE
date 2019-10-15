@@ -2,3 +2,5 @@ exportPattern("^[[:alpha:]]+")
 
 import(metafor)
 import(bayesmeta)
+import(TOSTER)
+import(pkgconfig)

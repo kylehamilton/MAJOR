@@ -142,6 +142,40 @@ items:
               type: number
               format: zto,pvalue
 
+        - name:  TOSToutput
+          title: "Two One-Sided Tests Equivalence Testing"
+          type: Table
+          rows:  1
+          columns:
+            - name: TOST_Z1
+              title: 'Z-Value Lower Bound'
+              type: number
+              format: zto
+            - name: TOST_p1
+              title: 'P-Value Lower Bound'
+              type: number
+              format: zto,pvalue
+            - name: TOST_Z2
+              title: 'Z-Value Upper Bound'
+              type: number
+              format: zto              
+            - name: TOST_p2
+              title: 'P-Value Upper Bound'
+              type: number
+              format: zto
+            - name: LL_CI_TOST
+              type: number
+              format: zto
+            - name: UL_CI_TOST
+              type: number
+              format: zto,pvalue
+            - name: LL_CI_ZTEST
+              type: number
+              format: zto              
+            - name: UL_CI_ZTEST
+              type: number
+              format: zto
+              
     - name: funplot
       title: Funnel Plot
       type: Image
