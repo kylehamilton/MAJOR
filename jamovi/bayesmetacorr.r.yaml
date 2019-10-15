@@ -8,6 +8,7 @@ items:
     - name:  textRICH
       type: Table
       title: "Random-Effects Model - Posterior Summary"
+      refs: [ bayesmeta ]
       rows:  6
       columns:
         - name: Labels
@@ -26,6 +27,7 @@ items:
       width:  900
       height: 600
       renderFun: .plot
+      refs: [ bayesmeta ]
 
     - name: plotPDTau
       title: Marginal Posterior Density Plots (τ)
@@ -33,6 +35,7 @@ items:
       width:  900
       height: 600
       renderFun: .plotPDTau
+      refs: [ bayesmeta ]
 
     - name: plotPDMu
       title: Marginal Posterior Density Plots (μ)
@@ -40,12 +43,14 @@ items:
       width:  900
       height: 600
       renderFun: .plotPDMu
-      
+      refs: [ bayesmeta ]
+
     - name: plotJPD
       title:  Joint Posterior Density of Heterogeneity (τ) and Effect (μ)
       type: Image
       width:  900
       height: 600
       renderFun: .plotJPD
+      refs: [ bayesmeta ]
 
 ...

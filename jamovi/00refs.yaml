@@ -1,0 +1,31 @@
+---
+refs:
+    metafor:
+        type: 'article'
+        author: Viechtbauer, W.
+        year: 2010
+        title: Conducting meta-analyses in R with the metafor package
+        publisher: Journal of Statistical Software
+        volume: 36
+        pages: 1-48
+        url: https://www.jstatsoft.org/article/view/v036i03
+        
+    bayesmeta:
+        type: 'article'
+        author: Röver, C.
+        year: 2018
+        title: Bayesian random-effects meta-analysis using the bayesmeta R package
+        publisher: arXiv
+        url: https://arxiv.org/abs/1711.08683
+   
+    TOSTER:
+        type: 'article'
+        author: Lakens, Daniel
+        year: 2017
+        title: 'Equivalence tests: A practical primer for t-tests, correlations, and meta-analyses'
+        publisher: Social Psychological and Personality Science
+        volume: 1
+        pages: 1-8
+        url: https://doi.org/10.1177/1948550617697177
+
+...

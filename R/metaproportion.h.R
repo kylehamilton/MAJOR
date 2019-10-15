@@ -258,6 +258,8 @@ metaProportionResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 options=options,
                 name="textRICH",
                 title="Random-Effects Model",
+                refs=list(
+                    "metafor"),
                 rows=2,
                 columns=list(
                     list(
@@ -369,7 +371,9 @@ metaProportionResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 title="Forest Plot",
                 width=600,
                 height=450,
-                renderFun=".plot"))
+                renderFun=".plot",
+                refs=list(
+                    "metafor")))
             self$add(R6::R6Class(
                 inherit = jmvcore::Group,
                 active = list(
@@ -433,7 +437,9 @@ metaProportionResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 title="Funnel Plot",
                 width=600,
                 height=450,
-                renderFun=".funplot"))}))
+                renderFun=".funplot",
+                refs=list(
+                    "metafor")))}))
 
 metaProportionBase <- if (requireNamespace('jmvcore')) R6::R6Class(
     "metaProportionBase",

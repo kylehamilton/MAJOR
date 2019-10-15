@@ -300,6 +300,8 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="textRICH",
+                refs=list(
+                    "metafor"),
                 title="Random-Effects Model",
                 rows=2,
                 columns=list(
@@ -412,7 +414,9 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 title="Forest Plot",
                 width=600,
                 height=450,
-                renderFun=".plot"))
+                renderFun=".plot",
+                refs=list(
+                    "metafor")))
             self$add(R6::R6Class(
                 inherit = jmvcore::Group,
                 active = list(
@@ -476,7 +480,9 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 title="Funnel Plot",
                 width=600,
                 height=450,
-                renderFun=".funplot"))}))
+                renderFun=".funplot",
+                refs=list(
+                    "metafor")))}))
 
 metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
     "metaMeanDiffBase",

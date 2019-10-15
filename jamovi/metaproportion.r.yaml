@@ -8,6 +8,7 @@ items:
     - name:  textRICH
       type: Table
       title: "Random-Effects Model"
+      refs: [ metafor ]
       rows:  2
       columns:
         - name: Intercept
@@ -99,6 +100,7 @@ items:
       width:  600
       height: 450
       renderFun: .plot
+      refs: [ metafor ]
 
     - name: pubBias
       title: Publication Bias Assessment
@@ -148,5 +150,5 @@ items:
       width:  600
       height: 450
       renderFun: .funplot
-
+      refs: [ metafor ]
 ...

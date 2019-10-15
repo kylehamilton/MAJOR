@@ -141,6 +141,8 @@ bayesmetacorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 options=options,
                 name="textRICH",
                 title="Random-Effects Model - Posterior Summary",
+                refs=list(
+                    "bayesmeta"),
                 rows=6,
                 columns=list(
                     list(
@@ -162,28 +164,36 @@ bayesmetacorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 title="Forest Plot",
                 width=900,
                 height=600,
-                renderFun=".plot"))
+                renderFun=".plot",
+                refs=list(
+                    "bayesmeta")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plotPDTau",
                 title="Marginal Posterior Density Plots (\u03C4)",
                 width=900,
                 height=600,
-                renderFun=".plotPDTau"))
+                renderFun=".plotPDTau",
+                refs=list(
+                    "bayesmeta")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plotPDMu",
                 title="Marginal Posterior Density Plots (\u03BC)",
                 width=900,
                 height=600,
-                renderFun=".plotPDMu"))
+                renderFun=".plotPDMu",
+                refs=list(
+                    "bayesmeta")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plotJPD",
                 title="Joint Posterior Density of Heterogeneity (\u03C4) and Effect (\u03BC)",
                 width=900,
                 height=600,
-                renderFun=".plotJPD"))}))
+                renderFun=".plotJPD",
+                refs=list(
+                    "bayesmeta")))}))
 
 bayesmetacorrBase <- if (requireNamespace('jmvcore')) R6::R6Class(
     "bayesmetacorrBase",
