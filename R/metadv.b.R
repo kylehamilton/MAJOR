@@ -75,7 +75,16 @@ metaDVClass <- if (requireNamespace('jmvcore'))
                   level = level
                 )
               
-              resTOST <- TOSTER::TOSTmeta(ES=res$beta, se=res$se, low_eqbound_d=lowerTOST, high_eqbound_d=upperTOST, alpha=alphaTOST, verbose = FALSE)
+              resTOST <-
+                TOSTER::TOSTmeta(
+                  ES = res$beta,
+                  se = res$se,
+                  low_eqbound_d = lowerTOST,
+                  high_eqbound_d = upperTOST,
+                  alpha = alphaTOST,
+                  plot = FALSE,
+                  verbose = FALSE
+                )
               
             }
             
@@ -109,7 +118,16 @@ metaDVClass <- if (requireNamespace('jmvcore'))
                   level = level
                 )
               
-              resTOST <- TOSTER::TOSTmeta(ES=res$beta, se=res$se, low_eqbound_d=lowerTOST, high_eqbound_d=upperTOST, alpha=alphaTOST, verbose = FALSE)
+              resTOST <-
+                TOSTER::TOSTmeta(
+                  ES = res$beta,
+                  se = res$se,
+                  low_eqbound_d = lowerTOST,
+                  high_eqbound_d = upperTOST,
+                  alpha = alphaTOST,
+                  plot = FALSE,
+                  verbose = FALSE
+                )
               
               }
             

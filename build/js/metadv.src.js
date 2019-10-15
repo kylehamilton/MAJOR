@@ -252,41 +252,38 @@ view.layout = ui.extend({
 			]
 		},
 		{
-			type: DefaultControls.LayoutBox,
-			typeName: 'LayoutBox',
-			margin: "large",
+			type: DefaultControls.CollapseBox,
+			typeName: 'CollapseBox',
+			label: "Equivalence Test Options",
+			collapsed: true,
+			stretchFactor: 1,
 			controls: [
 				{
-					type: DefaultControls.TextBox,
-					typeName: 'TextBox',
-					name: "lowerTOST",
-					format: FormatDef.number
-				}
-			]
-		},
-		{
-			type: DefaultControls.LayoutBox,
-			typeName: 'LayoutBox',
-			margin: "large",
-			controls: [
-				{
-					type: DefaultControls.TextBox,
-					typeName: 'TextBox',
-					name: "upperTOST",
-					format: FormatDef.number
-				}
-			]
-		},
-		{
-			type: DefaultControls.LayoutBox,
-			typeName: 'LayoutBox',
-			margin: "large",
-			controls: [
-				{
-					type: DefaultControls.TextBox,
-					typeName: 'TextBox',
-					name: "alphaTOST",
-					format: FormatDef.number
+					type: DefaultControls.LayoutBox,
+					typeName: 'LayoutBox',
+					controls: [
+						{
+							type: DefaultControls.TextBox,
+							typeName: 'TextBox',
+							name: "lowerTOST",
+							format: FormatDef.number,
+							useSingleCell: true
+						},
+						{
+							type: DefaultControls.TextBox,
+							typeName: 'TextBox',
+							name: "upperTOST",
+							format: FormatDef.number,
+							useSingleCell: true
+						},
+						{
+							type: DefaultControls.TextBox,
+							typeName: 'TextBox',
+							name: "alphaTOST",
+							format: FormatDef.number,
+							useSingleCell: true
+						}
+					]
 				}
 			]
 		}

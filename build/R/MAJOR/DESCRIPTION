@@ -9,4 +9,4 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports: jmvcore (>= 0.5.5), R6, metafor, bayesmeta, TOSTER, pkgconfig
-Built: R 3.4.1; ; 2019-10-15 17:44:32 UTC; windows
+Built: R 3.4.1; ; 2019-10-15 23:24:01 UTC; windows
