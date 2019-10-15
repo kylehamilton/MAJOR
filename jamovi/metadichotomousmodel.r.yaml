@@ -65,6 +65,24 @@ items:
           title: 'p'
           type: number
           format: zto,pvalue
+          
+    - name:  modelBackTransform
+      title: Back-Transform Log Odds Ratio to Odds Ratio
+      type: Table
+      rows:  1
+      columns:
+        - name: backTransformOddsRatio
+          title: Odds Ratio
+          type: number
+          format: zto
+        - name: backTransformCILow
+          title: CI Lower Bound
+          type: number
+          format: zto
+        - name: backTransformCIHigh
+          title: CI Upper Bound
+          type: number
+          format: zto
 
     - name:  modelFitRICH
       title: Model Fit Statistics and Information Criteria

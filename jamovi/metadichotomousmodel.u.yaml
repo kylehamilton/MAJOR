@@ -68,6 +68,11 @@ children:
           - type: ComboBox
             name: moderatorType
             useSingleCell: true
+          - type: LayoutBox
+            margin: large
+            children:
+              - type: CheckBox
+                name: showBackTransform
           - type: TextBox
             name: level
             format: number
@@ -127,7 +132,7 @@ children:
                 name: enhanceFunnel
                 label: Contour-Enhanced
                 verticalAlignment: center
-                enable: (yaxis:sei || yaxis:vi)
+                enable: '(yaxis:sei || yaxis:vi)'
   - type: CollapseBox
     label: Publication Bias
     collapsed: true

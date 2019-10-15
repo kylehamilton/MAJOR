@@ -87,6 +87,11 @@ options:
           title: Log odds ratio peto's method
       default: OR
 
+    - name: showBackTransform
+      title: Back-Transform Log Odds Ratio to Odds Ratio
+      type: Bool
+      default: FALSE
+      
     - name: moderatorType
       title: Moderator type
       type: List

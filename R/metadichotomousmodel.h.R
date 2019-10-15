@@ -14,6 +14,7 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             moderatorcor = NULL,
             methodmetamdms = "REML",
             mdmsmeasure = "OR",
+            showBackTransform = FALSE,
             moderatorType = "NON",
             level = 95,
             showModelFit = FALSE,
@@ -98,6 +99,10 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "AS",
                     "PETO"),
                 default="OR")
+            private$..showBackTransform <- jmvcore::OptionBool$new(
+                "showBackTransform",
+                showBackTransform,
+                default=FALSE)
             private$..moderatorType <- jmvcore::OptionList$new(
                 "moderatorType",
                 moderatorType,
@@ -196,6 +201,7 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..moderatorcor)
             self$.addOption(private$..methodmetamdms)
             self$.addOption(private$..mdmsmeasure)
+            self$.addOption(private$..showBackTransform)
             self$.addOption(private$..moderatorType)
             self$.addOption(private$..level)
             self$.addOption(private$..showModelFit)
@@ -220,6 +226,7 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         moderatorcor = function() private$..moderatorcor$value,
         methodmetamdms = function() private$..methodmetamdms$value,
         mdmsmeasure = function() private$..mdmsmeasure$value,
+        showBackTransform = function() private$..showBackTransform$value,
         moderatorType = function() private$..moderatorType$value,
         level = function() private$..level$value,
         showModelFit = function() private$..showModelFit$value,
@@ -243,6 +250,7 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..moderatorcor = NA,
         ..methodmetamdms = NA,
         ..mdmsmeasure = NA,
+        ..showBackTransform = NA,
         ..moderatorType = NA,
         ..level = NA,
         ..showModelFit = NA,
@@ -264,6 +272,7 @@ metaDichotomousModelResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     active = list(
         textRICH = function() private$.items[["textRICH"]],
         tableTauSqaured = function() private$.items[["tableTauSqaured"]],
+        modelBackTransform = function() private$.items[["modelBackTransform"]],
         modelFitRICH = function() private$.items[["modelFitRICH"]],
         plot = function() private$.items[["plot"]],
         pubBias = function() private$.items[["pubBias"]],
@@ -352,6 +361,27 @@ metaDichotomousModelResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `title`="p", 
                         `type`="number", 
                         `format`="zto,pvalue"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="modelBackTransform",
+                title="Back-Transform Log Odds Ratio to Odds Ratio",
+                rows=1,
+                columns=list(
+                    list(
+                        `name`="backTransformOddsRatio", 
+                        `title`="Odds Ratio", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="backTransformCILow", 
+                        `title`="CI Lower Bound", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="backTransformCIHigh", 
+                        `title`="CI Upper Bound", 
+                        `type`="number", 
+                        `format`="zto"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="modelFitRICH",
@@ -487,6 +517,7 @@ metaDichotomousModelBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param moderatorcor .
 #' @param methodmetamdms .
 #' @param mdmsmeasure .
+#' @param showBackTransform .
 #' @param moderatorType .
 #' @param level .
 #' @param showModelFit .
@@ -505,6 +536,7 @@ metaDichotomousModelBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' \tabular{llllll}{
 #'   \code{results$textRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$tableTauSqaured} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$modelBackTransform} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$modelFitRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$pubBias$fsnRICH} \tab \tab \tab \tab \tab a table \cr
@@ -530,6 +562,7 @@ metaDichotomousModel <- function(
     moderatorcor,
     methodmetamdms = "REML",
     mdmsmeasure = "OR",
+    showBackTransform = FALSE,
     moderatorType = "NON",
     level = 95,
     showModelFit = FALSE,
@@ -574,6 +607,7 @@ metaDichotomousModel <- function(
         moderatorcor = moderatorcor,
         methodmetamdms = methodmetamdms,
         mdmsmeasure = mdmsmeasure,
+        showBackTransform = showBackTransform,
         moderatorType = moderatorType,
         level = level,
         showModelFit = showModelFit,

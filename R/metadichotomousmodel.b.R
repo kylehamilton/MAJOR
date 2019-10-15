@@ -28,6 +28,8 @@ metaDichotomousModelClass <-
           pchForest <- self$options$pchForest
           table <- self$results$textRICH
           moderatorType <- self$options$moderatorType
+          backTransform <- self$options$showBackTransform
+          modelBackTransform <- self$results$modelBackTransform
           
           
           ready <- TRUE
@@ -433,6 +435,36 @@ metaDichotomousModelClass <-
             )
             
             
+            #Back Tranform from log odds ratio to odds ratio
+            #Show if checked, hide if unchecked
+            if (self$options$showBackTransform == TRUE &&
+                self$options$mdmsmeasure == "OR" &&
+                self$options$moderatorType == "NON") {
+              modelBackTransform$setVisible(visible = TRUE)
+            } else {
+              modelBackTransform$setVisible(visible = FALSE)
+            }
+            
+            
+            
+            if (self$options$moderatorType == "NON") {
+              #Data Prep: Backtransform Stats
+              resBackTransForm <- predict(res, transf = exp, digits = 2)
+              resPred <- round(resBackTransForm$pred, 4)
+              resCILB <- round(resBackTransForm$ci.lb, 4)
+              resCIUB <- round(resBackTransForm$ci.ub, 4)
+              
+              #Heterogeneity Stats annd Test Table
+              modelBackTransform <- self$results$modelBackTransform
+              modelBackTransform$setRow(
+                rowNo = 1,
+                values = list(
+                  backTransformOddsRatio = resPred,
+                  backTransformCILow = resCILB,
+                  backTransformCIHigh = resCIUB
+                )
+              )
+            }
             # `self$data` contains the data
             # `self$options` contains the options
             # `self$results` contains the results object (to populate)
