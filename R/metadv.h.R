@@ -27,7 +27,8 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             enhanceFunnel = FALSE,
             lowerTOST = -0.5,
             upperTOST = 0.5,
-            alphaTOST = 0.05, ...) {
+            alphaTOST = 0.05,
+            showTestTOST = TRUE, ...) {
 
             super$initialize(
                 package='MAJOR',
@@ -182,6 +183,10 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 min=0.000001,
                 max=1,
                 default=0.05)
+            private$..showTestTOST <- jmvcore::OptionBool$new(
+                "showTestTOST",
+                showTestTOST,
+                default=TRUE)
 
             self$.addOption(private$..effectSize)
             self$.addOption(private$..samplingVariances)
@@ -205,6 +210,7 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..lowerTOST)
             self$.addOption(private$..upperTOST)
             self$.addOption(private$..alphaTOST)
+            self$.addOption(private$..showTestTOST)
         }),
     active = list(
         effectSize = function() private$..effectSize$value,
@@ -228,7 +234,8 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         enhanceFunnel = function() private$..enhanceFunnel$value,
         lowerTOST = function() private$..lowerTOST$value,
         upperTOST = function() private$..upperTOST$value,
-        alphaTOST = function() private$..alphaTOST$value),
+        alphaTOST = function() private$..alphaTOST$value,
+        showTestTOST = function() private$..showTestTOST$value),
     private = list(
         ..effectSize = NA,
         ..samplingVariances = NA,
@@ -251,7 +258,8 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..enhanceFunnel = NA,
         ..lowerTOST = NA,
         ..upperTOST = NA,
-        ..alphaTOST = NA)
+        ..alphaTOST = NA,
+        ..showTestTOST = NA)
 )
 
 metaDVResults <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -262,6 +270,7 @@ metaDVResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         modelFitRICH = function() private$.items[["modelFitRICH"]],
         plot = function() private$.items[["plot"]],
         pubBias = function() private$.items[["pubBias"]],
+        tostplot = function() private$.items[["tostplot"]],
         funplot = function() private$.items[["funplot"]]),
     private = list(),
     public=list(
@@ -396,7 +405,8 @@ metaDVResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     fsnRICH = function() private$.items[["fsnRICH"]],
                     rankRICH = function() private$.items[["rankRICH"]],
                     regRICH = function() private$.items[["regRICH"]],
-                    TOSToutput = function() private$.items[["TOSToutput"]]),
+                    TOSToutput = function() private$.items[["TOSToutput"]],
+                    TOSToutputtext = function() private$.items[["TOSToutputtext"]]),
                 private = list(),
                 public=list(
                     initialize=function(options) {
@@ -491,7 +501,20 @@ metaDVResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                                 list(
                                     `name`="UL_CI_ZTEST", 
                                     `type`="number", 
-                                    `format`="zto"))))}))$new(options=options))
+                                    `format`="zto"))))
+                        self$add(jmvcore::Preformatted$new(
+                            options=options,
+                            name="TOSToutputtext",
+                            title="Two One-Sided Tests Equivalence Testing: Text Summary"))}))$new(options=options))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="tostplot",
+                title="Equivalence Test Plot",
+                width=600,
+                height=450,
+                renderFun=".tostplot",
+                refs=list(
+                    "TOSTER")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="funplot",
@@ -547,6 +570,7 @@ metaDVBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param lowerTOST .
 #' @param upperTOST .
 #' @param alphaTOST .
+#' @param showTestTOST .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$textRICH} \tab \tab \tab \tab \tab a table \cr
@@ -557,6 +581,8 @@ metaDVBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$pubBias$rankRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$pubBias$regRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$pubBias$TOSToutput} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$pubBias$TOSToutputtext} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$tostplot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$funplot} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
@@ -590,7 +616,8 @@ metaDV <- function(
     enhanceFunnel = FALSE,
     lowerTOST = -0.5,
     upperTOST = 0.5,
-    alphaTOST = 0.05) {
+    alphaTOST = 0.05,
+    showTestTOST = TRUE) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('metaDV requires jmvcore to be installed (restart may be required)')
@@ -630,7 +657,8 @@ metaDV <- function(
         enhanceFunnel = enhanceFunnel,
         lowerTOST = lowerTOST,
         upperTOST = upperTOST,
-        alphaTOST = alphaTOST)
+        alphaTOST = alphaTOST,
+        showTestTOST = showTestTOST)
 
     analysis <- metaDVClass$new(
         options = options,

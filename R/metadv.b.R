@@ -85,6 +85,17 @@ metaDVClass <- if (requireNamespace('jmvcore'))
                   plot = FALSE,
                   verbose = FALSE
                 )
+              resTOST$se <- res$se
+              
+              resTOSTText <- capture.output(TOSTER::TOSTmeta(
+                ES = res$beta,
+                se = res$se,
+                low_eqbound_d = lowerTOST,
+                high_eqbound_d = upperTOST,
+                alpha = alphaTOST,
+                verbose = TRUE,
+                plot = FALSE
+              ))
               
             }
             
@@ -128,6 +139,17 @@ metaDVClass <- if (requireNamespace('jmvcore'))
                   plot = FALSE,
                   verbose = FALSE
                 )
+              resTOST$se <- res$se
+              
+              resTOSTText <- capture.output(TOSTER::TOSTmeta(
+                ES = res$beta,
+                se = res$se,
+                low_eqbound_d = lowerTOST,
+                high_eqbound_d = upperTOST,
+                alpha = alphaTOST,
+                verbose = TRUE,
+                plot = FALSE
+              ))
               
               }
             
@@ -171,11 +193,24 @@ metaDVClass <- if (requireNamespace('jmvcore'))
                   verbose = FALSE,
                   plot = FALSE
                 )
+              resTOST$se <- res$se
+              
+              resTOSTText <- capture.output(TOSTER::TOSTmeta(
+                ES = res$beta,
+                se = res$se,
+                low_eqbound_d = lowerTOST,
+                high_eqbound_d = upperTOST,
+                alpha = alphaTOST,
+                verbose = TRUE,
+                plot = FALSE
+              ))
               
               }
           }
           
+        #TOST Output 
         
+        #TOST Table
         TOSToutput <- self$results$pubBias$TOSToutput
         TOSToutput$setRow(rowNo = 1,
                        values = list(TOST_Z1 = resTOST$TOST_Z1[1],
@@ -186,7 +221,22 @@ metaDVClass <- if (requireNamespace('jmvcore'))
                                      UL_CI_TOST = resTOST$UL_CI_TOST[1],
                                      LL_CI_ZTEST = resTOST$LL_CI_ZTEST[1],
                                      UL_CI_ZTEST = resTOST$UL_CI_ZTEST[1]))
+        #TOST Text Output
+        TOSToutputtext <- self$results$pubBias$TOSToutputtext
         
+        outputTextTOST <-
+          paste(resTOSTText[18], 
+                resTOSTText[20], 
+                resTOSTText[21], sep = "\n")
+        
+        TOSToutputtext$setContent(outputTextTOST)
+        
+        #Visability Option TOST
+        if (self$options$showTestTOST == TRUE) {
+          TOSToutputtext$setVisible(visible = TRUE)
+        } else {
+          TOSToutputtext$setVisible(visible = FALSE)
+        }
         
           #Pub Bias
           failsafePB <-
@@ -413,12 +463,77 @@ metaDVClass <- if (requireNamespace('jmvcore'))
           # `self$results` contains the results object (to populate)
           image <- self$results$plot
           imageFUN <- self$results$funplot
+          imageTOST <- self$results$tostplot
           
           image$setState(res)
           imageFUN$setState(res)
+          imageTOST$setState(resTOST)
           
           # }}))
         #}
+      },
+      
+      .tostplot = function(imageTOST, ...) {
+        # <-- the plot function
+        plotDataTOST <- imageTOST$state
+
+        ready <- TRUE
+        if (is.null(self$options$effectSize) ||
+            is.null(self$options$samplingVariances) ||
+            is.null(self$options$slab) == TRUE) {
+          
+          
+          ready <- FALSE
+        }
+        if (is.null(imageTOST$state$ES) ||
+            is.null(imageTOST$state$alpha) == TRUE) {
+          ready <- FALSE
+        }
+        if (ready == TRUE) {
+          #I couldn't make jamovi put the plot from TOSTER into the results without
+          #it popping a new window and crashing so I'm trying this ugly work around
+          #I just copied the function from TOSTER and then put the new variable names
+          #in place of the ones that the author Daniel Laken wrote. I should come back 
+          #to this and clean it up slash do it correctly.
+          plotTOSTfunction <- function(ES, se, low_eqbound_d, high_eqbound_d, alpha) {
+            Z1<-(ES-low_eqbound_d)/se
+            p1<-pnorm(Z1, lower.tail=FALSE)
+            Z2<-(ES-high_eqbound_d)/se
+            p2<-pnorm(Z2, lower.tail=TRUE)
+            Z<-(ES/se)
+            pttest<-2*pnorm(-abs(Z))
+            LL90<-ES-qnorm(1-alpha)*(se)
+            UL90<-ES+qnorm(1-alpha)*(se)
+            LL95<-ES-qnorm(1-alpha/2)*(se)
+            UL95<-ES+qnorm(1-alpha/2)*(se)
+            ptost<-max(p1,p2) #Get highest p-value for summary TOST result
+            Ztost<-ifelse(abs(Z1) < abs(Z2), Z1, Z2) #Get lowest t-value for summary TOST result
+            results<-data.frame(Z1,p1,Z2,p2,LL90,UL90)
+            colnames(results) <- c("Z-value 1","p-value 1","Z-value 2","p-value 2", paste("Lower Limit ",100*(1-alpha*2),"% CI",sep=""),paste("Upper Limit ",100*(1-alpha*2),"% CI",sep=""))
+            testoutcome<-ifelse(pttest<alpha,"significant","non-significant")
+            TOSToutcome<-ifelse(ptost<alpha,"significant","non-significant")
+            
+            # Plot results
+            plot(NA, ylim=c(0,1), xlim=c(min(LL95,low_eqbound_d,ES)-max(UL95-LL95, high_eqbound_d-low_eqbound_d,ES)/10, max(UL95,high_eqbound_d,ES)+max(UL95-LL95, high_eqbound_d-low_eqbound_d, ES)/10), bty="l", yaxt="n", ylab="",xlab="Effect size")
+            points(x=ES, y=0.5, pch=15, cex=2)
+            abline(v=high_eqbound_d, lty=2)
+            abline(v=low_eqbound_d, lty=2)
+            abline(v=0, lty=2, col="grey")
+            segments(LL90,0.5,UL90,0.5, lwd=3)
+            segments(LL95,0.5,UL95,0.5, lwd=1)
+            title(main=paste("Equivalence bounds ",round(low_eqbound_d,digits=3)," and ",round(high_eqbound_d,digits=3),"\nEffect size = ",round(ES,digits=3)," \n TOST: ", 100*(1-alpha*2),"% CI [",round(LL90,digits=3),";",round(UL90,digits=3),"] ", TOSToutcome," \n NHST: ", 100*(1-alpha),"% CI [",round(LL95,digits=3),";",round(UL95,digits=3),"] ", testoutcome,sep=""), cex.main=1)
+            }
+          tostPlotFUN <-
+            plotTOSTfunction(
+              ES = plotDataTOST$ES,
+              se = plotDataTOST$se,
+              low_eqbound_d = plotDataTOST$low_eqbound_d,
+              high_eqbound_d = plotDataTOST$high_eqbound_d,
+              alpha = plotDataTOST$alpha
+            )
+          print(tostPlotFUN)
+          TRUE
+        }
       },
       #Forest Plot Function
       .plot = function(image, ...) {

@@ -207,4 +207,9 @@ options:
       min: 0.000001
       max: 1
       default: 0.05
+
+    - name: showTestTOST
+      title: Show Summary TOST Report
+      type: Bool
+      default: true
 ...

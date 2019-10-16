@@ -139,3 +139,5 @@ children:
             name: alphaTOST
             format: number
             useSingleCell: true
+          - type: CheckBox
+            name: showTestTOST
