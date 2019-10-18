@@ -10,4 +10,4 @@ Encoding: UTF-8
 LazyData: true
 Imports: jmvcore (>= 0.5.5), R6, metafor, bayesmeta, TOSTER, pkgconfig,
         graphics, stats
-Built: R 3.4.1; ; 2019-10-18 00:04:03 UTC; windows
+Built: R 3.4.1; ; 2019-10-18 01:03:39 UTC; windows

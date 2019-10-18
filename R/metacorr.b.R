@@ -6,19 +6,6 @@ MetaCorrClass <- R6::R6Class(
   "MetaCorrClass",
   inherit = MetaCorrBase,
   private = list(
-    # .init = function() {
-    #
-    #     ready <- TRUE
-    #   if (is.null(self$options$rcor) || is.null(self$options$samplesize) || is.null(self$options$slab) == TRUE)
-    #     ready <- FALSE
-    #
-    #   if (ready == TRUE) {
-    #
-    #     private$.run()
-    #
-    #   }
-    #
-    # },
     .run = function() {
       ri <- self$options$rcor
       ni <- self$options$samplesize
@@ -40,6 +27,9 @@ MetaCorrClass <- R6::R6Class(
       #yaxis <- self$options$yaxis
       #data <- self$data
       table <- self$results$textRICH
+      lowerTOST <- self$options$lowerTOST
+      upperTOST <- self$options$upperTOST
+      alphaTOST <- self$options$alphaTOST
       
       ready <- TRUE
       if (is.null(self$options$rcor) ||
@@ -58,34 +48,7 @@ MetaCorrClass <- R6::R6Class(
         jmvcore::reject("Study Label fields must be populated to run analysis", code =
                           '')
       }
-     # if (ready == TRUE) {
-        # if (is.null(self$options$moderatorcor) == FALSE) {
-          # data <-
-          #   data.frame(
-          #     ri = self$data[[self$options$rcor]],
-          #     ni = self$data[[self$options$samplesize]],
-          #     moderator = self$data[[self$options$moderatorcor]],
-          #     slab = self$data[[self$options$slab]]
-          #   )
-          # data[[ri]] <- jmvcore::toNumeric(data[[ri]])
-          # data[[ni]] <- jmvcore::toNumeric(data[[ni]])
-          # data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
-          #data <- as.data.frame((jmvcore::naOmit(data$moderator)))
-          #data <- data[!is.na(data$moderator),]
-          #rownames(data) <- NULL
-      # }
-      #   data <- data %>% drop_na(moderator)
-      #   } else {
-      #     data <-
-      #       data.frame(ri = self$data[[self$options$rcor]],
-      #                  ni = self$data[[self$options$samplesize]],
-      #                  slab = self$data[[self$options$slab]])
-      #     data[[ri]] <- jmvcore::toNumeric(data[[ri]])
-      #     data[[ni]] <- jmvcore::toNumeric(data[[ni]])
-          #data <- data[!is.na(data$moderator),]
-          #rownames(data) <- NULL
-          #data <- data %>% drop_na(moderator)
-        #}
+
         
         if (ready == TRUE) {
           if (self$options$moderatorType == "NON") {
@@ -111,6 +74,31 @@ MetaCorrClass <- R6::R6Class(
               data = data,
               slab = slab,
               level = level)
+           resTOST <-
+             TOSTER::TOSTmeta(
+               ES = res$beta,
+               se = res$se,
+               low_eqbound_d = lowerTOST,
+               high_eqbound_d = upperTOST,
+               alpha = alphaTOST,
+               plot = FALSE,
+               verbose = FALSE
+             )
+           resTOST$se <- res$se
+           resTOST$effectSize <- res$yi
+           resTOST$samplingVariances <- res$vi
+           resTOST$slab <- res$slab
+           resTOST$ni <- res$ni
+           
+           resTOSTText <- capture.output(TOSTER::TOSTmeta(
+             ES = res$beta,
+             se = res$se,
+             low_eqbound_d = lowerTOST,
+             high_eqbound_d = upperTOST,
+             alpha = alphaTOST,
+             verbose = TRUE,
+             plot = FALSE
+           ))
           }
           
         if (self$options$moderatorType == "CON") {
@@ -144,7 +132,33 @@ MetaCorrClass <- R6::R6Class(
               data = data,
               slab = slab,
               level = level
-            )}
+            )
+          resTOST <-
+            TOSTER::TOSTmeta(
+              ES = res$beta,
+              se = res$se,
+              low_eqbound_d = lowerTOST,
+              high_eqbound_d = upperTOST,
+              alpha = alphaTOST,
+              verbose = FALSE,
+              plot = FALSE
+            )
+          resTOST$se <- res$se
+          resTOST$effectSize <- res$yi
+          resTOST$samplingVariances <- res$vi
+          resTOST$slab <- res$slab
+          resTOST$ni <- res$ni
+          
+          resTOSTText <- capture.output(TOSTER::TOSTmeta(
+            ES = res$beta,
+            se = res$se,
+            low_eqbound_d = lowerTOST,
+            high_eqbound_d = upperTOST,
+            alpha = alphaTOST,
+            verbose = TRUE,
+            plot = FALSE
+          ))
+          }
           
           if ((self$options$moderatorType) == "CAT") {
             if (is.null(self$options$moderatorcor) == TRUE) {
@@ -177,40 +191,35 @@ MetaCorrClass <- R6::R6Class(
                 data = data,
                 slab = slab,
                 level = level
-              )}
+              )
+            resTOST <-
+              TOSTER::TOSTmeta(
+                ES = res$beta,
+                se = res$se,
+                low_eqbound_d = lowerTOST,
+                high_eqbound_d = upperTOST,
+                alpha = alphaTOST,
+                verbose = FALSE,
+                plot = FALSE
+              )
+            resTOST$se <- res$se
+            resTOST$effectSize <- res$yi
+            resTOST$samplingVariances <- res$vi
+            resTOST$slab <- res$slab
+            resTOST$ni <- res$ni
+            
+            resTOSTText <- capture.output(TOSTER::TOSTmeta(
+              ES = res$beta,
+              se = res$se,
+              low_eqbound_d = lowerTOST,
+              high_eqbound_d = upperTOST,
+              alpha = alphaTOST,
+              verbose = TRUE,
+              plot = FALSE
+            ))
+            }
           }
-        # } else {
-        #   res <-
-        #     metafor::rma(
-        #       ri = ri,
-        #       ni = ni,
-        #       method = method2,
-        #       measure = cormeasure,
-        #       data = data,
-        #       slab = slab,
-        #       level = level
-        #     )
-        # }
-        #}
-        #}
-        
-        # if (self$options$includemods == TRUE) {
-        #   data <- data.frame(ri = self$data[[self$options$rcor]], ni = self$data[[self$options$samplesize]], mods = self$data[[self$options$moderatorcor]], slab = self$data[[self$options$slab]])
-        #   data[[ri]] <- jmvcore::toNumeric(data[[ri]])
-        #   data[[ni]] <- jmvcore::toNumeric(data[[ni]])
-        #   data[[mods]] <- jmvcore::toNumeric(data[[mods]])
-        # } else {
-        #   data <- data.frame(ri = self$data[[self$options$rcor]], ni = self$data[[self$options$samplesize]], slab = self$data[[self$options$slab]])
-        #   data[[ri]] <- jmvcore::toNumeric(data[[ri]])
-        #   data[[ni]] <- jmvcore::toNumeric(data[[ni]])
-        # }
-        #
-        # if (self$options$includemods == TRUE) {
-        #   res <- metafor::rma(ri=ri, ni=ni, method=method2, measure=cormeasure, mods=mods, data=data, slab=slab, level=level)
-        # } else {
-        #   res <- metafor::rma(ri=ri, ni=ni, method=method2, measure=cormeasure, data=data, slab=slab, level=level)
-        # }
-        
+
         
         #Pub Bias
         failsafePB <-
@@ -453,12 +462,78 @@ MetaCorrClass <- R6::R6Class(
         # `self$results` contains the results object (to populate)
         image <- self$results$plot
         imageFUN <- self$results$funplot
+        imageTOST <- self$results$tostplot
         
         image$setState(res)
         imageFUN$setState(res)
+        imageTOST$setState(resTOST)
         
         # }}))
       #}
+    },
+    .tostplot = function(imageTOST, ...) {
+      # <-- the plot function
+      plotDataTOST <- imageTOST$state
+      
+      ready <- TRUE
+      if (is.null(plotDataTOST$effectSize) ||
+          is.null(plotDataTOST$samplingVariances) ||
+          is.null(plotDataTOST$slab) == TRUE) {
+        
+        
+        ready <- FALSE
+      }
+      if (is.null(imageTOST$state$ES) ||
+          is.null(imageTOST$state$alpha) == TRUE) {
+        ready <- FALSE
+      }
+      if (ready == TRUE) {
+        #I couldn't make jamovi put the plot from TOSTER into the results without
+        #it popping a new window and crashing so I'm trying this ugly work around
+        #I just copied the function from TOSTER and then put the new variable names
+        #in place of the ones that the author Daniel Laken wrote. I should come back 
+        #to this and clean it up slash do it correctly.
+        plotTOSTfunction <- function(ES, se, low_eqbound_d, high_eqbound_d, alpha) {
+          Z1<-(ES-low_eqbound_d)/se
+          p1<-pnorm(Z1, lower.tail=FALSE)
+          Z2<-(ES-high_eqbound_d)/se
+          p2<-pnorm(Z2, lower.tail=TRUE)
+          Z<-(ES/se)
+          pttest<-2*pnorm(-abs(Z))
+          LL90<-ES-qnorm(1-alpha)*(se)
+          UL90<-ES+qnorm(1-alpha)*(se)
+          LL95<-ES-qnorm(1-alpha/2)*(se)
+          UL95<-ES+qnorm(1-alpha/2)*(se)
+          ptost<-max(p1,p2) #Get highest p-value for summary TOST result
+          Ztost<-ifelse(abs(Z1) < abs(Z2), Z1, Z2) #Get lowest t-value for summary TOST result
+          results<-data.frame(Z1,p1,Z2,p2,LL90,UL90)
+          colnames(results) <- c("Z-value 1","p-value 1","Z-value 2","p-value 2", paste("Lower Limit ",100*(1-alpha*2),"% CI",sep=""),paste("Upper Limit ",100*(1-alpha*2),"% CI",sep=""))
+          testoutcome<-ifelse(pttest<alpha,"significant","non-significant")
+          TOSToutcome<-ifelse(ptost<alpha,"significant","non-significant")
+          
+          # Plot results
+          plot(NA, ylim=c(0,1), xlim=c(min(LL95,low_eqbound_d,ES)-max(UL95-LL95, high_eqbound_d-low_eqbound_d,ES)/10, max(UL95,high_eqbound_d,ES)+max(UL95-LL95, high_eqbound_d-low_eqbound_d, ES)/10), bty="l", yaxt="n", ylab="",xlab="Effect size")
+          points(x=ES, y=0.5, pch=15, cex=2)
+          abline(v=high_eqbound_d, lty=2)
+          abline(v=low_eqbound_d, lty=2)
+          abline(v=0, lty=2, col="grey")
+          segments(LL90,0.5,UL90,0.5, lwd=3)
+          segments(LL95,0.5,UL95,0.5, lwd=1)
+          title(main=paste("Equivalence bounds ",round(low_eqbound_d,digits=3)," and ",round(high_eqbound_d,digits=3),"\nEffect size = ",round(ES,digits=3)," \n TOST: ", 100*(1-alpha*2),"% CI [",round(LL90,digits=3),";",round(UL90,digits=3),"] ", TOSToutcome," \n NHST: ", 100*(1-alpha),"% CI [",round(LL95,digits=3),";",round(UL95,digits=3),"] ", testoutcome,sep=""), cex.main=1)
+        }
+        
+        plotDataTOST$ESd <- compute.es::res(r=plotDataTOST$ES, n=sum(plotDataTOST$ni))
+        tostPlotFUN <-
+          plotTOSTfunction(
+            ES = plotDataTOST$ESd,
+            se = plotDataTOST$se,
+            low_eqbound_d = plotDataTOST$low_eqbound_d,
+            high_eqbound_d = plotDataTOST$high_eqbound_d,
+            alpha = plotDataTOST$alpha
+          )
+        print(tostPlotFUN)
+        TRUE
+      }
     },
     #Forest Plot Function
     .plot = function(image, ...) {
