@@ -269,9 +269,11 @@ metaDVResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         tableTauSqaured = function() private$.items[["tableTauSqaured"]],
         modelFitRICH = function() private$.items[["modelFitRICH"]],
         plot = function() private$.items[["plot"]],
-        pubBias = function() private$.items[["pubBias"]],
-        tostplot = function() private$.items[["tostplot"]],
-        funplot = function() private$.items[["funplot"]]),
+        fsnRICH = function() private$.items[["fsnRICH"]],
+        funplot = function() private$.items[["funplot"]],
+        TOSToutput = function() private$.items[["TOSToutput"]],
+        TOSToutputtext = function() private$.items[["TOSToutputtext"]],
+        tostplot = function() private$.items[["tostplot"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -399,122 +401,25 @@ metaDVResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 renderFun=".plot",
                 refs=list(
                     "metafor")))
-            self$add(R6::R6Class(
-                inherit = jmvcore::Group,
-                active = list(
-                    fsnRICH = function() private$.items[["fsnRICH"]],
-                    rankRICH = function() private$.items[["rankRICH"]],
-                    regRICH = function() private$.items[["regRICH"]],
-                    TOSToutput = function() private$.items[["TOSToutput"]],
-                    TOSToutputtext = function() private$.items[["TOSToutputtext"]]),
-                private = list(),
-                public=list(
-                    initialize=function(options) {
-                        super$initialize(
-                            options=options,
-                            name="pubBias",
-                            title="Publication Bias Assessment")
-                        self$add(jmvcore::Table$new(
-                            options=options,
-                            name="fsnRICH",
-                            title="Fail-Safe N Analysis",
-                            rows=1,
-                            columns=list(
-                                list(
-                                    `name`="failSafeNumber", 
-                                    `title`="Fail-safe N", 
-                                    `type`="integer", 
-                                    `format`="zto"),
-                                list(
-                                    `name`="p", 
-                                    `type`="number", 
-                                    `format`="zto,pvalue"))))
-                        self$add(jmvcore::Table$new(
-                            options=options,
-                            name="rankRICH",
-                            title="Rank Correlation Test for Funnel Plot Asymmetry",
-                            rows=1,
-                            columns=list(
-                                list(
-                                    `name`="rankTau", 
-                                    `title`="Kendall's Tau", 
-                                    `type`="number", 
-                                    `format`="zto"),
-                                list(
-                                    `name`="p", 
-                                    `type`="number", 
-                                    `format`="zto,pvalue"))))
-                        self$add(jmvcore::Table$new(
-                            options=options,
-                            name="regRICH",
-                            title="Regression Test for Funnel Plot Asymmetry",
-                            rows=1,
-                            columns=list(
-                                list(
-                                    `name`="Z", 
-                                    `type`="number", 
-                                    `format`="zto"),
-                                list(
-                                    `name`="p", 
-                                    `type`="number", 
-                                    `format`="zto,pvalue"))))
-                        self$add(jmvcore::Table$new(
-                            options=options,
-                            name="TOSToutput",
-                            title="Two One-Sided Tests Equivalence Testing",
-                            refs=list(
-                                "TOSTER"),
-                            rows=1,
-                            columns=list(
-                                list(
-                                    `name`="TOST_Z1", 
-                                    `title`="Z-Value Lower Bound", 
-                                    `type`="number", 
-                                    `format`="zto"),
-                                list(
-                                    `name`="TOST_p1", 
-                                    `title`="P-Value Lower Bound", 
-                                    `type`="number", 
-                                    `format`="zto,pvalue"),
-                                list(
-                                    `name`="TOST_Z2", 
-                                    `title`="Z-Value Upper Bound", 
-                                    `type`="number", 
-                                    `format`="zto"),
-                                list(
-                                    `name`="TOST_p2", 
-                                    `title`="P-Value Upper Bound", 
-                                    `type`="number", 
-                                    `format`="zto"),
-                                list(
-                                    `name`="LL_CI_TOST", 
-                                    `type`="number", 
-                                    `format`="zto"),
-                                list(
-                                    `name`="UL_CI_TOST", 
-                                    `type`="number", 
-                                    `format`="zto,pvalue"),
-                                list(
-                                    `name`="LL_CI_ZTEST", 
-                                    `type`="number", 
-                                    `format`="zto"),
-                                list(
-                                    `name`="UL_CI_ZTEST", 
-                                    `type`="number", 
-                                    `format`="zto"))))
-                        self$add(jmvcore::Preformatted$new(
-                            options=options,
-                            name="TOSToutputtext",
-                            title="Two One-Sided Tests Equivalence Testing: Text Summary"))}))$new(options=options))
-            self$add(jmvcore::Image$new(
+            self$add(jmvcore::Table$new(
                 options=options,
-                name="tostplot",
-                title="Equivalence Test Plot",
-                width=600,
-                height=450,
-                renderFun=".tostplot",
-                refs=list(
-                    "TOSTER")))
+                name="fsnRICH",
+                title="",
+                rows=3,
+                columns=list(
+                    list(
+                        `name`="label", 
+                        `title`="Test Name", 
+                        `type`="text"),
+                    list(
+                        `name`="failSafeNumber", 
+                        `title`="value", 
+                        `type`="integer", 
+                        `format`="zto"),
+                    list(
+                        `name`="p", 
+                        `type`="number", 
+                        `format`="zto,pvalue"))))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="funplot",
@@ -523,7 +428,64 @@ metaDVResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 height=450,
                 renderFun=".funplot",
                 refs=list(
-                    "metafor")))}))
+                    "metafor")))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="TOSToutput",
+                title="Two One-Sided Tests Equivalence Testing",
+                refs=list(
+                    "TOSTER"),
+                rows=1,
+                columns=list(
+                    list(
+                        `name`="TOST_Z1", 
+                        `title`="Z-Value Lower Bound", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="TOST_p1", 
+                        `title`="P-Value Lower Bound", 
+                        `type`="number", 
+                        `format`="zto,pvalue"),
+                    list(
+                        `name`="TOST_Z2", 
+                        `title`="Z-Value Upper Bound", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="TOST_p2", 
+                        `title`="P-Value Upper Bound", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="LL_CI_TOST", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="UL_CI_TOST", 
+                        `type`="number", 
+                        `format`="zto,pvalue"),
+                    list(
+                        `name`="LL_CI_ZTEST", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="UL_CI_ZTEST", 
+                        `type`="number", 
+                        `format`="zto"))))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
+                name="TOSToutputtext",
+                title="Two One-Sided Tests Equivalence Testing: Text Summary"))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="tostplot",
+                title="Equivalence Test Plot",
+                width=600,
+                height=450,
+                renderFun=".tostplot",
+                refs=list(
+                    "TOSTER")))}))
 
 metaDVBase <- if (requireNamespace('jmvcore')) R6::R6Class(
     "metaDVBase",
@@ -577,13 +539,11 @@ metaDVBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$tableTauSqaured} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$modelFitRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$pubBias$fsnRICH} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$pubBias$rankRICH} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$pubBias$regRICH} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$pubBias$TOSToutput} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$pubBias$TOSToutputtext} \tab \tab \tab \tab \tab a preformatted \cr
-#'   \code{results$tostplot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$fsnRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$funplot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$TOSToutput} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$TOSToutputtext} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$tostplot} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

@@ -211,7 +211,7 @@ metaDVClass <- if (requireNamespace('jmvcore'))
         #TOST Output 
         
         #TOST Table
-        TOSToutput <- self$results$pubBias$TOSToutput
+        TOSToutput <- self$results$TOSToutput
         TOSToutput$setRow(rowNo = 1,
                        values = list(TOST_Z1 = resTOST$TOST_Z1[1],
                                      TOST_p1 = resTOST$TOST_p1[1],
@@ -222,7 +222,7 @@ metaDVClass <- if (requireNamespace('jmvcore'))
                                      LL_CI_ZTEST = resTOST$LL_CI_ZTEST[1],
                                      UL_CI_ZTEST = resTOST$UL_CI_ZTEST[1]))
         #TOST Text Output
-        TOSToutputtext <- self$results$pubBias$TOSToutputtext
+        TOSToutputtext <- self$results$TOSToutputtext
         
         outputTextTOST <-
           paste(resTOSTText[18], 
@@ -247,15 +247,52 @@ metaDVClass <- if (requireNamespace('jmvcore'))
           regtestPB <- metafor::regtest(res)
           
           
-          fsnRICH <- self$results$pubBias$fsnRICH
-          
+          #fsnRICH <- self$results$pubBias$fsnRICH
+          fsnRICH <- self$results$fsnRICH
+          # fsnRICH$setRow(
+          #   rowNo = 1,
+          #   values = list(failSafeNumber = failsafePB$fsnum[1],
+          #                 p = failsafePB$pval[1])
+          # )
+          # fsnTitle <-
+          #   paste("Fail-Safe N Analysis (File Drawer Analysis)")
+          # fsnNote <-
+          #   paste("Fail-safe N Calculation Using the ",
+          #         fsntype,
+          #         " Approach",
+          #         sep = "")
+          # fsnRICH$setTitle(title = fsnTitle)
+          # fsnRICH$setNote("fsnNoteTable", fsnNote)
+          #fsnRICH <- self$results$fsnRICH
           fsnRICH$setRow(
             rowNo = 1,
-            values = list(failSafeNumber = failsafePB$fsnum[1],
-                          p = failsafePB$pval[1])
-          )
+            values = list(
+              label = "Fail-Safe N",
+              failSafeNumber = failsafePB$fsnum[1],
+              p = failsafePB$pval[1])
+            )
+          
+          
+          fsnRICH$setRow(
+            rowNo = 2,
+            values = list(
+              label = "Kendalls Tau",
+              failSafeNumber = ranktestPB$tau[1],
+              p = ranktestPB$pval[1])
+            )
+          
+          
+          fsnRICH$setRow(
+            rowNo = 3,
+            values = list(
+              label = "Egger's Regression",
+              failSafeNumber = regtestPB[["zval"]],
+              p = regtestPB[["pval"]])
+            )
+          
+          
           fsnTitle <-
-            paste("Fail-Safe N Analysis (File Drawer Analysis)")
+            paste("Publication Bias Assessment")
           fsnNote <-
             paste("Fail-safe N Calculation Using the ",
                   fsntype,
@@ -263,18 +300,20 @@ metaDVClass <- if (requireNamespace('jmvcore'))
                   sep = "")
           fsnRICH$setTitle(title = fsnTitle)
           fsnRICH$setNote("fsnNoteTable", fsnNote)
+          fsnRICH <- self$results$fsnRICH
           
-          rankRICH <- self$results$pubBias$rankRICH
-          rankRICH$setRow(
-            rowNo = 1,
-            values = list(rankTau = ranktestPB$tau[1],
-                          p = ranktestPB$pval[1])
-          )
           
-          regRICH <- self$results$pubBias$regRICH
-          regRICH$setRow(rowNo = 1,
-                         values = list(Z = regtestPB$zval[1],
-                                       p = regtestPB$pval[1]))
+          # rankRICH <- self$results$pubBias$rankRICH
+          # rankRICH$setRow(
+          #   rowNo = 1,
+          #   values = list(rankTau = ranktestPB$tau[1],
+          #                 p = ranktestPB$pval[1])
+          # )
+          # 
+          # regRICH <- self$results$pubBias$regRICH
+          # regRICH$setRow(rowNo = 1,
+          #                values = list(Z = regtestPB$zval[1],
+          #                              p = regtestPB$pval[1]))
           
           # # Extracting the effect sizes and sampling variances:
           # effect <- res$yi
