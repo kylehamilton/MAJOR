@@ -143,15 +143,7 @@ items:
             - name: p
               type: number
               format: zto,pvalue
-              
-        - name: funplot
-          title: Funnel Plot
-          type: Image
-          width:  600
-          height: 450
-          renderFun: .funplot
-          refs: [ metafor ]
-          
+      
         - name:  TOSToutput
           title: "Two One-Sided Tests Equivalence Testing"
           refs: [ TOSTER ]
@@ -199,4 +191,11 @@ items:
       renderFun: .tostplot
       refs: [ TOSTER ]
       
+    - name: funplot
+      title: Funnel Plot
+      type: Image
+      width:  600
+      height: 450
+      renderFun: .funplot
+      refs: [ metafor ]      
 ...
