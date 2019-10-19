@@ -690,10 +690,14 @@ metaDVClass <- if (requireNamespace('jmvcore'))
             is.null(self$options$samplingVariances) ||
             is.null(self$options$slab) == TRUE) {
           ready <- FALSE
+          jmvcore::reject(
+            "Effect Sizes, Sampling Variances, and Study Label fields must be populated to run analysis",
+            code = ''
+          )
+        } else {
+          influDiagPlot9 <- qqnorm(plotDataInfluence)
+          print(influDiagPlot9)
         }
-        
-        influDiagPlot9 <- qqnorm(plotDataInfluence)
-        print(influDiagPlot9)
         TRUE
       },
       

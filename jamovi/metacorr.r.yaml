@@ -102,100 +102,97 @@ items:
       renderFun: .plot
       refs: [ metafor ]
 
-    - name: pubBias
-      title: Publication Bias Assessment
-      type: Group
-      items:
-        - name:  fsnRICH
-          title: "Fail-Safe N Analysis"
-          type: Table
-          rows:  1
-          columns:
-            - name: failSafeNumber
-              title: "Fail-safe N"
-              type: integer
-              format: zto
-            - name: p
-              type: number
-              format: zto,pvalue
 
-        - name:  rankRICH
-          title: "Rank Correlation Test for Funnel Plot Asymmetry"
-          type: Table
-          rows:  1
-          columns:
-            - name: rankTau
-              title: "Kendall's Tau"
-              type: number
-              format: zto
-            - name: p
-              type: number
-              format: zto,pvalue
+    - name:  fsnRICH
+      title: ""
+      type: Table
+      rows:  3
+      columns:
+        - name: label
+          title: 'Test Name'
+          type: text
+        - name: failSafeNumber
+          title: 'value'
+          type: integer
+          format: zto
+        - name: p
+          type: number
+          format: zto,pvalue
 
-        - name:  regRICH
-          title: "Regression Test for Funnel Plot Asymmetry"
-          type: Table
-          rows:  1
-          columns:
-            - name: Z
-              type: number
-              format: zto
-            - name: p
-              type: number
-              format: zto,pvalue
-        - name:  TOSToutput
-          title: "Two One-Sided Tests Equivalence Testing"
-          refs: [ TOSTER ]
-          type: Table
-          rows:  1
-          columns:
-            - name: TOST_Z1
-              title: 'Z-Value Lower Bound'
-              type: number
-              format: zto
-            - name: TOST_p1
-              title: 'P-Value Lower Bound'
-              type: number
-              format: zto,pvalue
-            - name: TOST_Z2
-              title: 'Z-Value Upper Bound'
-              type: number
-              format: zto              
-            - name: TOST_p2
-              title: 'P-Value Upper Bound'
-              type: number
-              format: zto
-            - name: LL_CI_TOST
-              type: number
-              format: zto
-            - name: UL_CI_TOST
-              type: number
-              format: zto,pvalue
-            - name: LL_CI_ZTEST
-              type: number
-              format: zto              
-            - name: UL_CI_ZTEST
-              type: number
-              format: zto
               
-        - name:  TOSToutputtext
-          title: "Two One-Sided Tests Equivalence Testing: Text Summary"
-          type: Preformatted
-
-    - name: tostplot
-      title: Equivalence Test Plot
-      type: Image
-      width:  600
-      height: 450
-      renderFun: .tostplot
-      refs: [ TOSTER ]
-      
     - name: funplot
       title: Funnel Plot
       type: Image
       width:  600
       height: 450
       renderFun: .funplot
-      refs: [ metafor ]
+      refs: [ metafor ] 
+
+    - name: diagPlotAll
+      title: Outlier and Influential Case Diagnostics
+      type: Group
+      items:
+          - name: diagplot1
+            title: Externally Standardized Residual
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot1
+            
+          - name: diagplot2
+            title: DFFITS Values
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot2
+            
+          - name: diagplot3
+            title: Cook's Distances
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot3
+            
+          - name: diagplot4
+            title: Covariance Ratios
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot4
+            
+          - name: diagplot5
+            title: Leave-one-out Tau Estimates
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot5
+            
+          - name: diagplot6
+            title: Leave-one-out (residual) Heterogeneity Test Statistics
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot6
+            
+          - name: diagplot7
+            title: Hat Values
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot7
+            
+          - name: diagplot8
+            title: Weights
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot8
+            
+          - name: diagplot9
+            title: Q-Q Plot
+            type: Image
+            width:  700
+            height: 700
+            renderFun: .influDiagPlot9
 
 ...
