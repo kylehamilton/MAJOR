@@ -141,3 +141,5 @@ children:
             useSingleCell: true
           - type: CheckBox
             name: showTestTOST
+          - type: CheckBox
+            name: showInfPlot

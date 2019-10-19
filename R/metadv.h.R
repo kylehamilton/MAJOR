@@ -28,7 +28,8 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             lowerTOST = -0.5,
             upperTOST = 0.5,
             alphaTOST = 0.05,
-            showTestTOST = TRUE, ...) {
+            showTestTOST = TRUE,
+            showInfPlot = FALSE, ...) {
 
             super$initialize(
                 package='MAJOR',
@@ -187,6 +188,10 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "showTestTOST",
                 showTestTOST,
                 default=TRUE)
+            private$..showInfPlot <- jmvcore::OptionBool$new(
+                "showInfPlot",
+                showInfPlot,
+                default=FALSE)
 
             self$.addOption(private$..effectSize)
             self$.addOption(private$..samplingVariances)
@@ -211,6 +216,7 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..upperTOST)
             self$.addOption(private$..alphaTOST)
             self$.addOption(private$..showTestTOST)
+            self$.addOption(private$..showInfPlot)
         }),
     active = list(
         effectSize = function() private$..effectSize$value,
@@ -235,7 +241,8 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         lowerTOST = function() private$..lowerTOST$value,
         upperTOST = function() private$..upperTOST$value,
         alphaTOST = function() private$..alphaTOST$value,
-        showTestTOST = function() private$..showTestTOST$value),
+        showTestTOST = function() private$..showTestTOST$value,
+        showInfPlot = function() private$..showInfPlot$value),
     private = list(
         ..effectSize = NA,
         ..samplingVariances = NA,
@@ -259,7 +266,8 @@ metaDVOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..lowerTOST = NA,
         ..upperTOST = NA,
         ..alphaTOST = NA,
-        ..showTestTOST = NA)
+        ..showTestTOST = NA,
+        ..showInfPlot = NA)
 )
 
 metaDVResults <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -273,7 +281,8 @@ metaDVResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         funplot = function() private$.items[["funplot"]],
         TOSToutput = function() private$.items[["TOSToutput"]],
         TOSToutputtext = function() private$.items[["TOSToutputtext"]],
-        tostplot = function() private$.items[["tostplot"]]),
+        tostplot = function() private$.items[["tostplot"]],
+        diagPlotAll = function() private$.items[["diagPlotAll"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -485,7 +494,89 @@ metaDVResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 height=450,
                 renderFun=".tostplot",
                 refs=list(
-                    "TOSTER")))}))
+                    "TOSTER")))
+            self$add(R6::R6Class(
+                inherit = jmvcore::Group,
+                active = list(
+                    diagplot1 = function() private$.items[["diagplot1"]],
+                    diagplot2 = function() private$.items[["diagplot2"]],
+                    diagplot3 = function() private$.items[["diagplot3"]],
+                    diagplot4 = function() private$.items[["diagplot4"]],
+                    diagplot5 = function() private$.items[["diagplot5"]],
+                    diagplot6 = function() private$.items[["diagplot6"]],
+                    diagplot7 = function() private$.items[["diagplot7"]],
+                    diagplot8 = function() private$.items[["diagplot8"]],
+                    diagplot9 = function() private$.items[["diagplot9"]]),
+                private = list(),
+                public=list(
+                    initialize=function(options) {
+                        super$initialize(
+                            options=options,
+                            name="diagPlotAll",
+                            title="Outlier and Influential Case Diagnostics")
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="diagplot1",
+                            title="Externally Standardized Residual",
+                            width=750,
+                            height=300,
+                            renderFun=".influDiagPlot1"))
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="diagplot2",
+                            title="DFFITS Values",
+                            width=750,
+                            height=300,
+                            renderFun=".influDiagPlot2"))
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="diagplot3",
+                            title="Cook's Distances",
+                            width=750,
+                            height=300,
+                            renderFun=".influDiagPlot3"))
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="diagplot4",
+                            title="Covariance Ratios",
+                            width=750,
+                            height=300,
+                            renderFun=".influDiagPlot4"))
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="diagplot5",
+                            title="Leave-one-out Tau Estimates",
+                            width=750,
+                            height=300,
+                            renderFun=".influDiagPlot5"))
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="diagplot6",
+                            title="Leave-one-out (residual) Heterogeneity Test Statistics",
+                            width=750,
+                            height=300,
+                            renderFun=".influDiagPlot6"))
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="diagplot7",
+                            title="Hat Values",
+                            width=750,
+                            height=300,
+                            renderFun=".influDiagPlot7"))
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="diagplot8",
+                            title="Weights",
+                            width=750,
+                            height=300,
+                            renderFun=".influDiagPlot8"))
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="diagplot9",
+                            title="Q-Q Plot",
+                            width=700,
+                            height=700,
+                            renderFun=".influDiagPlot9"))}))$new(options=options))}))
 
 metaDVBase <- if (requireNamespace('jmvcore')) R6::R6Class(
     "metaDVBase",
@@ -533,6 +624,7 @@ metaDVBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param upperTOST .
 #' @param alphaTOST .
 #' @param showTestTOST .
+#' @param showInfPlot .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$textRICH} \tab \tab \tab \tab \tab a table \cr
@@ -544,6 +636,15 @@ metaDVBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$TOSToutput} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$TOSToutputtext} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$tostplot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$diagPlotAll$diagplot1} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$diagPlotAll$diagplot2} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$diagPlotAll$diagplot3} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$diagPlotAll$diagplot4} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$diagPlotAll$diagplot5} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$diagPlotAll$diagplot6} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$diagPlotAll$diagplot7} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$diagPlotAll$diagplot8} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$diagPlotAll$diagplot9} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -577,7 +678,8 @@ metaDV <- function(
     lowerTOST = -0.5,
     upperTOST = 0.5,
     alphaTOST = 0.05,
-    showTestTOST = TRUE) {
+    showTestTOST = TRUE,
+    showInfPlot = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('metaDV requires jmvcore to be installed (restart may be required)')
@@ -618,7 +720,8 @@ metaDV <- function(
         lowerTOST = lowerTOST,
         upperTOST = upperTOST,
         alphaTOST = alphaTOST,
-        showTestTOST = showTestTOST)
+        showTestTOST = showTestTOST,
+        showInfPlot = showInfPlot)
 
     analysis <- metaDVClass$new(
         options = options,

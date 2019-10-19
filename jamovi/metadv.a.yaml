@@ -212,4 +212,10 @@ options:
       title: Show Summary TOST Report
       type: Bool
       default: true
+      
+    - name: showInfPlot
+      title: Show Plot of Influence Diagnostics
+      type: Bool
+      default: false
+
 ...

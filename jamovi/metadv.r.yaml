@@ -174,6 +174,71 @@ items:
       height: 450
       renderFun: .tostplot
       refs: [ TOSTER ]
-      
-     
+
+    - name: diagPlotAll
+      title: Outlier and Influential Case Diagnostics
+      type: Group
+      items:
+          - name: diagplot1
+            title: Externally Standardized Residual
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot1
+            
+          - name: diagplot2
+            title: DFFITS Values
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot2
+            
+          - name: diagplot3
+            title: Cook's Distances
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot3
+            
+          - name: diagplot4
+            title: Covariance Ratios
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot4
+            
+          - name: diagplot5
+            title: Leave-one-out Tau Estimates
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot5
+            
+          - name: diagplot6
+            title: Leave-one-out (residual) Heterogeneity Test Statistics
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot6
+            
+          - name: diagplot7
+            title: Hat Values
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot7
+            
+          - name: diagplot8
+            title: Weights
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot8
+            
+          - name: diagplot9
+            title: Q-Q Plot
+            type: Image
+            width:  700
+            height: 700
+            renderFun: .influDiagPlot9
 ...
