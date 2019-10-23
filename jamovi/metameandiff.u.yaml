@@ -151,3 +151,28 @@ children:
         children:
           - type: ComboBox
             name: fsntype
+          - type: CheckBox
+            name: showFunTrimPlot
+  - type: CollapseBox
+    label: Equivalence Test Options
+    collapsed: true
+    stretchFactor: 1
+    children:
+      - type: LayoutBox
+        children:
+          - type: TextBox
+            name: lowerTOST
+            format: number
+            useSingleCell: true
+          - type: TextBox
+            name: upperTOST
+            format: number
+            useSingleCell: true
+          - type: TextBox
+            name: alphaTOST
+            format: number
+            useSingleCell: true
+          - type: CheckBox
+            name: showTestTOST
+          - type: CheckBox
+            name: showInfPlot

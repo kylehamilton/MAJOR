@@ -245,10 +245,10 @@ metaDVClass <- if (requireNamespace('jmvcore'))
                          type = fsntype)
           ranktestPB <- metafor::ranktest(res)
           regtestPB <- metafor::regtest(res)
-          
+          fsnRICH <- self$results$fsnRICH
           
           #fsnRICH <- self$results$pubBias$fsnRICH
-          fsnRICH <- self$results$fsnRICH
+          
           # fsnRICH$setRow(
           #   rowNo = 1,
           #   values = list(failSafeNumber = failsafePB$fsnum[1],

@@ -224,4 +224,39 @@ options:
       title: Contour-Enhanced
       type: Bool
       default: false
-...
+      
+    - name: lowerTOST
+      type: Number
+      title: Lower Equivalence Bounds (Cohen's d)
+      min: -100
+      max: 100
+      default: -0.5
+      
+    - name: upperTOST
+      type: Number
+      title: Upper Equivalence Bounds (Cohen's d)
+      min: -100
+      max: 100
+      default: 0.5
+      
+    - name: alphaTOST
+      type: Number
+      title: Alpha Level
+      min: 0.000001
+      max: 1
+      default: 0.05
+
+    - name: showTestTOST
+      title: Show Summary TOST Report
+      type: Bool
+      default: true
+      
+    - name: showInfPlot
+      title: Show Plot of Influence Diagnostics
+      type: Bool
+      default: false
+      
+    - name: showFunTrimPlot
+      title: Show Trim and Fill Funnel Plot
+      type: Bool
+      default: false
