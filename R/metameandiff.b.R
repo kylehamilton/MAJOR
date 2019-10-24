@@ -246,6 +246,64 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             }
         }
         
+        
+        #summary
+        res_back<-predict(res)
+        
+        summaryOutputText <- self$results$summaryOutputText
+        
+        outputTextSummary <-
+          paste(
+            "A meta-analysis was conducted (k=",
+            res$k,
+            "). The average difference between the two groups was g = ",
+            round(res$b, 2),
+            ", (p = ",
+            round(res$pval, 3),
+            ", 95% CI [",
+            round(res$ci.lb, 2),
+            ", ",
+            round(res$ci.ub, 2),
+            "]).",
+            ifelse(
+              res$pval > 0.05,
+              " It is important to note that a p>.05 indicates lack of evidence of an effect (i.e. uncertainty) rather than evidence of no effect unless confidence intervals are sufficently narrow to rule out a clinically meaningful effect.",
+              ""
+            ),
+            sep = ""
+          )
+        
+        summaryOutputText$setContent(outputTextSummary)
+        
+        ### Second part
+        summaryOutputText2 <- self$results$summaryOutputText2
+        
+        outputTextSummary2 <-
+          paste(
+            "A Cochran's Q test was conducted to examine whether variations in the observed effect are likely to be attributable soley to sampling error (Q~(df=",
+            res$k-1,
+            ")~=",
+            round(res$QE,2),
+            ", p=",
+            ifelse(res$QEp < 0.001,
+                   "<.001",
+                   round(res$QEp,3)),
+            ".", 
+            ifelse(res$QEp < 0.05, 
+                   " The variation in the effect is greater than would be expected from sampling error alone. It appears that the true effect varies betweeen studies.",
+                   "There is no evidence that the true effect size varies between studies."),
+            "The I^2^ statistics indicates the proportion of variance in the observed effect attributable to sampling error. In this instance, the I^2^ =",
+            round(res$I2,2),
+            "%.",
+            "Note, this statistic is not an absolute measure of heterogeneity (although it is often interpreted as such). It is strongly advise against using rules of thumb such as small, medium, or large when interpreting I^2^ values. Instead, researchers increasingly argue that the information provided credibility or prediction intervals is more useful in understanding the heterogeneity of true effect sizes in meta-analysis.",
+            "In this instance the 95% credibility intervals are",
+            round(res_back$cr.lb,2), ",", round(res_back$cr.ub,2),
+            ". That is, it is estimated that 95% of true effect sizes fall between g=",
+            round(res_back$cr.lb,2)," and g=", round(res_back$cr.ub,2), ".",
+            sep = ""
+          )
+        
+        summaryOutputText2$setContent(outputTextSummary2)
         #TOST Output 
         
         #TOST Table
@@ -893,6 +951,8 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         yaxis <- self$options$yaxis
         yaxisInv <- self$options$yaxisInv
         enhancePlot <- self$options$enhanceFunnel
+        
+        
         ready <- TRUE
         if (is.null(self$options$n1i) ||
             is.null(self$options$m1i) ||

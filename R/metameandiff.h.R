@@ -341,6 +341,8 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         textRICH = function() private$.items[["textRICH"]],
         tableTauSqaured = function() private$.items[["tableTauSqaured"]],
         modelFitRICH = function() private$.items[["modelFitRICH"]],
+        summaryOutputText = function() private$.items[["summaryOutputText"]],
+        summaryOutputText2 = function() private$.items[["summaryOutputText2"]],
         plot = function() private$.items[["plot"]],
         fsnRICH = function() private$.items[["fsnRICH"]],
         funplot = function() private$.items[["funplot"]],
@@ -467,6 +469,14 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `name`="AICc", 
                         `type`="number", 
                         `format`="zto"))))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="summaryOutputText",
+                title="Model Summary"))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="summaryOutputText2",
+                title="Model Summary"))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -567,7 +577,7 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `name`="UL_CI_ZTEST", 
                         `type`="number", 
                         `format`="zto"))))
-            self$add(jmvcore::Preformatted$new(
+            self$add(jmvcore::Html$new(
                 options=options,
                 name="TOSToutputtext",
                 title="Two One-Sided Tests Equivalence Testing: Text Summary"))
@@ -721,12 +731,14 @@ metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$textRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$tableTauSqaured} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$modelFitRICH} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$summaryOutputText} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$summaryOutputText2} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$fsnRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$funplot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$funplotTrimGroup$funplotTrim} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$TOSToutput} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$TOSToutputtext} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$TOSToutputtext} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$tostplot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$diagPlotAll$diagplot1} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$diagPlotAll$diagplot2} \tab \tab \tab \tab \tab an image \cr

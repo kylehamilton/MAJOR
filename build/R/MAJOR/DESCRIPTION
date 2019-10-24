@@ -9,5 +9,5 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports: jmvcore (>= 0.5.5), R6, metafor, bayesmeta, TOSTER, pkgconfig,
-        graphics, stats, compute.es
-Built: R 3.4.1; ; 2019-10-23 00:16:53 UTC; windows
+        graphics, stats
+Built: R 3.4.1; ; 2019-10-24 00:34:32 UTC; windows

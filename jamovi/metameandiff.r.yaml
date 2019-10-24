@@ -93,7 +93,15 @@ items:
         - name: AICc
           type: number
           format: zto
-
+          
+    - name:  summaryOutputText
+      title: "Model Summary"
+      type: Html
+      
+    - name:  summaryOutputText2
+      title: "Model Summary"
+      type: Html
+      
     - name: plot
       title: Forest Plot
       type: Image
@@ -176,7 +184,7 @@ items:
           
     - name:  TOSToutputtext
       title: "Two One-Sided Tests Equivalence Testing: Text Summary"
-      type: Preformatted
+      type: Html
 
     - name: tostplot
       title: Equivalence Test Plot
