@@ -206,4 +206,10 @@ options:
       title: Contour-Enhanced
       type: Bool
       default: false
+
+    - name: showInfPlot
+      title: Show Plot of Influence Diagnostics
+      type: Bool
+      default: false
+      
 ...

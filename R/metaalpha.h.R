@@ -26,7 +26,8 @@ metaAlphaOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             fsntype = "Rosenthal",
             yaxis = "sei",
             yaxisInv = FALSE,
-            enhanceFunnel = FALSE, ...) {
+            enhanceFunnel = FALSE,
+            showInfPlot = FALSE, ...) {
 
             super$initialize(
                 package='MAJOR',
@@ -179,6 +180,10 @@ metaAlphaOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "enhanceFunnel",
                 enhanceFunnel,
                 default=FALSE)
+            private$..showInfPlot <- jmvcore::OptionBool$new(
+                "showInfPlot",
+                showInfPlot,
+                default=FALSE)
 
             self$.addOption(private$..ai)
             self$.addOption(private$..mi)
@@ -201,6 +206,7 @@ metaAlphaOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..yaxis)
             self$.addOption(private$..yaxisInv)
             self$.addOption(private$..enhanceFunnel)
+            self$.addOption(private$..showInfPlot)
         }),
     active = list(
         ai = function() private$..ai$value,
@@ -223,7 +229,8 @@ metaAlphaOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         fsntype = function() private$..fsntype$value,
         yaxis = function() private$..yaxis$value,
         yaxisInv = function() private$..yaxisInv$value,
-        enhanceFunnel = function() private$..enhanceFunnel$value),
+        enhanceFunnel = function() private$..enhanceFunnel$value,
+        showInfPlot = function() private$..showInfPlot$value),
     private = list(
         ..ai = NA,
         ..mi = NA,
@@ -245,7 +252,8 @@ metaAlphaOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..fsntype = NA,
         ..yaxis = NA,
         ..yaxisInv = NA,
-        ..enhanceFunnel = NA)
+        ..enhanceFunnel = NA,
+        ..showInfPlot = NA)
 )
 
 metaAlphaResults <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -255,8 +263,9 @@ metaAlphaResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         tableTauSqaured = function() private$.items[["tableTauSqaured"]],
         modelFitRICH = function() private$.items[["modelFitRICH"]],
         plot = function() private$.items[["plot"]],
-        pubBias = function() private$.items[["pubBias"]],
-        funplot = function() private$.items[["funplot"]]),
+        fsnRICH = function() private$.items[["fsnRICH"]],
+        funplot = function() private$.items[["funplot"]],
+        diagPlotAll = function() private$.items[["diagPlotAll"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -384,63 +393,25 @@ metaAlphaResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 renderFun=".plot",
                 refs=list(
                     "metafor")))
-            self$add(R6::R6Class(
-                inherit = jmvcore::Group,
-                active = list(
-                    fsnRICH = function() private$.items[["fsnRICH"]],
-                    rankRICH = function() private$.items[["rankRICH"]],
-                    regRICH = function() private$.items[["regRICH"]]),
-                private = list(),
-                public=list(
-                    initialize=function(options) {
-                        super$initialize(
-                            options=options,
-                            name="pubBias",
-                            title="Publication Bias Assessment")
-                        self$add(jmvcore::Table$new(
-                            options=options,
-                            name="fsnRICH",
-                            title="Fail-Safe N Analysis",
-                            rows=1,
-                            columns=list(
-                                list(
-                                    `name`="failSafeNumber", 
-                                    `title`="Fail-safe N", 
-                                    `type`="integer", 
-                                    `format`="zto"),
-                                list(
-                                    `name`="p", 
-                                    `type`="number", 
-                                    `format`="zto,pvalue"))))
-                        self$add(jmvcore::Table$new(
-                            options=options,
-                            name="rankRICH",
-                            title="Rank Correlation Test for Funnel Plot Asymmetry",
-                            rows=1,
-                            columns=list(
-                                list(
-                                    `name`="rankTau", 
-                                    `title`="Kendall's Tau", 
-                                    `type`="number", 
-                                    `format`="zto"),
-                                list(
-                                    `name`="p", 
-                                    `type`="number", 
-                                    `format`="zto,pvalue"))))
-                        self$add(jmvcore::Table$new(
-                            options=options,
-                            name="regRICH",
-                            title="Regression Test for Funnel Plot Asymmetry",
-                            rows=1,
-                            columns=list(
-                                list(
-                                    `name`="Z", 
-                                    `type`="number", 
-                                    `format`="zto"),
-                                list(
-                                    `name`="p", 
-                                    `type`="number", 
-                                    `format`="zto,pvalue"))))}))$new(options=options))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="fsnRICH",
+                title="",
+                rows=3,
+                columns=list(
+                    list(
+                        `name`="label", 
+                        `title`="Test Name", 
+                        `type`="text"),
+                    list(
+                        `name`="failSafeNumber", 
+                        `title`="value", 
+                        `type`="integer", 
+                        `format`="zto"),
+                    list(
+                        `name`="p", 
+                        `type`="number", 
+                        `format`="zto,pvalue"))))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="funplot",
@@ -449,7 +420,89 @@ metaAlphaResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 height=450,
                 renderFun=".funplot",
                 refs=list(
-                    "metafor")))}))
+                    "metafor")))
+            self$add(R6::R6Class(
+                inherit = jmvcore::Group,
+                active = list(
+                    diagplot1 = function() private$.items[["diagplot1"]],
+                    diagplot2 = function() private$.items[["diagplot2"]],
+                    diagplot3 = function() private$.items[["diagplot3"]],
+                    diagplot4 = function() private$.items[["diagplot4"]],
+                    diagplot5 = function() private$.items[["diagplot5"]],
+                    diagplot6 = function() private$.items[["diagplot6"]],
+                    diagplot7 = function() private$.items[["diagplot7"]],
+                    diagplot8 = function() private$.items[["diagplot8"]],
+                    diagplot9 = function() private$.items[["diagplot9"]]),
+                private = list(),
+                public=list(
+                    initialize=function(options) {
+                        super$initialize(
+                            options=options,
+                            name="diagPlotAll",
+                            title="Outlier and Influential Case Diagnostics")
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="diagplot1",
+                            title="Externally Standardized Residual",
+                            width=750,
+                            height=300,
+                            renderFun=".influDiagPlot1"))
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="diagplot2",
+                            title="DFFITS Values",
+                            width=750,
+                            height=300,
+                            renderFun=".influDiagPlot2"))
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="diagplot3",
+                            title="Cook's Distances",
+                            width=750,
+                            height=300,
+                            renderFun=".influDiagPlot3"))
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="diagplot4",
+                            title="Covariance Ratios",
+                            width=750,
+                            height=300,
+                            renderFun=".influDiagPlot4"))
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="diagplot5",
+                            title="Leave-one-out Tau Estimates",
+                            width=750,
+                            height=300,
+                            renderFun=".influDiagPlot5"))
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="diagplot6",
+                            title="Leave-one-out (residual) Heterogeneity Test Statistics",
+                            width=750,
+                            height=300,
+                            renderFun=".influDiagPlot6"))
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="diagplot7",
+                            title="Hat Values",
+                            width=750,
+                            height=300,
+                            renderFun=".influDiagPlot7"))
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="diagplot8",
+                            title="Weights",
+                            width=750,
+                            height=300,
+                            renderFun=".influDiagPlot8"))
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="diagplot9",
+                            title="Q-Q Plot",
+                            width=700,
+                            height=700,
+                            renderFun=".influDiagPlot9"))}))$new(options=options))}))
 
 metaAlphaBase <- if (requireNamespace('jmvcore')) R6::R6Class(
     "metaAlphaBase",
@@ -495,16 +548,24 @@ metaAlphaBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param yaxis .
 #' @param yaxisInv .
 #' @param enhanceFunnel .
+#' @param showInfPlot .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$textRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$tableTauSqaured} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$modelFitRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$pubBias$fsnRICH} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$pubBias$rankRICH} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$pubBias$regRICH} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$fsnRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$funplot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$diagPlotAll$diagplot1} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$diagPlotAll$diagplot2} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$diagPlotAll$diagplot3} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$diagPlotAll$diagplot4} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$diagPlotAll$diagplot5} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$diagPlotAll$diagplot6} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$diagPlotAll$diagplot7} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$diagPlotAll$diagplot8} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$diagPlotAll$diagplot9} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -536,7 +597,8 @@ metaAlpha <- function(
     fsntype = "Rosenthal",
     yaxis = "sei",
     yaxisInv = FALSE,
-    enhanceFunnel = FALSE) {
+    enhanceFunnel = FALSE,
+    showInfPlot = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('metaAlpha requires jmvcore to be installed (restart may be required)')
@@ -577,7 +639,8 @@ metaAlpha <- function(
         fsntype = fsntype,
         yaxis = yaxis,
         yaxisInv = yaxisInv,
-        enhanceFunnel = enhanceFunnel)
+        enhanceFunnel = enhanceFunnel,
+        showInfPlot = showInfPlot)
 
     analysis <- metaAlphaClass$new(
         options = options,

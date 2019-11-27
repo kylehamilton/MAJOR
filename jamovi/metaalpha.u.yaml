@@ -68,6 +68,9 @@ children:
           - type: CheckBox
             name: showModelFit
             useSingleCell: true
+          - type: CheckBox
+            name: showInfPlot
+            useSingleCell: true
   - type: CollapseBox
     label: Plots
     collapsed: true
