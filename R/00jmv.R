@@ -26,4 +26,11 @@
         `publisher`="Social Psychological and Personality Science", 
         `volume`=1, 
         `pages`="1-8", 
-        `url`="https://doi.org/10.1177/1948550617697177"))
+        `url`="https://doi.org/10.1177/1948550617697177"), 
+    `robvis`=list(
+        `type`="software", 
+        `author`="McGuinness, L.", 
+        `year`=2019, 
+        `title`="robvis: An R package and web application for visualising risk-of-bias assessments.", 
+        `publisher`="[R package]. Retrieved from https://github.com/mcguinlu/robvis", 
+        `url`="https://github.com/mcguinlu/robvis"))

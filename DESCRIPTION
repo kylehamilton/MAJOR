@@ -8,4 +8,4 @@ Description: This module allows you to run a meta-analysis and is based on the R
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: jmvcore (>= 0.5.5), R6, metafor, bayesmeta, TOSTER, pkgconfig, graphics, stats
+Imports: jmvcore (>= 0.5.5), R6, metafor, bayesmeta, ggplot2, TOSTER, pkgconfig, graphics, stats

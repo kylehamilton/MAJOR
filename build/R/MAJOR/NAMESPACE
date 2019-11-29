@@ -4,7 +4,6 @@ import(metafor)
 import(bayesmeta)
 import(TOSTER)
 import(pkgconfig)
-
 export(MetaCorrClass)
 export(MetaCorrOptions)
 
@@ -28,3 +27,6 @@ export(bayesmetacorrOptions)
 
 export(bayesmetasmdClass)
 export(bayesmetasmdOptions)
+
+export(robvisClass)
+export(robvisOptions)

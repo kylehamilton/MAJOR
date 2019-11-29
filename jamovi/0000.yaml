@@ -58,5 +58,10 @@ analyses:
     menuGroup: MAJOR
     menuTitle: Mean Differences
     enuSubgroup: Bayesian Meta Analysis
+  - title: Risk of Bias Assessment
+    name: robvis
+    ns: MAJOR
+    menuGroup: MAJOR
+    menuTitle: Risk of Bias Assessment
 
 ...

@@ -1,0 +1,69 @@
+---
+name:  robvis
+title: Risk of Bias Assessment
+menuGroup: MAJOR
+version: '1.0.0'
+jas: '1.2'
+
+options:
+    - name: data
+      type: Data
+
+    - name: D1
+      title: Correlations
+      suggested: [nominal]
+      type: Variable
+      
+    - name: D2
+      title: Correlations
+      suggested: [nominal]
+      type: Variable
+      
+    - name: D3
+      title: Correlations
+      suggested: [nominal]
+      type: Variable
+      
+    - name: D4
+      title: Correlations
+      suggested: [nominal]
+      type: Variable
+      
+    - name: D5
+      title: Correlations
+      suggested: [nominal]
+      type: Variable
+
+    - name: Overall
+      title: Overall
+      suggested: [nominal]
+      type: Variable
+
+    - name: Weight
+      title: Weight
+      suggested: [continuous]
+      permitted: [numeric]
+      type: Variable
+
+    - name: Study
+      title: Study label
+      suggested: [nominal]
+      type: Variable
+      
+    - name: alt
+      title: Alternative hypothesis
+      type: List
+      options:
+        - title: Not equal
+          name:  notequal
+        - title: One greater
+          name:  onegreater
+        - title: Two greater
+          name:  twogreater
+      default: notequal
+
+    - name: varEq
+      title: Assume equal variances
+      type: Bool
+      default: true
+...
