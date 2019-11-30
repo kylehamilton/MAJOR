@@ -235,7 +235,112 @@ MetaCorrClass <- R6::R6Class(
             }
           }
 
+      #summary
+      #I took this entire bit of code from Emily Kothe and her amazing meta-analysis templates
+      #https://osf.io/6bk7b/
+      res_back <- if(res[["measure"]] == "COR"){res_back <- predict(res)}
+      res_back <- if(res[["measure"]] == "UCOR"){res_back <- predict(res)}
+      res_back <- if(res[["measure"]] == "ZCOR"){res_back <- predict(res, tranf = transf.ztor)}
+
+      backTransText <- if(res[["measure"]] == "COR"){"Correlation coefficents were used in analysis and reporting."}
+      backTransText <- if(res[["measure"]] == "UCOR"){"Correlation coefficents were used in analysis and reporting."}
+      backTransText <- if(res[["measure"]] == "ZCOR"){"Correlation coefficents were transformed to Fisher Z correlation coefficents for analysis and backtransformed for reporting."}
+
+      if (is.null(self$options$moderatorcor) == TRUE){
+      
+      summaryOutputText <- self$results$summaryOutputText
+      
+      outputTextSummary <-
+        paste(
+          "A meta-analysis was conducted (k=",
+          res$k,
+          "). ",
+          backTransText,
+          "The average correlation between these variables is r = ",
+          round(res_back$pred, 3),
+          ", (p = ",
+          round(res$pval, 3),
+          ", 95% CI [",
+          round(res_back$ci.lb, 2),
+          ", ",
+          round(res_back$ci.ub, 2),
+          "]).",
+          ifelse(
+            res$pval > 0.05,
+            " It is important to note that a p>.05 indicates lack of evidence of an effect (i.e. uncertainty) rather than evidence of no effect unless confidence intervals are sufficently narrow to rule out a clinically meaningful effect.",
+            ""
+          ),
+          sep = ""
+        )
+      
+      summaryOutputText$setContent(outputTextSummary)
+      
+      ### Second part
+      summaryOutputText2 <- self$results$summaryOutputText2
+      
+      outputTextSummary2 <-
+        paste(
+          "A Cochran's Q test was conducted to examine whether variations in the observed correlation are likely to be attributable soley to sampling error (Q~(df=",
+          res$k-1,
+          ")~=",
+          round(res$QE,2),
+          ", p=",
+          ifelse(res$QEp < 0.001,
+                 "<.001",
+                 round(res$QEp,3)),
+          ".", 
+          ifelse(res$QEp < 0.05, 
+                 " The variation in the correlation is greater than would be expected from sampling error alone. It appears that the true correlation varies betweeen studies.",
+                 "There is no evidence that the true effect size varies between studies."),
+          "The I\u00B2 statistics indicates the proportion of variance in the observed effect attributable to sampling error. In this instance, the I\u00B2 = ",
+          round(res$I2,2),
+          "%.",
+          "Note, this statistic is not an absolute measure of heterogeneity (although it is often interpreted as such). It is strongly advise against using rules of thumb such as small, medium, or large when interpreting I\u00B2 values. Instead, researchers increasingly argue that the information provided credibility or prediction intervals is more useful in understanding the heterogeneity of true effect sizes in meta-analysis.",
+          "In this instance the 95% credibility intervals are",
+          round(res_back$cr.lb, 2), ", ", round(res_back$cr.ub, 2),
+          ". hat is, it is estimated that 95% of true correlations fall between r=",
+          round(res_back$cr.lb, 2)," and r=", round(res_back$cr.ub, 2), ".",
+          sep = ""
+        )
+      
+      summaryOutputText2$setContent(outputTextSummary2)
+      }
+      if ((self$options$moderatorType) == "CAT"){
         
+        summaryOutputText <- self$results$summaryOutputText
+        
+        outputTextSummary <-
+          paste(" ")
+        
+        summaryOutputText$setContent(outputTextSummary)
+        
+        ### Second part
+        summaryOutputText2 <- self$results$summaryOutputText2
+        
+        outputTextSummary2 <-
+          paste(" ")
+        
+        summaryOutputText2$setContent(outputTextSummary2)
+      }      
+ 
+      if ((self$options$moderatorType) == "CON"){
+        
+        summaryOutputText <- self$results$summaryOutputText
+        
+        outputTextSummary <-
+          paste(" ")
+        
+        summaryOutputText$setContent(outputTextSummary)
+        
+        ### Second part
+        summaryOutputText2 <- self$results$summaryOutputText2
+        
+        outputTextSummary2 <-
+          paste(" ")
+        
+        summaryOutputText2$setContent(outputTextSummary2)
+      }  
+      
       #Pub Bias
       failsafePB <-
         metafor::fsn(yi = res$yi,

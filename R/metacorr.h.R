@@ -250,6 +250,8 @@ MetaCorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         textRICH = function() private$.items[["textRICH"]],
         tableTauSqaured = function() private$.items[["tableTauSqaured"]],
         modelFitRICH = function() private$.items[["modelFitRICH"]],
+        summaryOutputText = function() private$.items[["summaryOutputText"]],
+        summaryOutputText2 = function() private$.items[["summaryOutputText2"]],
         plot = function() private$.items[["plot"]],
         fsnRICH = function() private$.items[["fsnRICH"]],
         funplot = function() private$.items[["funplot"]],
@@ -372,6 +374,14 @@ MetaCorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `name`="AICc", 
                         `type`="number", 
                         `format`="zto"))))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="summaryOutputText",
+                title="Model Summary"))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="summaryOutputText2",
+                title="Model Summary"))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -541,6 +551,8 @@ MetaCorrBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$textRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$tableTauSqaured} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$modelFitRICH} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$summaryOutputText} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$summaryOutputText2} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$fsnRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$funplot} \tab \tab \tab \tab \tab an image \cr

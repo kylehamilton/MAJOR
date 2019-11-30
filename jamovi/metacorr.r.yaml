@@ -93,7 +93,15 @@ items:
         - name: AICc
           type: number
           format: zto
-
+          
+    - name:  summaryOutputText
+      title: "Model Summary"
+      type: Html
+      
+    - name:  summaryOutputText2
+      title: "Model Summary"
+      type: Html
+      
     - name: plot
       title: Forest Plot
       type: Image

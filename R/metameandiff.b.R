@@ -248,6 +248,9 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         
         
         #summary
+        #I took this entire bit of code from Emily Kothe and her amazing meta-analysis templates
+        #https://osf.io/6bk7b/
+        
         res_back<-predict(res)
         
         summaryOutputText <- self$results$summaryOutputText
