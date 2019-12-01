@@ -76,6 +76,9 @@ MetaCorrClass <- R6::R6Class(
               level = level
               )
            
+           res_back <- if(res[["measure"]] == "COR"){predict(res)}
+           res_back <- if(res[["measure"]] == "UCOR"){predict(res)}
+           res_back <- if(res[["measure"]] == "ZCOR"){predict(res, tranf = transf.ztor)}
            # resTemp <-
            #   metafor::rma(
            #     ri = ri,
@@ -238,9 +241,19 @@ MetaCorrClass <- R6::R6Class(
       #summary
       #I took this entire bit of code from Emily Kothe and her amazing meta-analysis templates
       #https://osf.io/6bk7b/
-      res_back <- if(res[["measure"]] == "COR"){res_back <- predict(res)}
-      res_back <- if(res[["measure"]] == "UCOR"){res_back <- predict(res)}
-      res_back <- if(res[["measure"]] == "ZCOR"){res_back <- predict(res, tranf = transf.ztor)}
+      
+      if(self$options$cormeasure == "ZCOR"){
+        res_back <- predict(res, tranf = transf.ztor)
+      } else {
+        res_back <- predict(res)
+        }
+      
+
+      if(self$options$cormeasure =="ZCOR"){
+        averageCorrelation <- round(res_back$pred, 3)
+      } else {
+        averageCorrelation <- round(res$b, 3)
+        }
 
       backTransText <- if(res[["measure"]] == "COR"){"Correlation coefficents were used in analysis and reporting."}
       backTransText <- if(res[["measure"]] == "UCOR"){"Correlation coefficents were used in analysis and reporting."}
@@ -257,13 +270,13 @@ MetaCorrClass <- R6::R6Class(
           "). ",
           backTransText,
           "The average correlation between these variables is r = ",
-          round(res_back$pred, 3),
+          averageCorrelation,
           ", (p = ",
           round(res$pval, 3),
           ", 95% CI [",
-          round(res_back$ci.lb, 2),
+          round(res$ci.lb, 2),
           ", ",
-          round(res_back$ci.ub, 2),
+          round(res$ci.ub, 2),
           "]).",
           ifelse(
             res$pval > 0.05,
@@ -298,7 +311,7 @@ MetaCorrClass <- R6::R6Class(
           "Note, this statistic is not an absolute measure of heterogeneity (although it is often interpreted as such). It is strongly advise against using rules of thumb such as small, medium, or large when interpreting I\u00B2 values. Instead, researchers increasingly argue that the information provided credibility or prediction intervals is more useful in understanding the heterogeneity of true effect sizes in meta-analysis.",
           "In this instance the 95% credibility intervals are",
           round(res_back$cr.lb, 2), ", ", round(res_back$cr.ub, 2),
-          ". hat is, it is estimated that 95% of true correlations fall between r=",
+          ". That is, it is estimated that 95% of true correlations fall between r=",
           round(res_back$cr.lb, 2)," and r=", round(res_back$cr.ub, 2), ".",
           sep = ""
         )
