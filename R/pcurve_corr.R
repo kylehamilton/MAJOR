@@ -36,7 +36,10 @@
 
 pcurve_cor <- function(ni, ri) {
 
+# tests = paste("r(",dat$ni,")=",dat$ri, sep = "")
 
+tests = paste("r(",ni,")=",ri, sep = "")
+  
 ############################################################################################################
 
 #Load libraries necessary to run programs
