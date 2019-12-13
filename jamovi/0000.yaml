@@ -63,5 +63,7 @@ analyses:
     ns: MAJOR
     menuGroup: MAJOR
     menuTitle: Risk of Bias Assessment
+usesNative: true
+minApp: 1.0.8
 
 ...

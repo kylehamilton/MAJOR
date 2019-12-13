@@ -418,37 +418,59 @@ MetaCorrClass <- R6::R6Class(
       fsnRICH$setNote("fsnNoteTable", fsnNote)
       fsnRICH <- self$results$fsnRICH
       
+
         
-        # rankRICH <- self$results$pubBias$rankRICH
-        # rankRICH$setRow(
-        #   rowNo = 1,
-        #   values = list(rankTau = ranktestPB$tau[1],
-        #                 p = ranktestPB$pval[1])
-        # )
-        # 
-        # regRICH <- self$results$pubBias$regRICH
-        # regRICH$setRow(rowNo = 1,
-        #                values = list(Z = regtestPB$zval[1],
-        #                              p = regtestPB$pval[1]))
-        
-        # Extracting the effect sizes and sampling variances:
-        # effect <- res$yi
-        # v <- res$vi
-        
-        # The weight-function model with no mean model:
-        # wfRES <- weightr::weightfunct(effect, v)
-        #
-        #
-        # self$results$weightFunctionModel$setContent(wfRES)
-        #
-        # #Show if checked, hide if unchecked
-        # if (self$options$showWF == TRUE) {
-        #   weightFunctionModel$setVisible(visible=TRUE)
-        # } else {
-        #   weightFunctionModel$setVisible(visible=FALSE)
-        # }
-        #
-        
+      
+        #puniform code
+      
+      
+      # puni_test <- puniform::puniform(yi=res$yi, vi=res$vi, side="right", plot=FALSE)
+      # 
+      # 
+      # puniformTable <- self$results$puniformTable
+      # 
+      # puniformTable$setRow(
+      #   rowNo = 1,
+      #   values = list(
+      #     label = "Effect size estimation p-uniform",
+      #     est1 = puni_test$est,
+      #     cilb1 = puni_test$ci.lb,
+      #     ciub1 = puni_test$ci.ub,
+      #     L01 = puni_test$L.0,
+      #     pval1 = puni_test$pval.0,
+      #     ksig1 = puni_test$ksig)
+      # )
+      
+      
+      # puniformTable$setRow(
+      #   rowNo = 2,
+      #   values = list(
+      #     label = "Kendalls Tau",
+      #     failSafeNumber = ranktestPB$tau[1],
+      #     p = ranktestPB$pval[1])
+      # )
+      # 
+      # 
+      # puniformTable$setRow(
+      #   rowNo = 3,
+      #   values = list(
+      #     label = "Egger's Regression",
+      #     failSafeNumber = regtestPB[["zval"]],
+      #     p = regtestPB[["pval"]])
+      # )
+      
+      
+      fsnTitle <-
+        paste("Publication Bias Assessment")
+      fsnNote <-
+        paste("Fail-safe N Calculation Using the ",
+              fsntype,
+              " Approach",
+              sep = "")
+      fsnRICH$setTitle(title = fsnTitle)
+      fsnRICH$setNote("fsnNoteTable", fsnNote)
+      fsnRICH <- self$results$fsnRICH
+      
         
         #Model Fit
         modelFitRICH <- self$results$modelFitRICH

@@ -1,0 +1,16 @@
+Package: poibin
+Type: Package
+Title: The Poisson Binomial Distribution
+Version: 1.3
+Date: 2018-05-16
+Author: Yili Hong
+Maintainer: Yili Hong <yilihong@vt.edu>
+Description: Implementation of both the exact and approximation methods for computing the cdf of the Poisson binomial distribution. It also provides the pmf, quantile function, and random number generation for the Poisson binomial distribution.
+License: GPL-2
+LazyLoad: yes
+NeedsCompilation: yes
+Packaged: 2018-05-16 13:40:15 UTC; yilihong
+Repository: CRAN
+Date/Publication: 2018-05-16 13:58:26 UTC
+Built: R 3.4.4; x86_64-w64-mingw32; 2018-11-05 13:51:00 UTC; windows
+Archs: i386, x64
