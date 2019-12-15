@@ -9,5 +9,5 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports: jmvcore (>= 0.5.5), R6, metafor, bayesmeta, ggplot2, TOSTER,
-        pkgconfig, graphics, stats, pwr, stringr, poibin, remotes
-Built: R 3.4.1; ; 2019-12-09 09:04:19 UTC; windows
+        pkgconfig, graphics, stats, pwr, stringr, poibin, esc, remotes
+Built: R 3.4.1; ; 2019-12-15 09:07:12 UTC; windows

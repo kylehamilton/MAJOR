@@ -110,7 +110,6 @@ items:
       renderFun: .plot
       refs: [ metafor ]
 
-
     - name:  fsnRICH
       title: ""
       type: Table
@@ -127,7 +126,6 @@ items:
           type: number
           format: zto,pvalue
 
-              
     - name: funplot
       title: Funnel Plot
       type: Image
@@ -136,6 +134,90 @@ items:
       renderFun: .funplot
       refs: [ metafor ] 
 
+    - name: pcurveAll
+      title: P-Curve Analysis 
+      type: Group
+      items:
+      
+          - name: pcurvePlot
+            title: P-Curve Plot
+            type: Image
+            width:  600
+            height: 450
+            renderFun: .pcurvePlot
+            refs: [ pcurve ] 
+            
+          - name:  pCurveText
+            title: "Text"
+            type: Table
+            rows:  3
+            columns:
+              - name: pcurveLabel
+                title: ' '
+                type: text
+              - name: pcurveBi
+                title: 'Binomial'
+                type: number
+                format: zto
+              - name: pcurveCon
+                title: 'Continuous'
+                type: number
+                format: zto
+              - name: pcurveP
+                type: number
+                format: zto,pvalue
+
+          - name:  pcurveExplanation
+            title: Brief Explanations of Results
+            type: Html
+            
+    - name:  TOSToutput
+      title: "Two One-Sided Tests Equivalence Testing"
+      refs: [ TOSTER ]
+      type: Table
+      rows:  1
+      columns:
+          - name: TOST_Z1
+            title: 'Z-Value Lower Bound'
+            type: number
+            format: zto
+          - name: TOST_p1
+            title: 'P-Value Lower Bound'
+            type: number
+            format: zto,pvalue
+          - name: TOST_Z2
+            title: 'Z-Value Upper Bound'
+            type: number
+            format: zto              
+          - name: TOST_p2
+            title: 'P-Value Upper Bound'
+            type: number
+            format: zto
+          - name: LL_CI_TOST
+            type: number
+            format: zto
+          - name: UL_CI_TOST
+            type: number
+            format: zto,pvalue
+          - name: LL_CI_ZTEST
+            type: number
+            format: zto              
+          - name: UL_CI_ZTEST
+            type: number
+            format: zto
+          
+    - name:  TOSToutputtext
+      title: "Two One-Sided Tests Equivalence Testing: Text Summary"
+      type: Html
+
+    - name: tostplot
+      title: Equivalence Test Plot
+      type: Image
+      width:  600
+      height: 450
+      renderFun: .tostplot
+      refs: [ TOSTER ]
+      
     - name: diagPlotAll
       title: Outlier and Influential Case Diagnostics
       type: Group

@@ -127,3 +127,19 @@ children:
           - type: ComboBox
             name: fsntype
             useSingleCell: true
+  - type: CollapseBox
+    label: Equivalence Test Options
+    collapsed: true
+    stretchFactor: 1
+    children:
+      - type: TextBox
+        name: lowerTOST
+        format: number
+      - type: TextBox
+        name: upperTOST
+        format: number
+      - type: TextBox
+        name: alphaTOST
+        format: number
+      - type: CheckBox
+        name: showTestTOST

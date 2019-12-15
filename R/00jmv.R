@@ -20,7 +20,7 @@
         `url`="https://arxiv.org/abs/1711.08683"), 
     `TOSTER`=list(
         `type`="article", 
-        `author`="Lakens, Daniel", 
+        `author`="Lakens, D.", 
         `year`=2017, 
         `title`="Equivalence tests: A practical primer for t-tests, correlations, and meta-analyses", 
         `publisher`="Social Psychological and Personality Science", 
@@ -33,4 +33,13 @@
         `year`=2019, 
         `title`="robvis: An R package and web application for visualising risk-of-bias assessments.", 
         `publisher`="[R package]. Retrieved from https://github.com/mcguinlu/robvis", 
-        `url`="https://github.com/mcguinlu/robvis"))
+        `url`="https://github.com/mcguinlu/robvis"), 
+    `pcurve`=list(
+        `type`="article", 
+        `author`="Simonsohn, U., Nelson, L. D., & Simmons, J. P.", 
+        `year`=2014, 
+        `title`="p-Curve and Effect Size: Correcting for Publication Bias Using Only Significant Results", 
+        `publisher`="Perspectives on Psychological Science", 
+        `volume`=9, 
+        `pages`="666-681", 
+        `url`="https://doi.org/10.1177/1745691614553988"))

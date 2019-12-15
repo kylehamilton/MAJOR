@@ -34,7 +34,11 @@
 
 
 
-pcurve_cor <- function(ni, ri) {
+pcurve_cor <- function(ni, 
+                       ri, 
+                       showText = TRUE, 
+                       showPlot = TRUE) {
+  
 
 # tests = paste("r(",dat$ni,")=",dat$ri, sep = "")
 
@@ -516,7 +520,7 @@ plotfit=function()
   mtext("If you see a V-Shape with a low minimum-->yes",side=3,line=0.5,cex=1.25,at=0.4)
   
 }
-
+if(isTRUE(showPlot)){
 #Create two graphs in a single chart
 #par(mfrow=c(2,1)) 
 par(mfrow=c(1,1)) 
@@ -564,15 +568,17 @@ legend(legendx, 100, c('Observed p-curve','Null of 33% power', 'Null of zero eff
 
 #ADD THE POWER FIT CHART
 #plotfit()
-
+}
 #PRINT OUT RESULTS
 printout=function()
 {cat("\nTest for right-skew....Binomial: ",binom.r,"   Continuous: Z=",Zppr,"  p=",p.Zppr)
   cat("\nTest for 33%....Binomial: ",binom.33,"   Continuous: Z=",Zpp33,"  p=",p.Zpp33)
   cat("\nTest for left-skew....Binomial: ",binom.l,"   Continuous: Z=",Zppl,"  p=",p.Zppl)
 }
-printout()
 
+if(isTRUE(showText)){
+printout()
+}
 
 }
 

@@ -1,0 +1,24 @@
+Package: esc
+Type: Package
+Encoding: UTF-8
+Title: Effect Size Computation for Meta Analysis
+Version: 0.5.1
+Authors@R: person("Daniel", "Lüdecke", role = c("aut", "cre"), email = "d.luedecke@uke.de", comment = c(ORCID = "0000-0002-8895-3206"))
+Description: Implementation of the web-based 'Practical Meta-Analysis Effect Size
+    Calculator' from David B. Wilson (<http://www.campbellcollaboration.org/escalc/html/EffectSizeCalculator-Home.php>)
+    in R. Based on the input, the effect size can be returned as standardized mean 
+    difference, Cohen's f, Hedges' g, Pearson's r or Fisher's
+    transformation z, odds ratio or log odds, or eta squared effect size.
+License: GPL-3
+Depends: R (>= 3.2), stats
+Imports: utils
+URL: https://strengejacke.github.io/esc
+BugReports: https://github.com/strengejacke/esc/issues
+RoxygenNote: 7.0.1
+NeedsCompilation: no
+Packaged: 2019-12-04 09:38:36 UTC; mail
+Author: Daniel Lüdecke [aut, cre] (<https://orcid.org/0000-0002-8895-3206>)
+Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
+Repository: CRAN
+Date/Publication: 2019-12-04 09:50:02 UTC
+Built: R 3.4.1; ; 2019-12-15 06:42:00 UTC; windows

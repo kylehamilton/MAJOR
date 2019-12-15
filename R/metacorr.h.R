@@ -26,6 +26,10 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             yaxis = "sei",
             yaxisInv = FALSE,
             enhanceFunnel = FALSE,
+            lowerTOST = -0.5,
+            upperTOST = 0.5,
+            alphaTOST = 0.05,
+            showTestTOST = TRUE,
             showInfPlot = FALSE, ...) {
 
             super$initialize(
@@ -171,6 +175,28 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "enhanceFunnel",
                 enhanceFunnel,
                 default=FALSE)
+            private$..lowerTOST <- jmvcore::OptionNumber$new(
+                "lowerTOST",
+                lowerTOST,
+                min=-100,
+                max=100,
+                default=-0.5)
+            private$..upperTOST <- jmvcore::OptionNumber$new(
+                "upperTOST",
+                upperTOST,
+                min=-100,
+                max=100,
+                default=0.5)
+            private$..alphaTOST <- jmvcore::OptionNumber$new(
+                "alphaTOST",
+                alphaTOST,
+                min=0.000001,
+                max=1,
+                default=0.05)
+            private$..showTestTOST <- jmvcore::OptionBool$new(
+                "showTestTOST",
+                showTestTOST,
+                default=TRUE)
             private$..showInfPlot <- jmvcore::OptionBool$new(
                 "showInfPlot",
                 showInfPlot,
@@ -196,6 +222,10 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..yaxis)
             self$.addOption(private$..yaxisInv)
             self$.addOption(private$..enhanceFunnel)
+            self$.addOption(private$..lowerTOST)
+            self$.addOption(private$..upperTOST)
+            self$.addOption(private$..alphaTOST)
+            self$.addOption(private$..showTestTOST)
             self$.addOption(private$..showInfPlot)
         }),
     active = list(
@@ -219,6 +249,10 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         yaxis = function() private$..yaxis$value,
         yaxisInv = function() private$..yaxisInv$value,
         enhanceFunnel = function() private$..enhanceFunnel$value,
+        lowerTOST = function() private$..lowerTOST$value,
+        upperTOST = function() private$..upperTOST$value,
+        alphaTOST = function() private$..alphaTOST$value,
+        showTestTOST = function() private$..showTestTOST$value,
         showInfPlot = function() private$..showInfPlot$value),
     private = list(
         ..rcor = NA,
@@ -241,6 +275,10 @@ MetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..yaxis = NA,
         ..yaxisInv = NA,
         ..enhanceFunnel = NA,
+        ..lowerTOST = NA,
+        ..upperTOST = NA,
+        ..alphaTOST = NA,
+        ..showTestTOST = NA,
         ..showInfPlot = NA)
 )
 
@@ -255,6 +293,10 @@ MetaCorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         plot = function() private$.items[["plot"]],
         fsnRICH = function() private$.items[["fsnRICH"]],
         funplot = function() private$.items[["funplot"]],
+        pcurveAll = function() private$.items[["pcurveAll"]],
+        TOSToutput = function() private$.items[["TOSToutput"]],
+        TOSToutputtext = function() private$.items[["TOSToutputtext"]],
+        tostplot = function() private$.items[["tostplot"]],
         diagPlotAll = function() private$.items[["diagPlotAll"]]),
     private = list(),
     public=list(
@@ -422,6 +464,113 @@ MetaCorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(R6::R6Class(
                 inherit = jmvcore::Group,
                 active = list(
+                    pcurvePlot = function() private$.items[["pcurvePlot"]],
+                    pCurveText = function() private$.items[["pCurveText"]],
+                    pcurveExplanation = function() private$.items[["pcurveExplanation"]]),
+                private = list(),
+                public=list(
+                    initialize=function(options) {
+                        super$initialize(
+                            options=options,
+                            name="pcurveAll",
+                            title="P-Curve Analysis")
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="pcurvePlot",
+                            title="P-Curve Plot",
+                            width=600,
+                            height=450,
+                            renderFun=".pcurvePlot",
+                            refs=list(
+                                "pcurve")))
+                        self$add(jmvcore::Table$new(
+                            options=options,
+                            name="pCurveText",
+                            title="Text",
+                            rows=3,
+                            columns=list(
+                                list(
+                                    `name`="pcurveLabel", 
+                                    `title`=" ", 
+                                    `type`="text"),
+                                list(
+                                    `name`="pcurveBi", 
+                                    `title`="Binomial", 
+                                    `type`="number", 
+                                    `format`="zto"),
+                                list(
+                                    `name`="pcurveCon", 
+                                    `title`="Continuous", 
+                                    `type`="number", 
+                                    `format`="zto"),
+                                list(
+                                    `name`="pcurveP", 
+                                    `type`="number", 
+                                    `format`="zto,pvalue"))))
+                        self$add(jmvcore::Html$new(
+                            options=options,
+                            name="pcurveExplanation",
+                            title="Brief Explanations of Results"))}))$new(options=options))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="TOSToutput",
+                title="Two One-Sided Tests Equivalence Testing",
+                refs=list(
+                    "TOSTER"),
+                rows=1,
+                columns=list(
+                    list(
+                        `name`="TOST_Z1", 
+                        `title`="Z-Value Lower Bound", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="TOST_p1", 
+                        `title`="P-Value Lower Bound", 
+                        `type`="number", 
+                        `format`="zto,pvalue"),
+                    list(
+                        `name`="TOST_Z2", 
+                        `title`="Z-Value Upper Bound", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="TOST_p2", 
+                        `title`="P-Value Upper Bound", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="LL_CI_TOST", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="UL_CI_TOST", 
+                        `type`="number", 
+                        `format`="zto,pvalue"),
+                    list(
+                        `name`="LL_CI_ZTEST", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="UL_CI_ZTEST", 
+                        `type`="number", 
+                        `format`="zto"))))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="TOSToutputtext",
+                title="Two One-Sided Tests Equivalence Testing: Text Summary"))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="tostplot",
+                title="Equivalence Test Plot",
+                width=600,
+                height=450,
+                renderFun=".tostplot",
+                refs=list(
+                    "TOSTER")))
+            self$add(R6::R6Class(
+                inherit = jmvcore::Group,
+                active = list(
                     diagplot1 = function() private$.items[["diagplot1"]],
                     diagplot2 = function() private$.items[["diagplot2"]],
                     diagplot3 = function() private$.items[["diagplot3"]],
@@ -545,6 +694,10 @@ MetaCorrBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param yaxis .
 #' @param yaxisInv .
 #' @param enhanceFunnel .
+#' @param lowerTOST .
+#' @param upperTOST .
+#' @param alphaTOST .
+#' @param showTestTOST .
 #' @param showInfPlot .
 #' @return A results object containing:
 #' \tabular{llllll}{
@@ -556,6 +709,12 @@ MetaCorrBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$fsnRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$funplot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$pcurveAll$pcurvePlot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$pcurveAll$pCurveText} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$pcurveAll$pcurveExplanation} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$TOSToutput} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$TOSToutputtext} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$tostplot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$diagPlotAll$diagplot1} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$diagPlotAll$diagplot2} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$diagPlotAll$diagplot3} \tab \tab \tab \tab \tab an image \cr
@@ -596,6 +755,10 @@ MetaCorr <- function(
     yaxis = "sei",
     yaxisInv = FALSE,
     enhanceFunnel = FALSE,
+    lowerTOST = -0.5,
+    upperTOST = 0.5,
+    alphaTOST = 0.05,
+    showTestTOST = TRUE,
     showInfPlot = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
@@ -635,6 +798,10 @@ MetaCorr <- function(
         yaxis = yaxis,
         yaxisInv = yaxisInv,
         enhanceFunnel = enhanceFunnel,
+        lowerTOST = lowerTOST,
+        upperTOST = upperTOST,
+        alphaTOST = alphaTOST,
+        showTestTOST = showTestTOST,
         showInfPlot = showInfPlot)
 
     analysis <- MetaCorrClass$new(
