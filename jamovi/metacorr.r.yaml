@@ -126,14 +126,30 @@ items:
           type: number
           format: zto,pvalue
 
-    - name: funplot
-      title: Funnel Plot
-      type: Image
-      width:  600
-      height: 450
-      renderFun: .funplot
-      refs: [ metafor ] 
+    - name: funnelALL
+      title: Funnel Plots 
+      type: Group
+      items:
+      
+          - name: funplot
+            title: Funnel Plot
+            type: Image
+            width:  600
+            height: 450
+            renderFun: .funplot
+            refs: [ metafor ] 
 
+          - name: trimfillplot
+            title: Trim and Fill Funnel Plot
+            type: Image
+            width:  600
+            height: 450
+            renderFun: .trimfillplot
+            refs: [ metafor ] 
+            
+          - name:  summaryTrimAndFillOutput
+            type: Html
+            
     - name: pcurveAll
       title: P-Curve Analysis 
       type: Group

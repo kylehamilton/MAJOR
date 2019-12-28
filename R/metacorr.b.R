@@ -450,7 +450,24 @@ MetaCorrClass <- R6::R6Class(
       fsnRICH$setNote("fsnNoteTable", fsnNote)
       fsnRICH <- self$results$fsnRICH
       
-
+      resTrimFill <- trimfill(res)
+      
+      summaryTrimAndFillOutput <- self$results$funnelALL$summaryTrimAndFillOutput
+      
+      outputTrimAndFillSummary <-
+        paste(
+          "Estimated number of missing studies on the ",
+          resTrimFill$side,
+          " side: ",
+          resTrimFill$k0,
+          "(SE = ",
+          round(resTrimFill$se.k0, 4),
+          ")",
+          sep = ""
+        )
+      
+      summaryTrimAndFillOutput$setContent(outputTrimAndFillSummary)
+      
         #pcurve code
       pcurve_cor <- function(ni, 
                              ri, 
@@ -1327,7 +1344,8 @@ MetaCorrClass <- R6::R6Class(
         # `self$options` contains the options
         # `self$results` contains the results object (to populate)
         image <- self$results$plot
-        imageFUN <- self$results$funplot
+        imageFUN <- self$results$funnelALL$funplot
+        imageTRIMFILL <- self$results$funnelALL$trimfillplot
         imageTOST <- self$results$tostplot
         pcurvePlot <- self$results$pcurveAll$pcurvePlot
         imageDiagPlot1 <- self$results$diagPlotAll$diagplot1
@@ -1343,6 +1361,7 @@ MetaCorrClass <- R6::R6Class(
         
         image$setState(res)
         imageFUN$setState(res)
+        imageTRIMFILL$setState(res)
         pcurvePlot$setState(data)
         imageTOST$setState(resTOST)
         imageDiagPlot1$setState(inf)
@@ -1705,6 +1724,32 @@ MetaCorrClass <- R6::R6Class(
         print(plotFUN)
         TRUE
       }
+    },
+    #Trim and Fill Funnel Plot Function
+    .trimfillplot = function(imageTRIMFILL, ...) {
+      # <-- the plot function
+      plotDataTRIMFILL <- imageTRIMFILL$state
+      # yaxis <- self$options$yaxis
+      # yaxisInv <- self$options$yaxisInv
+      # enhancePlot <- self$options$enhanceFunnel
+      ready <- TRUE
+      if (is.null(self$options$rcor) ||
+          is.null(self$options$samplesize) ||
+          is.null(self$options$slab) == TRUE) {
+        #if (is.null(self$options$rcor) == TRUE){
+        
+        ready <- FALSE
+      }
+      if (is.null(imageTRIMFILL$state$yi) ||
+          is.null(imageTRIMFILL$state$vi) == TRUE) {
+        ready <- FALSE
+      }
+      if (ready == TRUE) {
+            plotTRIMFILL <- metafor::funnel(trimfill(plotDataTRIMFILL), legend=TRUE)
+          }
+        
+        print(plotTRIMFILL)
+        TRUE
     }
   )
 )

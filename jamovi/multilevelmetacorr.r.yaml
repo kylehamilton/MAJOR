@@ -1,0 +1,11 @@
+---
+name:  multiLevelMetaCorr
+title: Correlation Coefficients
+jrs:   '1.1'
+
+items:
+    - name:  text
+      title: Correlation Coefficients
+      type:  Preformatted
+
+...

@@ -292,7 +292,7 @@ MetaCorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         summaryOutputText2 = function() private$.items[["summaryOutputText2"]],
         plot = function() private$.items[["plot"]],
         fsnRICH = function() private$.items[["fsnRICH"]],
-        funplot = function() private$.items[["funplot"]],
+        funnelALL = function() private$.items[["funnelALL"]],
         pcurveAll = function() private$.items[["pcurveAll"]],
         TOSToutput = function() private$.items[["TOSToutput"]],
         TOSToutputtext = function() private$.items[["TOSToutputtext"]],
@@ -452,15 +452,40 @@ MetaCorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `name`="p", 
                         `type`="number", 
                         `format`="zto,pvalue"))))
-            self$add(jmvcore::Image$new(
-                options=options,
-                name="funplot",
-                title="Funnel Plot",
-                width=600,
-                height=450,
-                renderFun=".funplot",
-                refs=list(
-                    "metafor")))
+            self$add(R6::R6Class(
+                inherit = jmvcore::Group,
+                active = list(
+                    funplot = function() private$.items[["funplot"]],
+                    trimfillplot = function() private$.items[["trimfillplot"]],
+                    summaryTrimAndFillOutput = function() private$.items[["summaryTrimAndFillOutput"]]),
+                private = list(),
+                public=list(
+                    initialize=function(options) {
+                        super$initialize(
+                            options=options,
+                            name="funnelALL",
+                            title="Funnel Plots")
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="funplot",
+                            title="Funnel Plot",
+                            width=600,
+                            height=450,
+                            renderFun=".funplot",
+                            refs=list(
+                                "metafor")))
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="trimfillplot",
+                            title="Trim and Fill Funnel Plot",
+                            width=600,
+                            height=450,
+                            renderFun=".trimfillplot",
+                            refs=list(
+                                "metafor")))
+                        self$add(jmvcore::Html$new(
+                            options=options,
+                            name="summaryTrimAndFillOutput"))}))$new(options=options))
             self$add(R6::R6Class(
                 inherit = jmvcore::Group,
                 active = list(
@@ -537,22 +562,6 @@ MetaCorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     list(
                         `name`="TOST_p2", 
                         `title`="P-Value Upper Bound", 
-                        `type`="number", 
-                        `format`="zto"),
-                    list(
-                        `name`="LL_CI_TOST", 
-                        `type`="number", 
-                        `format`="zto"),
-                    list(
-                        `name`="UL_CI_TOST", 
-                        `type`="number", 
-                        `format`="zto,pvalue"),
-                    list(
-                        `name`="LL_CI_ZTEST", 
-                        `type`="number", 
-                        `format`="zto"),
-                    list(
-                        `name`="UL_CI_ZTEST", 
                         `type`="number", 
                         `format`="zto"))))
             self$add(jmvcore::Html$new(
@@ -708,7 +717,9 @@ MetaCorrBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$summaryOutputText2} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$fsnRICH} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$funplot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$funnelALL$funplot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$funnelALL$trimfillplot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$funnelALL$summaryTrimAndFillOutput} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$pcurveAll$pcurvePlot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$pcurveAll$pCurveText} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$pcurveAll$pcurveExplanation} \tab \tab \tab \tab \tab a html \cr
