@@ -379,11 +379,16 @@ MetaCorrClass <- R6::R6Class(
                         values = list(TOST_Z1 = resTOST$TOST_Z1[1],
                                       TOST_p1 = resTOST$TOST_p1[1],
                                       TOST_Z2 = resTOST$TOST_Z2[1],
-                                      TOST_p2 = resTOST$TOST_p2[1],
-                                      LL_CI_TOST = resTOST$LL_CI_TOST[1],
-                                      UL_CI_TOST = resTOST$UL_CI_TOST[1],
-                                      LL_CI_ZTEST = resTOST$LL_CI_ZTEST[1],
-                                      UL_CI_ZTEST = resTOST$UL_CI_ZTEST[1]))
+                                      TOST_p2 = resTOST$TOST_p2[1]))
+      # TOSToutput$setRow(rowNo = 1,
+      #                   values = list(TOST_Z1 = resTOST$TOST_Z1[1],
+      #                                 TOST_p1 = resTOST$TOST_p1[1],
+      #                                 TOST_Z2 = resTOST$TOST_Z2[1],
+      #                                 TOST_p2 = resTOST$TOST_p2[1],
+      #                                 LL_CI_TOST = resTOST$LL_CI_TOST[1],
+      #                                 UL_CI_TOST = resTOST$UL_CI_TOST[1],
+      #                                 LL_CI_ZTEST = resTOST$LL_CI_ZTEST[1],
+      #                                 UL_CI_ZTEST = resTOST$UL_CI_ZTEST[1]))
       #TOST Text Output
       TOSToutputtext <- self$results$TOSToutputtext
       
@@ -1075,7 +1080,7 @@ MetaCorrClass <- R6::R6Class(
         pcurveExplanation <- self$results$pcurveAll$pcurveExplanation
         
         outputPCurveExplanation <- 
-          paste("P-Curve analysis combines the half and full p-curve to make inferences about evidential value.", 
+          paste("P-Curve analysis combines the half and full p-curve to make inferences about evidential value. ", 
                 "In particular, if the half p-curve test is right-skewed with p<.05 or both the half and full test are right-skewed with p<.1,",
                 "then p-curve analysis indicates the presence of evidential value.", "\nBinomial tests compare the observed proportion of significant results that are p<.025",
                 "to the expected proportions when there is no effect, and when studies have 1/3 power.",

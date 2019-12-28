@@ -563,10 +563,12 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `format`="zto"),
                     list(
                         `name`="LL_CI_TOST", 
+                        `title`="Lower Limit Confidence Interval TOST", 
                         `type`="number", 
                         `format`="zto"),
                     list(
                         `name`="UL_CI_TOST", 
+                        `title`="Upper Limit Confidence Interval TOST", 
                         `type`="number", 
                         `format`="zto,pvalue"),
                     list(
@@ -575,6 +577,7 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `format`="zto"),
                     list(
                         `name`="UL_CI_ZTEST", 
+                        `title`="Z-Value Upper Limit Confidence Interval TOST", 
                         `type`="number", 
                         `format`="zto"))))
             self$add(jmvcore::Html$new(

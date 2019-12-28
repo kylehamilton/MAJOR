@@ -170,15 +170,18 @@ items:
             type: number
             format: zto
           - name: LL_CI_TOST
+            title: 'Lower Limit Confidence Interval TOST'
             type: number
             format: zto
           - name: UL_CI_TOST
+            title: 'Upper Limit Confidence Interval TOST'
             type: number
             format: zto,pvalue
           - name: LL_CI_ZTEST
             type: number
             format: zto              
           - name: UL_CI_ZTEST
+            title: 'Z-Value Upper Limit Confidence Interval TOST'
             type: number
             format: zto
           
