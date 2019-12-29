@@ -69,6 +69,12 @@ analyses:
     menuGroup: MAJOR
     menuTitle: Correlation Coefficients
     menuSubgroup: Multilevel Models
+  - title: Mean Differences
+    name: multiLevelMetaMeanDiff
+    ns: MAJOR
+    menuGroup: MAJOR
+    menuTitle: Mean Differences
+    menuSubgroup: Multilevel Models
 usesNative: true
 minApp: 1.0.8
 

@@ -91,19 +91,6 @@ multiLevelMetaCorrClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 )
             )
             
-            # table$setRow(
-            #     rowNo = 2,
-            #     values = list(
-            #         Intercept = "Moderator",
-            #         Estimate = as.numeric(res$b[2]),
-            #         se = res$se[2],
-            #         CILow = res$ci.lb[2],
-            #         CIHigh = res$ci.ub[2],
-            #         p = res$pval[2],
-            #         Z = res$zval[2],
-            #         k = res$k
-            #     )
-            # )
 
             ### Heterogeneity ###
             tableHeterogeneity <- self$results$tableHeterogeneity
@@ -121,16 +108,7 @@ multiLevelMetaCorrClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 )
             )
 
-            #Heterogeneity Stats annd Test Table
             
-            # tableHeterogeneity$setRow(
-            #     rowNo = 1,
-            #     values = list(
-            #         QallDF = NULL,
-            #         Qall = NULL,
-            #         QallPval = NULL
-            #     )
-            # ) 
             ### Variance Components ###
             tableVariance <- self$results$tableVariance
             
@@ -180,7 +158,6 @@ multiLevelMetaCorrClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     AICc = res.ml$fit.stats[5, 1]
                 )
             )
-            
             
             modelFitRICH$setRow(
                 rowNo = 2,
