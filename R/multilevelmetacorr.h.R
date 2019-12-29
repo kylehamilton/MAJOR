@@ -6,10 +6,11 @@ multiLevelMetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Options,
     public = list(
         initialize = function(
-            dep = NULL,
-            group = NULL,
-            alt = "notequal",
-            varEq = TRUE, ...) {
+            rcor = NULL,
+            samplesize = NULL,
+            clusterOne = NULL,
+            clusterTwo = NULL,
+            slab = NULL, ...) {
 
             super$initialize(
                 package='MAJOR',
@@ -17,46 +18,62 @@ multiLevelMetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 requiresData=TRUE,
                 ...)
 
-            private$..dep <- jmvcore::OptionVariable$new(
-                "dep",
-                dep)
-            private$..group <- jmvcore::OptionVariable$new(
-                "group",
-                group)
-            private$..alt <- jmvcore::OptionList$new(
-                "alt",
-                alt,
-                options=list(
-                    "notequal",
-                    "onegreater",
-                    "twogreater"),
-                default="notequal")
-            private$..varEq <- jmvcore::OptionBool$new(
-                "varEq",
-                varEq,
-                default=TRUE)
+            private$..rcor <- jmvcore::OptionVariable$new(
+                "rcor",
+                rcor,
+                suggested=list(
+                    "continuous"),
+                permitted=list(
+                    "numeric"))
+            private$..samplesize <- jmvcore::OptionVariable$new(
+                "samplesize",
+                samplesize,
+                suggested=list(
+                    "continuous"),
+                permitted=list(
+                    "numeric"))
+            private$..clusterOne <- jmvcore::OptionVariable$new(
+                "clusterOne",
+                clusterOne,
+                permitted=list(
+                    "numeric"))
+            private$..clusterTwo <- jmvcore::OptionVariable$new(
+                "clusterTwo",
+                clusterTwo,
+                permitted=list(
+                    "numeric"))
+            private$..slab <- jmvcore::OptionVariable$new(
+                "slab",
+                slab,
+                suggested=list(
+                    "nominal"))
 
-            self$.addOption(private$..dep)
-            self$.addOption(private$..group)
-            self$.addOption(private$..alt)
-            self$.addOption(private$..varEq)
+            self$.addOption(private$..rcor)
+            self$.addOption(private$..samplesize)
+            self$.addOption(private$..clusterOne)
+            self$.addOption(private$..clusterTwo)
+            self$.addOption(private$..slab)
         }),
     active = list(
-        dep = function() private$..dep$value,
-        group = function() private$..group$value,
-        alt = function() private$..alt$value,
-        varEq = function() private$..varEq$value),
+        rcor = function() private$..rcor$value,
+        samplesize = function() private$..samplesize$value,
+        clusterOne = function() private$..clusterOne$value,
+        clusterTwo = function() private$..clusterTwo$value,
+        slab = function() private$..slab$value),
     private = list(
-        ..dep = NA,
-        ..group = NA,
-        ..alt = NA,
-        ..varEq = NA)
+        ..rcor = NA,
+        ..samplesize = NA,
+        ..clusterOne = NA,
+        ..clusterTwo = NA,
+        ..slab = NA)
 )
 
 multiLevelMetaCorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
-        text = function() private$.items[["text"]]),
+        textRICH = function() private$.items[["textRICH"]],
+        tableVariance = function() private$.items[["tableVariance"]],
+        tableHeterogeneity = function() private$.items[["tableHeterogeneity"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -64,10 +81,87 @@ multiLevelMetaCorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 options=options,
                 name="",
                 title="Correlation Coefficients")
-            self$add(jmvcore::Preformatted$new(
+            self$add(jmvcore::Table$new(
                 options=options,
-                name="text",
-                title="Correlation Coefficients"))}))
+                name="textRICH",
+                refs=list(
+                    "metafor"),
+                title="Multilevel Model",
+                rows=1,
+                columns=list(
+                    list(
+                        `name`="Intercept", 
+                        `title`="", 
+                        `type`="text"),
+                    list(
+                        `name`="Estimate", 
+                        `type`="number"),
+                    list(
+                        `name`="se", 
+                        `type`="number"),
+                    list(
+                        `name`="Z", 
+                        `type`="number"),
+                    list(
+                        `name`="p", 
+                        `type`="number", 
+                        `format`="zto,pvalue"),
+                    list(
+                        `name`="CILow", 
+                        `title`="CI Lower Bound", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="CIHigh", 
+                        `title`="CI Upper Bound", 
+                        `type`="number", 
+                        `format`="zto"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="tableVariance",
+                title="Variance Components",
+                rows=2,
+                columns=list(
+                    list(
+                        `name`="label", 
+                        `title`="", 
+                        `type`="text"),
+                    list(
+                        `name`="estimate", 
+                        `title`="Estimate", 
+                        `type`="integer", 
+                        `format`="zto"),
+                    list(
+                        `name`="squareroot", 
+                        `title`="Square Root", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="numLevel", 
+                        `title`="Number of Levels", 
+                        `type`="number", 
+                        `format`="zto"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="tableHeterogeneity",
+                title="Heterogeneity Statistics",
+                rows=1,
+                columns=list(
+                    list(
+                        `name`="QallDF", 
+                        `title`="df", 
+                        `type`="integer", 
+                        `format`="zto"),
+                    list(
+                        `name`="Qall", 
+                        `title`="Q", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="QallPval", 
+                        `title`="p", 
+                        `type`="number", 
+                        `format`="zto,pvalue"))))}))
 
 multiLevelMetaCorrBase <- if (requireNamespace('jmvcore')) R6::R6Class(
     "multiLevelMetaCorrBase",
@@ -92,40 +186,57 @@ multiLevelMetaCorrBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'
 #' 
 #' @param data .
-#' @param dep .
-#' @param group .
-#' @param alt .
-#' @param varEq .
+#' @param rcor .
+#' @param samplesize .
+#' @param clusterOne .
+#' @param clusterTwo .
+#' @param slab .
 #' @return A results object containing:
 #' \tabular{llllll}{
-#'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$textRICH} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$tableVariance} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$tableHeterogeneity} \tab \tab \tab \tab \tab a table \cr
 #' }
+#'
+#' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
+#'
+#' \code{results$textRICH$asDF}
+#'
+#' \code{as.data.frame(results$textRICH)}
 #'
 #' @export
 multiLevelMetaCorr <- function(
     data,
-    dep,
-    group,
-    alt = "notequal",
-    varEq = TRUE) {
+    rcor,
+    samplesize,
+    clusterOne,
+    clusterTwo,
+    slab) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('multiLevelMetaCorr requires jmvcore to be installed (restart may be required)')
 
-    if ( ! missing(dep)) dep <- jmvcore::resolveQuo(jmvcore::enquo(dep))
-    if ( ! missing(group)) group <- jmvcore::resolveQuo(jmvcore::enquo(group))
+    if ( ! missing(rcor)) rcor <- jmvcore::resolveQuo(jmvcore::enquo(rcor))
+    if ( ! missing(samplesize)) samplesize <- jmvcore::resolveQuo(jmvcore::enquo(samplesize))
+    if ( ! missing(clusterOne)) clusterOne <- jmvcore::resolveQuo(jmvcore::enquo(clusterOne))
+    if ( ! missing(clusterTwo)) clusterTwo <- jmvcore::resolveQuo(jmvcore::enquo(clusterTwo))
+    if ( ! missing(slab)) slab <- jmvcore::resolveQuo(jmvcore::enquo(slab))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
-            `if`( ! missing(dep), dep, NULL),
-            `if`( ! missing(group), group, NULL))
+            `if`( ! missing(rcor), rcor, NULL),
+            `if`( ! missing(samplesize), samplesize, NULL),
+            `if`( ! missing(clusterOne), clusterOne, NULL),
+            `if`( ! missing(clusterTwo), clusterTwo, NULL),
+            `if`( ! missing(slab), slab, NULL))
 
 
     options <- multiLevelMetaCorrOptions$new(
-        dep = dep,
-        group = group,
-        alt = alt,
-        varEq = varEq)
+        rcor = rcor,
+        samplesize = samplesize,
+        clusterOne = clusterOne,
+        clusterTwo = clusterTwo,
+        slab = slab)
 
     analysis <- multiLevelMetaCorrClass$new(
         options = options,

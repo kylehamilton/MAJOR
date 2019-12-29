@@ -34,3 +34,6 @@ export(bayesmetasmdOptions)
 
 export(robvisClass)
 export(robvisOptions)
+
+export(multiLevelMetaCorrClass)
+export(multiLevelMetaCorrOptions)

@@ -3,7 +3,7 @@
 
 'use strict';
 
-const options = [{"name":"data","type":"Data"},{"name":"dep","title":"Dependent Variable","type":"Variable"},{"name":"group","title":"Grouping Variable","type":"Variable"},{"name":"alt","title":"Alternative hypothesis","type":"List","options":[{"title":"Not equal","name":"notequal"},{"title":"One greater","name":"onegreater"},{"title":"Two greater","name":"twogreater"}],"default":"notequal"},{"name":"varEq","title":"Assume equal variances","type":"Bool","default":true}];
+const options = [{"name":"data","type":"Data"},{"name":"rcor","title":"Correlations","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"samplesize","title":"Sample sizes","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"clusterOne","title":"Cluster Level One","permitted":["numeric"],"type":"Variable"},{"name":"clusterTwo","title":"Cluster Level Two","permitted":["numeric"],"type":"Variable"},{"name":"slab","title":"Study label","suggested":["nominal"],"type":"Variable"}];
 
 const view = function() {
     
@@ -35,12 +35,12 @@ view.layout = ui.extend({
 				{
 					type: DefaultControls.TargetLayoutBox,
 					typeName: 'TargetLayoutBox',
-					label: "Dependent Variable",
+					label: "Correlations",
 					controls: [
 						{
 							type: DefaultControls.VariablesListBox,
 							typeName: 'VariablesListBox',
-							name: "dep",
+							name: "rcor",
 							maxItemCount: 1,
 							isTarget: true
 						}
@@ -49,40 +49,58 @@ view.layout = ui.extend({
 				{
 					type: DefaultControls.TargetLayoutBox,
 					typeName: 'TargetLayoutBox',
-					label: "Grouping Variable",
+					label: "Sample sizes",
 					controls: [
 						{
 							type: DefaultControls.VariablesListBox,
 							typeName: 'VariablesListBox',
-							name: "group",
+							name: "samplesize",
 							maxItemCount: 1,
 							isTarget: true
 						}
 					]
-				}
-			]
-		},
-		{
-			type: DefaultControls.LayoutBox,
-			typeName: 'LayoutBox',
-			margin: "large",
-			controls: [
+				},
 				{
-					type: DefaultControls.ComboBox,
-					typeName: 'ComboBox',
-					name: "alt"
-				}
-			]
-		},
-		{
-			type: DefaultControls.LayoutBox,
-			typeName: 'LayoutBox',
-			margin: "large",
-			controls: [
+					type: DefaultControls.TargetLayoutBox,
+					typeName: 'TargetLayoutBox',
+					label: "Cluster Level One",
+					controls: [
+						{
+							type: DefaultControls.VariablesListBox,
+							typeName: 'VariablesListBox',
+							name: "clusterOne",
+							maxItemCount: 1,
+							isTarget: true
+						}
+					]
+				},
 				{
-					type: DefaultControls.CheckBox,
-					typeName: 'CheckBox',
-					name: "varEq"
+					type: DefaultControls.TargetLayoutBox,
+					typeName: 'TargetLayoutBox',
+					label: "Cluster Level Two",
+					controls: [
+						{
+							type: DefaultControls.VariablesListBox,
+							typeName: 'VariablesListBox',
+							name: "clusterTwo",
+							maxItemCount: 1,
+							isTarget: true
+						}
+					]
+				},
+				{
+					type: DefaultControls.TargetLayoutBox,
+					typeName: 'TargetLayoutBox',
+					label: "Study label",
+					controls: [
+						{
+							type: DefaultControls.VariablesListBox,
+							typeName: 'VariablesListBox',
+							name: "slab",
+							maxItemCount: 1,
+							isTarget: true
+						}
+					]
 				}
 			]
 		}

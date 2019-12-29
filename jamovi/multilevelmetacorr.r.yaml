@@ -4,8 +4,70 @@ title: Correlation Coefficients
 jrs:   '1.1'
 
 items:
-    - name:  text
-      title: Correlation Coefficients
-      type:  Preformatted
+    - name:  textRICH
+      type: Table
+      refs: [ metafor ]
+      title: "Multilevel Model"
+      rows:  1
+      columns:
+        - name: Intercept
+          title: ''
+          type: text
+        - name: Estimate
+          type: number
+        - name: se
+          type: number
+        - name: Z
+          type: number
+        - name: p
+          type: number
+          format: zto,pvalue
+        - name: CILow
+          title: CI Lower Bound
+          type: number
+          format: zto
+        - name: CIHigh
+          title: CI Upper Bound
+          type: number
+          format: zto
+
+    - name:  tableVariance
+      title: Variance Components
+      type: Table
+      rows:  2
+      columns:
+        - name: label
+          title: ''
+          type: text
+        - name: estimate
+          title: 'Estimate'
+          type: integer
+          format: zto
+        - name: squareroot
+          title: 'Square Root'
+          type: number
+          format: zto
+        - name: numLevel
+          title: 'Number of Levels'
+          type: number
+          format: zto
+
+    - name:  tableHeterogeneity
+      title: Heterogeneity Statistics
+      type: Table
+      rows:  1
+      columns:
+        - name: QallDF
+          title: 'df'
+          type: integer
+          format: zto
+        - name: Qall
+          title: 'Q'
+          type: number
+          format: zto
+        - name: QallPval
+          title: 'p'
+          type: number
+          format: zto,pvalue
 
 ...
