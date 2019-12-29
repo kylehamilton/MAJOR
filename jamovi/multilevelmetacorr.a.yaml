@@ -2,6 +2,7 @@
 name:  multiLevelMetaCorr
 title: Correlation Coefficients
 menuGroup: MAJOR
+menuSubgroup: Multilevel Models
 version: '1.0.0'
 jas: '1.2'
 
@@ -35,4 +36,33 @@ options:
       title: Study label
       suggested: [nominal]
       type: Variable
+
+    - name: methodmetacor
+      title: Model estimator
+      type: List
+      options:
+        - name: "ML"
+          title: Maximum-Likelihood
+        - name: "REML"
+          title: Restricted Maximum-Likelihood
+        - name: "FE"
+          title: Fixed-Effect
+      default: REML
+
+    - name: cormeasure
+      title: Model measures
+      type: List
+      options:
+        - name: "COR"
+          title: Raw correlation coefficient
+        - name: "UCOR"
+          title: Raw correlation coefficient (bias corrected)
+        - name: "ZCOR"
+          title: Fisher's r-to-z transformed correlation coefficient
+      default: ZCOR
+
+    - name: showModelFit
+      title: Display model fit
+      type: Bool
+      default: FALSE
 ...

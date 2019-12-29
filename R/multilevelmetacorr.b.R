@@ -8,10 +8,11 @@ multiLevelMetaCorrClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         .run = function() {
             ri <- self$options$rcor
             ni <- self$options$samplesize
-            #cormeasure <- self$options$cormeasure
             slab <- self$options$slab
             clusterOne <- self$options$clusterOne
             clusterTwo <- self$options$clusterTwo
+            method2 <- self$options$methodmetacor
+            cormeasure <- self$options$cormeasure
             
             table <- self$results$textRICH
             
@@ -51,10 +52,24 @@ multiLevelMetaCorrClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     #dataMeta[[clusterOne]] <- jmvcore::toNumeric(dataMeta[[clusterOne]])
                     #dataMeta[[clusterTwo]] <- jmvcore::toNumeric(dataMeta[[clusterTwo]])
                     dat <- dataMeta
-                    dat <- metafor::escalc(measure="ZCOR", ri=ri, ni=ni, data=dataMeta, slab=slab)
-
+                    dat <-
+                        metafor::escalc(
+                            measure = cormeasure,
+                            ri = ri,
+                            ni = ni,
+                            data = dataMeta,
+                            slab = slab
+                        )
+                    
                     res.ml <-
-                        metafor::rma.mv(yi=yi, V=vi, slab=slab, random = ~ 1 | clusterOne/clusterTwo, data = dat)
+                        metafor::rma.mv(
+                            yi = yi,
+                            V = vi,
+                            method = method2,
+                            slab = slab,
+                            random = ~ 1 | clusterOne/clusterTwo,
+                            data = dat
+                        )
                    
                     
                     
@@ -93,36 +108,33 @@ multiLevelMetaCorrClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             ### Heterogeneity ###
             tableHeterogeneity <- self$results$tableHeterogeneity
             #Data Prep: Heterogeneity Test
-            # QTestStatDF <- round(res.ml$k - 1, 4)
-            # 
-            # #Heterogeneity Stats annd Test Table
-            # 
-            # tableHeterogeneity$setRow(
-            #     rowNo = 1,
-            #     values = list(
-            #         QallDF = QTestStatDF,
-            #         Qall = res.ml$QE,
-            #         QallPval = res.ml$QEp
-            #     )
-            # )                
+            QTestStatDF <- round(res.ml$k - 1, 4)
 
             #Heterogeneity Stats annd Test Table
-            
+
             tableHeterogeneity$setRow(
                 rowNo = 1,
                 values = list(
-                    QallDF = NULL,
-                    Qall = NULL,
-                    QallPval = NULL
+                    QallDF = QTestStatDF,
+                    Qall = res.ml$QE,
+                    QallPval = res.ml$QEp
                 )
-            ) 
+            )
+
+            #Heterogeneity Stats annd Test Table
+            
+            # tableHeterogeneity$setRow(
+            #     rowNo = 1,
+            #     values = list(
+            #         QallDF = NULL,
+            #         Qall = NULL,
+            #         QallPval = NULL
+            #     )
+            # ) 
             ### Variance Components ###
             tableVariance <- self$results$tableVariance
             
-            #Data Prep: Variance Components
-            #interClassCorr <- round(res.ml$sigma2[1] / sum(res.ml$sigma2), 3)
-            
-            
+
             
             #Variance Components Table
             
@@ -145,25 +157,50 @@ multiLevelMetaCorrClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     numLevel = res.ml$s.nlevels[2]
                 )
             )
-            # tableVariance$setRow(
-            #     rowNo = 1,
-            #     values = list(
-            #         label = "Sigma Cluster One",
-            #         estimate = NULL,
-            #         squareroot = NULL,
-            #         numLevel = NULL
-            #     )
-            # )         
-            # 
-            # tableVariance$setRow(
-            #     rowNo = 2,
-            #     values = list(
-            #         label = "Sigma Cluster Two",
-            #         estimate = NULL,
-            #         squareroot = NULL,
-            #         numLevel = NULL
-            #     )
-            # ) 
+            
+            #Data Prep: Variance Components
+            interClassCorr <- round(res.ml$sigma2[1] / sum(res.ml$sigma2), 3)
+            
+            tableVarianceNote <-
+                paste("Intraclass correlation coefficient = ",
+                      interClassCorr,
+                      sep = "")
+            tableVariance$setNote("tableVarianceTable", tableVarianceNote)
+            
+            #Model Fit
+            modelFitRICH <- self$results$modelFitRICH
+            modelFitRICH$setRow(
+                rowNo = 1,
+                values = list(
+                    label = "Maximum-Likelihood",
+                    loglikelihood = res.ml$fit.stats[1, 1],
+                    deviance = res.ml$fit.stats[2, 1],
+                    AIC = res.ml$fit.stats[3, 1],
+                    BIC = res.ml$fit.stats[4, 1],
+                    AICc = res.ml$fit.stats[5, 1]
+                )
+            )
+            
+            
+            modelFitRICH$setRow(
+                rowNo = 2,
+                values = list(
+                    label = "Restricted Maximum-Likelihood",
+                    loglikelihood = res.ml$fit.stats[1, 2],
+                    deviance = res.ml$fit.stats[2, 2],
+                    AIC = res.ml$fit.stats[3, 2],
+                    BIC = res.ml$fit.stats[4, 2],
+                    AICc = res.ml$fit.stats[5, 2]
+                )
+            )
+            
+            #fit statistics and information criteria
+            #Show if checked, hide if unchecked
+            if (self$options$showModelFit == TRUE) {
+                modelFitRICH$setVisible(visible = TRUE)
+            } else {
+                modelFitRICH$setVisible(visible = FALSE)
+            }
                         
         })
 )

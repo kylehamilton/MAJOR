@@ -31,6 +31,32 @@ items:
           type: number
           format: zto
 
+    - name:  modelFitRICH
+      title: Model Fit Statistics and Information Criteria
+      type: Table
+      rows:  2
+      columns:
+        - name: label
+          title: ''
+          type: text
+        - name: loglikelihood
+          title: log-likelihood
+          type: number
+          format: zto
+        - name: deviance
+          title: Deviance
+          type: number
+          format: zto
+        - name: AIC
+          type: number
+          format: zto
+        - name: BIC
+          type: number
+          format: zto
+        - name: AICc
+          type: number
+          format: zto
+          
     - name:  tableVariance
       title: Variance Components
       type: Table

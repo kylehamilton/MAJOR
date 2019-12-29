@@ -43,3 +43,18 @@ children:
             name: slab
             maxItemCount: 1
             isTarget: true
+  - type: LayoutBox
+    margin: large
+    children:
+      - type: ComboBox
+        name: methodmetacor
+  - type: LayoutBox
+    margin: large
+    children:
+      - type: ComboBox
+        name: cormeasure
+  - type: LayoutBox
+    margin: large
+    children:
+      - type: CheckBox
+        name: showModelFit

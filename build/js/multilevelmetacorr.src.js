@@ -3,7 +3,7 @@
 
 'use strict';
 
-const options = [{"name":"data","type":"Data"},{"name":"rcor","title":"Correlations","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"samplesize","title":"Sample sizes","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"clusterOne","title":"Cluster Level One","permitted":["numeric"],"type":"Variable"},{"name":"clusterTwo","title":"Cluster Level Two","permitted":["numeric"],"type":"Variable"},{"name":"slab","title":"Study label","suggested":["nominal"],"type":"Variable"}];
+const options = [{"name":"data","type":"Data"},{"name":"rcor","title":"Correlations","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"samplesize","title":"Sample sizes","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"clusterOne","title":"Cluster Level One","permitted":["numeric"],"type":"Variable"},{"name":"clusterTwo","title":"Cluster Level Two","permitted":["numeric"],"type":"Variable"},{"name":"slab","title":"Study label","suggested":["nominal"],"type":"Variable"},{"name":"methodmetacor","title":"Model estimator","type":"List","options":[{"name":"ML","title":"Maximum-Likelihood"},{"name":"REML","title":"Restricted Maximum-Likelihood"},{"name":"FE","title":"Fixed-Effect"}],"default":"REML"},{"name":"cormeasure","title":"Model measures","type":"List","options":[{"name":"COR","title":"Raw correlation coefficient"},{"name":"UCOR","title":"Raw correlation coefficient (bias corrected)"},{"name":"ZCOR","title":"Fisher's r-to-z transformed correlation coefficient"}],"default":"ZCOR"},{"name":"showModelFit","title":"Display model fit","type":"Bool","default":false}];
 
 const view = function() {
     
@@ -101,6 +101,42 @@ view.layout = ui.extend({
 							isTarget: true
 						}
 					]
+				}
+			]
+		},
+		{
+			type: DefaultControls.LayoutBox,
+			typeName: 'LayoutBox',
+			margin: "large",
+			controls: [
+				{
+					type: DefaultControls.ComboBox,
+					typeName: 'ComboBox',
+					name: "methodmetacor"
+				}
+			]
+		},
+		{
+			type: DefaultControls.LayoutBox,
+			typeName: 'LayoutBox',
+			margin: "large",
+			controls: [
+				{
+					type: DefaultControls.ComboBox,
+					typeName: 'ComboBox',
+					name: "cormeasure"
+				}
+			]
+		},
+		{
+			type: DefaultControls.LayoutBox,
+			typeName: 'LayoutBox',
+			margin: "large",
+			controls: [
+				{
+					type: DefaultControls.CheckBox,
+					typeName: 'CheckBox',
+					name: "showModelFit"
 				}
 			]
 		}

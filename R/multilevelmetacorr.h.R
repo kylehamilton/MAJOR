@@ -10,7 +10,10 @@ multiLevelMetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             samplesize = NULL,
             clusterOne = NULL,
             clusterTwo = NULL,
-            slab = NULL, ...) {
+            slab = NULL,
+            methodmetacor = "REML",
+            cormeasure = "ZCOR",
+            showModelFit = FALSE, ...) {
 
             super$initialize(
                 package='MAJOR',
@@ -47,31 +50,61 @@ multiLevelMetaCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 slab,
                 suggested=list(
                     "nominal"))
+            private$..methodmetacor <- jmvcore::OptionList$new(
+                "methodmetacor",
+                methodmetacor,
+                options=list(
+                    "ML",
+                    "REML",
+                    "FE"),
+                default="REML")
+            private$..cormeasure <- jmvcore::OptionList$new(
+                "cormeasure",
+                cormeasure,
+                options=list(
+                    "COR",
+                    "UCOR",
+                    "ZCOR"),
+                default="ZCOR")
+            private$..showModelFit <- jmvcore::OptionBool$new(
+                "showModelFit",
+                showModelFit,
+                default=FALSE)
 
             self$.addOption(private$..rcor)
             self$.addOption(private$..samplesize)
             self$.addOption(private$..clusterOne)
             self$.addOption(private$..clusterTwo)
             self$.addOption(private$..slab)
+            self$.addOption(private$..methodmetacor)
+            self$.addOption(private$..cormeasure)
+            self$.addOption(private$..showModelFit)
         }),
     active = list(
         rcor = function() private$..rcor$value,
         samplesize = function() private$..samplesize$value,
         clusterOne = function() private$..clusterOne$value,
         clusterTwo = function() private$..clusterTwo$value,
-        slab = function() private$..slab$value),
+        slab = function() private$..slab$value,
+        methodmetacor = function() private$..methodmetacor$value,
+        cormeasure = function() private$..cormeasure$value,
+        showModelFit = function() private$..showModelFit$value),
     private = list(
         ..rcor = NA,
         ..samplesize = NA,
         ..clusterOne = NA,
         ..clusterTwo = NA,
-        ..slab = NA)
+        ..slab = NA,
+        ..methodmetacor = NA,
+        ..cormeasure = NA,
+        ..showModelFit = NA)
 )
 
 multiLevelMetaCorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         textRICH = function() private$.items[["textRICH"]],
+        modelFitRICH = function() private$.items[["modelFitRICH"]],
         tableVariance = function() private$.items[["tableVariance"]],
         tableHeterogeneity = function() private$.items[["tableHeterogeneity"]]),
     private = list(),
@@ -114,6 +147,38 @@ multiLevelMetaCorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     list(
                         `name`="CIHigh", 
                         `title`="CI Upper Bound", 
+                        `type`="number", 
+                        `format`="zto"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="modelFitRICH",
+                title="Model Fit Statistics and Information Criteria",
+                rows=2,
+                columns=list(
+                    list(
+                        `name`="label", 
+                        `title`="", 
+                        `type`="text"),
+                    list(
+                        `name`="loglikelihood", 
+                        `title`="log-likelihood", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="deviance", 
+                        `title`="Deviance", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="AIC", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="BIC", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="AICc", 
                         `type`="number", 
                         `format`="zto"))))
             self$add(jmvcore::Table$new(
@@ -191,9 +256,13 @@ multiLevelMetaCorrBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param clusterOne .
 #' @param clusterTwo .
 #' @param slab .
+#' @param methodmetacor .
+#' @param cormeasure .
+#' @param showModelFit .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$textRICH} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$modelFitRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$tableVariance} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$tableHeterogeneity} \tab \tab \tab \tab \tab a table \cr
 #' }
@@ -211,7 +280,10 @@ multiLevelMetaCorr <- function(
     samplesize,
     clusterOne,
     clusterTwo,
-    slab) {
+    slab,
+    methodmetacor = "REML",
+    cormeasure = "ZCOR",
+    showModelFit = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('multiLevelMetaCorr requires jmvcore to be installed (restart may be required)')
@@ -236,7 +308,10 @@ multiLevelMetaCorr <- function(
         samplesize = samplesize,
         clusterOne = clusterOne,
         clusterTwo = clusterTwo,
-        slab = slab)
+        slab = slab,
+        methodmetacor = methodmetacor,
+        cormeasure = cormeasure,
+        showModelFit = showModelFit)
 
     analysis <- multiLevelMetaCorrClass$new(
         options = options,
