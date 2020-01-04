@@ -1149,6 +1149,25 @@ MetaCorrClass <- R6::R6Class(
       # )
 
 
+      # Vevea and Hedges Weight Function Model 
+        
+      veveaModel <- weightfunct(res$yi, res$vi)
+      
+      vhModel <- self$results$vhModelAll$vhModel
+      
+      vhModel$setRow(
+        rowNo = 1,
+        values = list(
+          Intercept = "Intercept",
+          Estimate = as.numeric(veveaModel[["output_adj"]][["par"]][2]),
+          se = veveaModel[["adj_se"]][2],
+          CILow = veveaModel[["ci.lb_adj"]][2],
+          CIHigh = veveaModel[["ci.ub_adj"]][2],
+          p = veveaModel[["p_adj"]][2],
+          Z = veveaModel[["z_adj"]][2],
+          k = veveaModel[["k"]]
+        )
+      )
       
       fsnTitle <-
         paste("Publication Bias Assessment")
@@ -1347,6 +1366,7 @@ MetaCorrClass <- R6::R6Class(
         imageFUN <- self$results$funnelALL$funplot
         imageTRIMFILL <- self$results$funnelALL$trimfillplot
         imageTOST <- self$results$tostplot
+        vhModelPlotData <- self$results$vhModelAll$vhModelPlot
         pcurvePlot <- self$results$pcurveAll$pcurvePlot
         imageDiagPlot1 <- self$results$diagPlotAll$diagplot1
         imageDiagPlot2 <- self$results$diagPlotAll$diagplot2
@@ -1363,6 +1383,7 @@ MetaCorrClass <- R6::R6Class(
         imageFUN$setState(res)
         imageTRIMFILL$setState(res)
         pcurvePlot$setState(data)
+        vhModelPlotData$setState(veveaModel)
         imageTOST$setState(resTOST)
         imageDiagPlot1$setState(inf)
         imageDiagPlot2$setState(inf)
@@ -1541,6 +1562,7 @@ MetaCorrClass <- R6::R6Class(
       }
       TRUE
     },
+    #TOST plot function
     .tostplot = function(imageTOST, ...) {
       # <-- the plot function
       plotDataTOST <- imageTOST$state
@@ -1603,7 +1625,6 @@ MetaCorrClass <- R6::R6Class(
         TRUE
       }
     },
-    
     #pcurve Plot Function
     .pcurvePlot = function(pcurvePlot, ...) {
       #source("../R/pcurve_corr.R")
@@ -1625,7 +1646,22 @@ MetaCorrClass <- R6::R6Class(
       }
       TRUE
     },
-    #TOST plot function
+    .vhModelPlot = function(vhModelPlotData, ...) {
+      # <-- the plot function
+      plot_vhModel <- vhModelPlotData$state
+      
+      ready <- TRUE
+      if (is.null(self$options$rcor) ||
+          is.null(self$options$samplesize) ||
+          is.null(self$options$slab) == TRUE) {
+        ready <- FALSE
+      }
+      
+      vhmodelPlotOutput <- density(plot_vhModel)
+      print(vhmodelPlotOutput)
+      TRUE
+    },
+    
     #Forest Plot Function
     .plot = function(image, ...) {
       # <-- the plot function

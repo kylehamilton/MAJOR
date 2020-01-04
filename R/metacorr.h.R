@@ -294,6 +294,7 @@ MetaCorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         fsnRICH = function() private$.items[["fsnRICH"]],
         funnelALL = function() private$.items[["funnelALL"]],
         pcurveAll = function() private$.items[["pcurveAll"]],
+        vhModelAll = function() private$.items[["vhModelAll"]],
         TOSToutput = function() private$.items[["TOSToutput"]],
         TOSToutputtext = function() private$.items[["TOSToutputtext"]],
         tostplot = function() private$.items[["tostplot"]],
@@ -536,6 +537,60 @@ MetaCorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                             options=options,
                             name="pcurveExplanation",
                             title="Brief Explanations of Results"))}))$new(options=options))
+            self$add(R6::R6Class(
+                inherit = jmvcore::Group,
+                active = list(
+                    vhModel = function() private$.items[["vhModel"]],
+                    vhModelPlot = function() private$.items[["vhModelPlot"]]),
+                private = list(),
+                public=list(
+                    initialize=function(options) {
+                        super$initialize(
+                            options=options,
+                            name="vhModelAll",
+                            title="Vevea and Hedges weight-function model for publication bias")
+                        self$add(jmvcore::Table$new(
+                            options=options,
+                            name="vhModel",
+                            refs=list(
+                                "metafor"),
+                            title="Adjusted Model",
+                            rows=1,
+                            columns=list(
+                                list(
+                                    `name`="Intercept", 
+                                    `title`="", 
+                                    `type`="text"),
+                                list(
+                                    `name`="Estimate", 
+                                    `type`="number"),
+                                list(
+                                    `name`="se", 
+                                    `type`="number"),
+                                list(
+                                    `name`="Z", 
+                                    `type`="number"),
+                                list(
+                                    `name`="p", 
+                                    `type`="number", 
+                                    `format`="zto,pvalue"),
+                                list(
+                                    `name`="CILow", 
+                                    `title`="CI Lower Bound", 
+                                    `type`="number", 
+                                    `format`="zto"),
+                                list(
+                                    `name`="CIHigh", 
+                                    `title`="CI Upper Bound", 
+                                    `type`="number", 
+                                    `format`="zto"))))
+                        self$add(jmvcore::Image$new(
+                            options=options,
+                            name="vhModelPlot",
+                            title="Density Plot",
+                            width=600,
+                            height=450,
+                            renderFun=".vhModelPlot"))}))$new(options=options))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="TOSToutput",
@@ -723,6 +778,8 @@ MetaCorrBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$pcurveAll$pcurvePlot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$pcurveAll$pCurveText} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$pcurveAll$pcurveExplanation} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$vhModelAll$vhModel} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$vhModelAll$vhModelPlot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$TOSToutput} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$TOSToutputtext} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$tostplot} \tab \tab \tab \tab \tab an image \cr
