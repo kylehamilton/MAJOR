@@ -95,8 +95,8 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             
             resTOST <-
               TOSTER::TOSTmeta(
-                ES = res$beta,
-                se = res$se,
+                ES = res$beta[1],
+                se = res$se[1],
                 low_eqbound_d = lowerTOST,
                 high_eqbound_d = upperTOST,
                 alpha = alphaTOST,
@@ -106,8 +106,8 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             resTOST$se <- res$se
             
             resTOSTText <- capture.output(TOSTER::TOSTmeta(
-              ES = res$beta,
-              se = res$se,
+              ES = res$beta[1],
+              se = res$se[1],
               low_eqbound_d = lowerTOST,
               high_eqbound_d = upperTOST,
               alpha = alphaTOST,
@@ -160,8 +160,8 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
               )
             resTOST <-
               TOSTER::TOSTmeta(
-                ES = res$beta,
-                se = res$se,
+                ES = res$beta[1],
+                se = res$se[1],
                 low_eqbound_d = lowerTOST,
                 high_eqbound_d = upperTOST,
                 alpha = alphaTOST,
@@ -171,8 +171,8 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             resTOST$se <- res$se
             
             resTOSTText <- capture.output(TOSTER::TOSTmeta(
-              ES = res$beta,
-              se = res$se,
+              ES = res$beta[1],
+              se = res$se[1],
               low_eqbound_d = lowerTOST,
               high_eqbound_d = upperTOST,
               alpha = alphaTOST,
@@ -224,8 +224,8 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
               )
             resTOST <-
               TOSTER::TOSTmeta(
-                ES = res$beta,
-                se = res$se,
+                ES = res$beta[1],
+                se = res$se[1],
                 low_eqbound_d = lowerTOST,
                 high_eqbound_d = upperTOST,
                 alpha = alphaTOST,
@@ -235,8 +235,8 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             resTOST$se <- res$se
             
             resTOSTText <- capture.output(TOSTER::TOSTmeta(
-              ES = res$beta,
-              se = res$se,
+              ES = res$beta[1],
+              se = res$se[1],
               low_eqbound_d = lowerTOST,
               high_eqbound_d = upperTOST,
               alpha = alphaTOST,
@@ -254,50 +254,98 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         res_back<-predict(res)
         
         summaryOutputText <- self$results$summaryOutputText
-        
+        #if (self$options$moderatorType == "NON") {
         outputTextSummary <-
           paste(
             "A meta-analysis was conducted (k=",
             res$k,
             "). The average difference between the two groups was g = ",
-            round(res$b, 2),
+            round(res$b[1], 2),
             ", (p = ",
-            round(res$pval, 3),
+            round(res$pval[1], 3),
             ", 95% CI [",
-            round(res$ci.lb, 2),
+            round(res$ci.lb[1], 2),
             ", ",
-            round(res$ci.ub, 2),
+            round(res$ci.ub[1], 2),
             "]).",
             ifelse(
-              res$pval > 0.05,
+              res$pval[1] > 0.05,
               " It is important to note that a p>.05 indicates lack of evidence of an effect (i.e. uncertainty) rather than evidence of no effect unless confidence intervals are sufficently narrow to rule out a clinically meaningful effect.",
               ""
             ),
             sep = ""
           )
+        #}
+        # if (self$options$moderatorType == "CAT") {
+        #   outputTextSummary <-
+        #     paste(
+        #       "A meta-analysis was conducted (k=",
+        #       res$k,
+        #       "). The average difference between the two groups was g = ",
+        #       round(res$b[1], 2),
+        #       ", (p = ",
+        #       round(res$pval[1], 3),
+        #       ", 95% CI [",
+        #       round(res$ci.lb[1], 2),
+        #       ", ",
+        #       round(res$ci.ub[1], 2),
+        #       "]).",
+        #       ifelse(
+        #         res$pval[1] > 0.05,
+        #         " It is important to note that a p>.05 indicates lack of evidence of an effect (i.e. uncertainty) rather than evidence of no effect unless confidence intervals are sufficently narrow to rule out a clinically meaningful effect.",
+        #         ""
+        #       ),
+        #       sep = ""
+        #     )
+        # }
+        # 
+        # if (self$options$moderatorType == "CON") {
+        #   outputTextSummary <-
+        #     paste(
+        #       "A meta-analysis was conducted (k=",
+        #       res$k,
+        #       "). The average difference between the two groups was g = ",
+        #       round(res$b[1], 2),
+        #       ", (p = ",
+        #       round(res$pval[1], 3),
+        #       ", 95% CI [",
+        #       round(res$ci.lb[1], 2),
+        #       ", ",
+        #       round(res$ci.ub[1], 2),
+        #       "]).",
+        #       ifelse(
+        #         res$pval[1] > 0.05,
+        #         " It is important to note that a p>.05 indicates lack of evidence of an effect (i.e. uncertainty) rather than evidence of no effect unless confidence intervals are sufficently narrow to rule out a clinically meaningful effect.",
+        #         ""
+        #       ),
+        #       sep = ""
+        #     )
+        # }        
+        
         
         summaryOutputText$setContent(outputTextSummary)
         
         ### Second part
         summaryOutputText2 <- self$results$summaryOutputText2
         
+        if (self$options$moderatorType == "NON") {
         outputTextSummary2 <-
           paste(
             "A Cochran's Q test was conducted to examine whether variations in the observed effect are likely to be attributable soley to sampling error (Q~(df=",
-            res$k-1,
+            res$k[1]-1,
             ")~=",
             round(res$QE,2),
             ", p=",
-            ifelse(res$QEp < 0.001,
+            ifelse(res$QEp[1] < 0.001,
                    "<.001",
-                   round(res$QEp,3)),
+                   round(res$QEp[1],3)),
             ".", 
-            ifelse(res$QEp < 0.05, 
+            ifelse(res$QEp[1] < 0.05, 
                    " The variation in the effect is greater than would be expected from sampling error alone. It appears that the true effect varies betweeen studies.",
                    "There is no evidence that the true effect size varies between studies."),
             "The I^2^ statistics indicates the proportion of variance in the observed effect attributable to sampling error. In this instance, the I^2^ =",
-            round(res$I2,2),
-            "%.",
+            round(res$I2[1],2),
+            " %.",
             "Note, this statistic is not an absolute measure of heterogeneity (although it is often interpreted as such). It is strongly advise against using rules of thumb such as small, medium, or large when interpreting I^2^ values. Instead, researchers increasingly argue that the information provided credibility or prediction intervals is more useful in understanding the heterogeneity of true effect sizes in meta-analysis.",
             "In this instance the 95% credibility intervals are",
             round(res_back$cr.lb,2), ",", round(res_back$cr.ub,2),
@@ -305,6 +353,30 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             round(res_back$cr.lb,2)," and g=", round(res_back$cr.ub,2), ".",
             sep = ""
           )
+        }
+        if (self$options$moderatorType == "CAT" ||
+            self$options$moderatorType == "CON") {
+          outputTextSummary2 <-
+            paste(
+              "A Cochran's Q test was conducted to examine whether variations in the observed effect are likely to be attributable soley to sampling error (Q~(df=",
+              res$k[1]-1,
+              ")~=",
+              round(res$QE,2),
+              ", p=",
+              ifelse(res$QEp[1] < 0.001,
+                     "<.001",
+                     round(res$QEp[1],3)),
+              ".", 
+              ifelse(res$QEp[1] < 0.05, 
+                     " The variation in the effect is greater than would be expected from sampling error alone. It appears that the true effect varies betweeen studies.",
+                     "There is no evidence that the true effect size varies between studies."),
+              "The I^2^ statistics indicates the proportion of variance in the observed effect attributable to sampling error. In this instance, the I^2^ =",
+              round(res$I2[1],2),
+              " %.",
+              sep = ""
+            ) 
+        }
+        
         
         summaryOutputText2$setContent(outputTextSummary2)
         #TOST Output 
@@ -345,8 +417,34 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
                        type = fsntype)
         ranktestPB <- metafor::ranktest(res)
         regtestPB <- metafor::regtest(res)
-        trimfillPB <- metafor::trimfill(res)
         fsnRICH <- self$results$fsnRICH
+        
+        if (self$options$moderatorType == "NON") {
+          trimfillPB <- metafor::trimfill(res)
+          fsnRICH$setRow(
+            rowNo = 4,
+            values = list(
+              label = "Trim and Fill Number of Studies",
+              failSafeNumber = trimfillPB[["k0"]])
+          )
+        }
+        
+        if (self$options$moderatorType == "CAT") {
+          fsnRICH$setRow(
+            rowNo = 4,
+            values = list(
+              label = "Trim and Fill Number of Studies")
+          )
+        }
+        if (self$options$moderatorType == "CON") {
+          fsnRICH$setRow(
+            rowNo = 4,
+            values = list(
+              label = "Trim and Fill Number of Studies")
+          )
+        }
+          
+        
         
         fsnRICH$setRow(
           rowNo = 1,
@@ -372,12 +470,12 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             p = regtestPB[["pval"]])
         )
         
-        fsnRICH$setRow(
-          rowNo = 4,
-          values = list(
-            label = "Trim and Fill Number of Studies",
-            failSafeNumber = trimfillPB[["k0"]])
-        )
+        # fsnRICH$setRow(
+        #   rowNo = 4,
+        #   values = list(
+        #     label = "Trim and Fill Number of Studies",
+        #     failSafeNumber = trimfillPB[["k0"]])
+        # )
         
         fsnTitle <-
           paste("Publication Bias Assessment")
@@ -566,13 +664,13 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           }
           
           #Data Prep: Heterogeneity Stats
-          tauSquared <- round(res$tau2, 4)
-          tauSquaredSE <- round(res$se.tau2, 4)
+          tauSquared <- round(res$tau2[1], 4)
+          tauSquaredSE <- round(res$se.tau2[1], 4)
           tauSqCombind <-
             paste(tauSquared, "(SE=", tauSquaredSE, ")")
-          tauOnly <- round(sqrt(res$tau2), 4)
-          ISquStat <- paste(round(res$I2, 2), "%", sep = "")
-          HSquStat <- round(res$H2, 4)
+          tauOnly <- round(sqrt(res$tau2[1]), 4)
+          ISquStat <- paste(round(res$I2[1], 2), "%", sep = "")
+          HSquStat <- round(res$H2[1], 4)
           
           if (is.null(self$options$moderatorcor) == FALSE) {
             RSquStat <- paste(round(res$R2, 2), "%", sep = "")
@@ -581,7 +679,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           }
           
           #Data Prep: Heterogeneity Test
-          QTestStatDF <- round(res$k - 1, 4)
+          QTestStatDF <- round(res$k[1] - 1, 4)
           
           #Heterogeneity Stats annd Test Table
           tableTauSqaured <- self$results$tableTauSqaured
@@ -594,8 +692,8 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
               HSqu = HSquStat,
               RSqu = RSquStat,
               QallDF = QTestStatDF,
-              Qall = res$QE,
-              QallPval = res$QEp
+              Qall = res$QE[1],
+              QallPval = res$QEp[1]
             )
           )
           
@@ -611,7 +709,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           
           image <- self$results$plot
           imageFUN <- self$results$funplot
-          imageFUNTRIM <- self$results$funplotTrimGroup$funplotTrim
+          # imageFUNTRIM <- self$results$funplotTrimGroup$funplotTrim
           imageTOST <- self$results$tostplot
           imageDiagPlot1 <- self$results$diagPlotAll$diagplot1
           imageDiagPlot2 <- self$results$diagPlotAll$diagplot2
@@ -625,7 +723,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           
           image$setState(res)
           imageFUN$setState(res)
-          imageFUNTRIM$setState(res)
+          #imageFUNTRIM$setState(res)
           imageTOST$setState(resTOST)
           imageDiagPlot1$setState(inf)
           imageDiagPlot2$setState(inf)
@@ -661,11 +759,11 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           }
           
           #Display Trim and Fill Funnel Plot
-          if (self$options$showFunTrimPlot == TRUE) {
-            imageFUNTRIM$setVisible(visible = TRUE)
-          } else {
-            imageFUNTRIM$setVisible(visible = FALSE)
-          }
+          # if (self$options$showFunTrimPlot == TRUE) {
+          #   imageFUNTRIM$setVisible(visible = TRUE)
+          # } else {
+          #   imageFUNTRIM$setVisible(visible = FALSE)
+          # }
           # }}))
         #}
       },
@@ -947,63 +1045,65 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           TRUE
         }
       },
-      #Funnel Plot Function for Trim and Fill
-      .funplotTrim = function(imageFUNTRIM, ...) {
-        # <-- the plot function
-        plotDataFUN <- imageFUNTRIM$state
-        yaxis <- self$options$yaxis
-        yaxisInv <- self$options$yaxisInv
-        enhancePlot <- self$options$enhanceFunnel
-        
-        
-        ready <- TRUE
-        if (is.null(self$options$n1i) ||
-            is.null(self$options$m1i) ||
-            is.null(self$options$sd1i) ||
-            is.null(self$options$n2i) ||
-            is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
-          #if (is.null(self$options$rcor) == TRUE){
-          
-          ready <- FALSE
-        }
-        if (is.null(imageFUNTRIM$state$yi) ||
-            is.null(imageFUNTRIM$state$vi) == TRUE) {
-          ready <- FALSE
-        }
-        if (ready == TRUE) {
-          if (self$options$yaxisInv == TRUE) {
-            if (self$options$enhanceFunnel == TRUE) {
-              yaxisTrans <- paste(yaxis, "nv", sep = "")
-              plotFUNTRIM <-
-                metafor::funnel(
-                  trimfill(plotDataFUN),
-                  yaxis = yaxisTrans,
-                  level = c(90, 95, 99),
-                  shade = c("white", "gray", "darkgray")
-                )
-            } else {
-              yaxisTrans <- paste(yaxis, "nv", sep = "")
-              plotFUNTRIM <-
-                metafor::funnel(trimfill(plotDataFUN), yaxis = yaxisTrans)
-            }
-            
-          } else {
-            if (self$options$enhanceFunnel == TRUE) {
-              plotFUNTRIM <-
-                metafor::funnel(
-                  trimfill(plotDataFUN),
-                  yaxis = yaxis,
-                  level = c(90, 95, 99),
-                  shade = c("white", "gray", "darkgray")
-                )
-            } else {
-              plotFUNTRIM <- metafor::funnel(trimfill(plotDataFUN), yaxis = yaxis)
-            }
-          }
-          print(plotFUNTRIM)
-          TRUE
-        }
-      },
+      # #Funnel Plot Function for Trim and Fill
+      # .funplotTrim = function(imageFUNTRIM, ...) {
+      #   # <-- the plot function
+      #   plotDataFUN <- imageFUNTRIM$state
+      #   yaxis <- self$options$yaxis
+      #   yaxisInv <- self$options$yaxisInv
+      #   enhancePlot <- self$options$enhanceFunnel
+      #   
+      #   
+      #   ready <- TRUE
+      #   if (is.null(self$options$n1i) ||
+      #       is.null(self$options$m1i) ||
+      #       is.null(self$options$sd1i) ||
+      #       is.null(self$options$n2i) ||
+      #       is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
+      #     #if (is.null(self$options$rcor) == TRUE){
+      #     
+      #     ready <- FALSE
+      #   }
+      #   if (is.null(imageFUNTRIM$state$yi) ||
+      #       self$options$moderatorType == "CAT" ||
+      #       self$options$moderatorType == "CON" ||
+      #       is.null(imageFUNTRIM$state$vi) == TRUE) {
+      #     ready <- FALSE
+      #   }
+      #   if (ready == TRUE) {
+      #     if (self$options$yaxisInv == TRUE) {
+      #       if (self$options$enhanceFunnel == TRUE) {
+      #         yaxisTrans <- paste(yaxis, "nv", sep = "")
+      #         plotFUNTRIM <-
+      #           metafor::funnel(
+      #             trimfill(plotDataFUN),
+      #             yaxis = yaxisTrans,
+      #             level = c(90, 95, 99),
+      #             shade = c("white", "gray", "darkgray")
+      #           )
+      #       } else {
+      #         yaxisTrans <- paste(yaxis, "nv", sep = "")
+      #         plotFUNTRIM <-
+      #           metafor::funnel(trimfill(plotDataFUN), yaxis = yaxisTrans)
+      #       }
+      #       
+      #     } else {
+      #       if (self$options$enhanceFunnel == TRUE) {
+      #         plotFUNTRIM <-
+      #           metafor::funnel(
+      #             trimfill(plotDataFUN),
+      #             yaxis = yaxis,
+      #             level = c(90, 95, 99),
+      #             shade = c("white", "gray", "darkgray")
+      #           )
+      #       } else {
+      #         plotFUNTRIM <- metafor::funnel(trimfill(plotDataFUN), yaxis = yaxis)
+      #       }
+      #     }
+      #     print(plotFUNTRIM)
+      #     TRUE
+      #   }
+      # },
       #Funnel Plot Function
       .funplot = function(imageFUN, ...) {
         # <-- the plot function

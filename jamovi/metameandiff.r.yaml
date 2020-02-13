@@ -127,7 +127,6 @@ items:
           type: number
           format: zto,pvalue
 
-              
     - name: funplot
       title: Funnel Plot
       type: Image
@@ -135,17 +134,6 @@ items:
       height: 450
       renderFun: .funplot
       refs: [ metafor ] 
-
-    - name: funplotTrimGroup
-      title: Trim and Fill Funnel Plot
-      type: Group
-      items:      
-          - name: funplotTrim
-            type: Image
-            width:  600
-            height: 450
-            renderFun: .funplotTrim
-            refs: [ metafor ] 
       
     - name:  TOSToutput
       title: "Two One-Sided Tests Equivalence Testing"

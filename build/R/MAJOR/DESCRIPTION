@@ -11,4 +11,4 @@ LazyData: true
 Imports: jmvcore (>= 0.5.5), R6, metafor, bayesmeta, ggplot2, TOSTER,
         pkgconfig, graphics, stats, pwr, stringr, poibin, esc, remotes,
         weightr
-Built: R 3.4.1; ; 2020-01-04 23:02:39 UTC; windows
+Built: R 3.4.1; ; 2020-02-13 04:28:08 UTC; windows

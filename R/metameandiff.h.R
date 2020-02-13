@@ -346,7 +346,6 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         plot = function() private$.items[["plot"]],
         fsnRICH = function() private$.items[["fsnRICH"]],
         funplot = function() private$.items[["funplot"]],
-        funplotTrimGroup = function() private$.items[["funplotTrimGroup"]],
         TOSToutput = function() private$.items[["TOSToutput"]],
         TOSToutputtext = function() private$.items[["TOSToutputtext"]],
         tostplot = function() private$.items[["tostplot"]],
@@ -514,25 +513,6 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 renderFun=".funplot",
                 refs=list(
                     "metafor")))
-            self$add(R6::R6Class(
-                inherit = jmvcore::Group,
-                active = list(
-                    funplotTrim = function() private$.items[["funplotTrim"]]),
-                private = list(),
-                public=list(
-                    initialize=function(options) {
-                        super$initialize(
-                            options=options,
-                            name="funplotTrimGroup",
-                            title="Trim and Fill Funnel Plot")
-                        self$add(jmvcore::Image$new(
-                            options=options,
-                            name="funplotTrim",
-                            width=600,
-                            height=450,
-                            renderFun=".funplotTrim",
-                            refs=list(
-                                "metafor")))}))$new(options=options))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="TOSToutput",
@@ -739,7 +719,6 @@ metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$fsnRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$funplot} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$funplotTrimGroup$funplotTrim} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$TOSToutput} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$TOSToutputtext} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$tostplot} \tab \tab \tab \tab \tab an image \cr
