@@ -89,6 +89,9 @@ children:
           - type: CheckBox
             name: showModelFit
             useSingleCell: true
+          - type: CheckBox
+            name: testType
+            useSingleCell: true 
   - type: CollapseBox
     label: Plots
     collapsed: true
@@ -140,7 +143,7 @@ children:
                 name: enhanceFunnel
                 label: Contour-Enhanced
                 verticalAlignment: center
-                enable: (yaxis:sei || yaxis:vi)
+                enable: '(yaxis:sei || yaxis:vi)'
   - type: CollapseBox
     label: Publication Bias
     collapsed: true

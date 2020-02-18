@@ -108,6 +108,11 @@ options:
         - name: "CON"
           title: Continuous moderator
       default: NON
+
+    - name: testType
+      title: Knapp and Hartung Adjustment
+      type: Bool
+      default: FALSE   
       
     - name: level
       type: Number
@@ -120,7 +125,7 @@ options:
       title: Display model fit
       type: Bool
       default: FALSE
-
+      
     - name: addcred
       title: Prediction interval
       type: Bool

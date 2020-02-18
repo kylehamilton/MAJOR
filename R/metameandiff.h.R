@@ -17,6 +17,7 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             methodmetacor = "REML",
             cormeasure = "SMD",
             moderatorType = "NON",
+            testType = FALSE,
             level = 95,
             showModelFit = FALSE,
             addcred = FALSE,
@@ -128,6 +129,10 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "CAT",
                     "CON"),
                 default="NON")
+            private$..testType <- jmvcore::OptionBool$new(
+                "testType",
+                testType,
+                default=FALSE)
             private$..level <- jmvcore::OptionNumber$new(
                 "level",
                 level,
@@ -251,6 +256,7 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..methodmetacor)
             self$.addOption(private$..cormeasure)
             self$.addOption(private$..moderatorType)
+            self$.addOption(private$..testType)
             self$.addOption(private$..level)
             self$.addOption(private$..showModelFit)
             self$.addOption(private$..addcred)
@@ -283,6 +289,7 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         methodmetacor = function() private$..methodmetacor$value,
         cormeasure = function() private$..cormeasure$value,
         moderatorType = function() private$..moderatorType$value,
+        testType = function() private$..testType$value,
         level = function() private$..level$value,
         showModelFit = function() private$..showModelFit$value,
         addcred = function() private$..addcred$value,
@@ -314,6 +321,7 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..methodmetacor = NA,
         ..cormeasure = NA,
         ..moderatorType = NA,
+        ..testType = NA,
         ..level = NA,
         ..showModelFit = NA,
         ..addcred = NA,
@@ -690,6 +698,7 @@ metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param methodmetacor .
 #' @param cormeasure .
 #' @param moderatorType .
+#' @param testType .
 #' @param level .
 #' @param showModelFit .
 #' @param addcred .
@@ -753,6 +762,7 @@ metaMeanDiff <- function(
     methodmetacor = "REML",
     cormeasure = "SMD",
     moderatorType = "NON",
+    testType = FALSE,
     level = 95,
     showModelFit = FALSE,
     addcred = FALSE,
@@ -809,6 +819,7 @@ metaMeanDiff <- function(
         methodmetacor = methodmetacor,
         cormeasure = cormeasure,
         moderatorType = moderatorType,
+        testType = testType,
         level = level,
         showModelFit = showModelFit,
         addcred = addcred,

@@ -78,20 +78,39 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             data[[m2i]] <- jmvcore::toNumeric(data[[m2i]])
             data[[sd2i]] <- jmvcore::toNumeric(data[[sd2i]])
             
-            res <-
-              metafor::rma(
-                n1i = n1i,
-                n2i = n2i,
-                m1i = m1i,
-                m2i = m2i,
-                sd1i = sd1i,
-                sd2i = sd2i,
-                method = method2,
-                measure = mdmseasure,
-                data = data,
-                slab = slab,
-                level = level
-              )
+            if (self$options$testType == FALSE) {
+              res <-
+                metafor::rma(
+                  n1i = n1i,
+                  n2i = n2i,
+                  m1i = m1i,
+                  m2i = m2i,
+                  sd1i = sd1i,
+                  sd2i = sd2i,
+                  method = method2,
+                  measure = mdmseasure,
+                  test="z",
+                  data = data,
+                  slab = slab,
+                  level = level
+                )
+            } else {
+              res <-
+                metafor::rma(
+                  n1i = n1i,
+                  n2i = n2i,
+                  m1i = m1i,
+                  m2i = m2i,
+                  sd1i = sd1i,
+                  sd2i = sd2i,
+                  method = method2,
+                  measure = mdmseasure,
+                  test="knha",
+                  data = data,
+                  slab = slab,
+                  level = level
+                )
+            }
             
             resTOST <-
               TOSTER::TOSTmeta(
@@ -143,21 +162,42 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             data[[sd2i]] <- jmvcore::toNumeric(data[[sd2i]])
             data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
             
-            res <-
-              metafor::rma(
-                n1i = n1i,
-                n2i = n2i,
-                m1i = m1i,
-                m2i = m2i,
-                sd1i = sd1i,
-                sd2i = sd2i,
-                mods = moderator,
-                method = method2,
-                measure = mdmseasure,
-                data = data,
-                slab = slab,
-                level = level
-              )
+            if (self$options$testType == FALSE) {
+              res <-
+                metafor::rma(
+                  n1i = n1i,
+                  n2i = n2i,
+                  m1i = m1i,
+                  m2i = m2i,
+                  sd1i = sd1i,
+                  sd2i = sd2i,
+                  method = method2,
+                  measure = mdmseasure,
+                  mods = moderator,
+                  test="z",
+                  data = data,
+                  slab = slab,
+                  level = level
+                )
+            } else {
+              res <-
+                metafor::rma(
+                  n1i = n1i,
+                  n2i = n2i,
+                  m1i = m1i,
+                  m2i = m2i,
+                  sd1i = sd1i,
+                  sd2i = sd2i,
+                  method = method2,
+                  measure = mdmseasure,
+                  mods = moderator,
+                  test="knha",
+                  data = data,
+                  slab = slab,
+                  level = level
+                )
+            }
+            
             resTOST <-
               TOSTER::TOSTmeta(
                 ES = res$beta[1],
@@ -207,21 +247,42 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             data[[sd2i]] <- jmvcore::toNumeric(data[[sd2i]])
             data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
             
-            res <-
-              metafor::rma(
-                n1i = n1i,
-                n2i = n2i,
-                m1i = m1i,
-                m2i = m2i,
-                sd1i = sd1i,
-                sd2i = sd2i,
-                mods = ~ factor(moderator),
-                method = method2,
-                measure = mdmseasure,
-                data = data,
-                slab = slab,
-                level = level
-              )
+            if (self$options$testType == FALSE) {
+              res <-
+                metafor::rma(
+                  n1i = n1i,
+                  n2i = n2i,
+                  m1i = m1i,
+                  m2i = m2i,
+                  sd1i = sd1i,
+                  sd2i = sd2i,
+                  method = method2,
+                  measure = mdmseasure,
+                  mods = moderator,
+                  test="z",
+                  data = data,
+                  slab = slab,
+                  level = level
+                )
+            } else {
+              res <-
+                metafor::rma(
+                  n1i = n1i,
+                  n2i = n2i,
+                  m1i = m1i,
+                  m2i = m2i,
+                  sd1i = sd1i,
+                  sd2i = sd2i,
+                  method = method2,
+                  measure = mdmseasure,
+                  mods = moderator,
+                  test="knha",
+                  data = data,
+                  slab = slab,
+                  level = level
+                )
+            }
+            
             resTOST <-
               TOSTER::TOSTmeta(
                 ES = res$beta[1],
@@ -613,8 +674,13 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           
           if (is.null(self$options$moderatorcor) == FALSE) {
             titleMix <- paste("Mixed-Effects Model (k = ", res$k, ")", sep = "")
+            if (self$options$testType == FALSE) {
             titleMixNote <-
               paste("Tau\u00B2 Estimator: ", tau2EstimatorName, sep = "")
+            } else {
+              titleMixNote <-
+                paste("Tau\u00B2 Estimator: ", tau2EstimatorName, ". Knapp and Hartung (2003) adjustment used.", sep = "")
+            }
             table$setTitle(title = titleMix)
             table$setNote("mixnote", titleMixNote)
           } else if (self$options$methodmetacor == "FE") {
@@ -623,8 +689,13 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             
           } else {
             titleRan <- paste("Random-Effects Model (k = ", res$k, ")", sep = "")
+            if (self$options$testType == FALSE) {
             titleRanNote <-
               paste("Tau\u00B2 Estimator: ", tau2EstimatorName, sep = "")
+            } else {
+              titleRanNote <-
+                paste("Tau\u00B2 Estimator: ", tau2EstimatorName, ". Knapp and Hartung (2003) adjustment used.", sep = "")
+            }
             table$setTitle(title = titleRan)
             table$setNote("rannote", titleRanNote)
           }
