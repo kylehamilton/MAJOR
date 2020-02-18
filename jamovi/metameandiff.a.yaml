@@ -250,18 +250,15 @@ options:
       min: 0.000001
       max: 1
       default: 0.05
-
-    - name: showTestTOST
-      title: Show Summary TOST Report
+      
+    - name: showTOST
+      title: Show TOST Output
       type: Bool
-      default: true
+      default: false
       
     - name: showInfPlot
       title: Show Plot of Influence Diagnostics
       type: Bool
       default: false
       
-    - name: showFunTrimPlot
-      title: Show Trim and Fill Funnel Plot
-      type: Bool
-      default: false
+

@@ -463,12 +463,21 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         
         TOSToutputtext$setContent(outputTextTOST)
         
-        #Visability Option TOST
-        if (self$options$showTestTOST == TRUE) {
+        #Display TOST
+        if (self$options$showTOST == TRUE) {
+          TOSToutput$setVisible(visible = TRUE)
           TOSToutputtext$setVisible(visible = TRUE)
         } else {
+          TOSToutput$setVisible(visible = FALSE)
           TOSToutputtext$setVisible(visible = FALSE)
-        }
+        }  
+        
+        # #Visability Option TOST
+        # if (self$options$showTestTOST == TRUE) {
+        #   TOSToutputtext$setVisible(visible = TRUE)
+        # } else {
+        #   TOSToutputtext$setVisible(visible = FALSE)
+        # }
         
         
           #Pub Bias
@@ -806,6 +815,13 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           imageDiagPlot8$setState(inf)
           imageDiagPlot9$setState(res)
           
+          #Display TOST Image
+          if (self$options$showTOST == TRUE) {
+            imageTOST$setVisible(visible = TRUE)
+          } else {
+            imageTOST$setVisible(visible = FALSE)
+          }  
+          
           #Display Diagnostic Plots
           if (self$options$showInfPlot == TRUE) {
             imageDiagPlot1$setVisible(visible = TRUE)
@@ -828,7 +844,6 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             imageDiagPlot8$setVisible(visible = FALSE)
             imageDiagPlot9$setVisible(visible = FALSE)
           }
-          
           #Display Trim and Fill Funnel Plot
           # if (self$options$showFunTrimPlot == TRUE) {
           #   imageFUNTRIM$setVisible(visible = TRUE)

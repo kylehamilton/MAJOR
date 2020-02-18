@@ -91,7 +91,7 @@ children:
             useSingleCell: true
           - type: CheckBox
             name: testType
-            useSingleCell: true 
+            useSingleCell: true
   - type: CollapseBox
     label: Plots
     collapsed: true
@@ -154,8 +154,6 @@ children:
         children:
           - type: ComboBox
             name: fsntype
-          - type: CheckBox
-            name: showFunTrimPlot
   - type: CollapseBox
     label: Equivalence Test Options
     collapsed: true
@@ -176,6 +174,6 @@ children:
             format: number
             useSingleCell: true
           - type: CheckBox
-            name: showTestTOST
+            name: showTOST
           - type: CheckBox
             name: showInfPlot

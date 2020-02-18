@@ -34,9 +34,8 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             lowerTOST = -0.5,
             upperTOST = 0.5,
             alphaTOST = 0.05,
-            showTestTOST = TRUE,
-            showInfPlot = FALSE,
-            showFunTrimPlot = FALSE, ...) {
+            showTOST = FALSE,
+            showInfPlot = FALSE, ...) {
 
             super$initialize(
                 package='MAJOR',
@@ -232,17 +231,13 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 min=0.000001,
                 max=1,
                 default=0.05)
-            private$..showTestTOST <- jmvcore::OptionBool$new(
-                "showTestTOST",
-                showTestTOST,
-                default=TRUE)
+            private$..showTOST <- jmvcore::OptionBool$new(
+                "showTOST",
+                showTOST,
+                default=FALSE)
             private$..showInfPlot <- jmvcore::OptionBool$new(
                 "showInfPlot",
                 showInfPlot,
-                default=FALSE)
-            private$..showFunTrimPlot <- jmvcore::OptionBool$new(
-                "showFunTrimPlot",
-                showFunTrimPlot,
                 default=FALSE)
 
             self$.addOption(private$..n1i)
@@ -273,9 +268,8 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..lowerTOST)
             self$.addOption(private$..upperTOST)
             self$.addOption(private$..alphaTOST)
-            self$.addOption(private$..showTestTOST)
+            self$.addOption(private$..showTOST)
             self$.addOption(private$..showInfPlot)
-            self$.addOption(private$..showFunTrimPlot)
         }),
     active = list(
         n1i = function() private$..n1i$value,
@@ -306,9 +300,8 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         lowerTOST = function() private$..lowerTOST$value,
         upperTOST = function() private$..upperTOST$value,
         alphaTOST = function() private$..alphaTOST$value,
-        showTestTOST = function() private$..showTestTOST$value,
-        showInfPlot = function() private$..showInfPlot$value,
-        showFunTrimPlot = function() private$..showFunTrimPlot$value),
+        showTOST = function() private$..showTOST$value,
+        showInfPlot = function() private$..showInfPlot$value),
     private = list(
         ..n1i = NA,
         ..m1i = NA,
@@ -338,9 +331,8 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..lowerTOST = NA,
         ..upperTOST = NA,
         ..alphaTOST = NA,
-        ..showTestTOST = NA,
-        ..showInfPlot = NA,
-        ..showFunTrimPlot = NA)
+        ..showTOST = NA,
+        ..showInfPlot = NA)
 )
 
 metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -715,9 +707,8 @@ metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param lowerTOST .
 #' @param upperTOST .
 #' @param alphaTOST .
-#' @param showTestTOST .
+#' @param showTOST .
 #' @param showInfPlot .
-#' @param showFunTrimPlot .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$textRICH} \tab \tab \tab \tab \tab a table \cr
@@ -779,9 +770,8 @@ metaMeanDiff <- function(
     lowerTOST = -0.5,
     upperTOST = 0.5,
     alphaTOST = 0.05,
-    showTestTOST = TRUE,
-    showInfPlot = FALSE,
-    showFunTrimPlot = FALSE) {
+    showTOST = FALSE,
+    showInfPlot = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('metaMeanDiff requires jmvcore to be installed (restart may be required)')
@@ -836,9 +826,8 @@ metaMeanDiff <- function(
         lowerTOST = lowerTOST,
         upperTOST = upperTOST,
         alphaTOST = alphaTOST,
-        showTestTOST = showTestTOST,
-        showInfPlot = showInfPlot,
-        showFunTrimPlot = showFunTrimPlot)
+        showTOST = showTOST,
+        showInfPlot = showInfPlot)
 
     analysis <- metaMeanDiffClass$new(
         options = options,
