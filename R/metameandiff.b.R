@@ -527,7 +527,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         fsnRICH$setRow(
           rowNo = 2,
           values = list(
-            label = "Kendalls Tau",
+            label = "Begg and Mazumdar Rank Correlation",
             failSafeNumber = ranktestPB$tau[1],
             p = ranktestPB$pval[1])
         )
