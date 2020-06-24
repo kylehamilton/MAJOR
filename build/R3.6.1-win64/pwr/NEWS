@@ -1,0 +1,65 @@
+2018-03-03
+
+* Version 1.2-2
+
+* Updates in documentation.
+
+2017-03-21
+
+* Version 1.2-1
+
+* vignettes/pwr-vignette.Rmd: New vignette by Clay Ford
+
+* R: Add upper limits of n (Aditya Anandkumar's pull request)
+
+* R/plot.pwer.htest: Robert Volcic's fix for pwr.t.test
+
+* NEWS: ChangeLog moved to "NEWS" file
+
+2016-08-06 Helios De Rosario-Martinez <helios.derosario@gmail.com>
+
+* Version 1.2-0
+
+* DESCRIPTION: move ggplot2 and scales to "Suggests"; import from graphics.
+
+* NAMESPACE: remove ggplot2 and scales from import; add graphics.
+
+* R/plot.power.htest: falling back to generic plot tools
+if ggplot2 and scales do not exist.
+
+2016-08-04 Helios De Rosario-Martinez <helios.derosario@gmail.com>
+
+* Version 1.1-4
+
+* R/plot.power.htest: New function contributed by Stephan Weibelzahl.
+
+* DESCRIPTION, NAMESPACE, man: Adapt to include new plot.power.htest function.
+
+2015-09-02 Helios De Rosario-Martinez <helios.derosario@gmail.com>
+
+* R/pwr.t2n.test: Revert to previous version. 
+
+2015-08-18 Helios De Rosario-Martinez <helios.derosario@gmail.com>
+
+* NAMESPACE, DESCRIPTION: Add import from stats.
+
+2015-04-02 Helios De Rosario-Martinez <helios.derosario@gmail.com>
+
+* R/pwr.t2n.test: Fix following Jan Wunder's report.
+
+2015-02-27 Helios De Rosario-Martinez <helios.derosario@gmail.com>
+
+* DESCRIPTION: Authors redefined as Authors@R.
+Add Claus Ekstrom, Peter Daalgard and Jeffrey Gill as contributors.
+New maintainer (Helios De Rosario, taking over Stephane Champely's work).
+Update License to GPL>=3.
+Added link to Github development repository.
+
+* LICENSE: Added GPL 3 license.
+
+* man: Fixed line widths of usage and example in various files.
+(pwr-package.Rd)Updated authors.
+
+* R/pwr.r.test.R: Fixed calculation of zrc following Jeffrey Gill's report.
+
+* Version 1.1-2

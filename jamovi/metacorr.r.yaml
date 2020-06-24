@@ -186,45 +186,6 @@ items:
           - name:  pcurveExplanation
             title: Brief Explanations of Results
             type: Html
-            
-    - name: vhModelAll
-      title: Vevea and Hedges weight-function model for publication bias
-      type: Group
-      items:
-
-          - name:  vhModel
-            type: Table
-            refs: [ metafor ]
-            title: "Adjusted Model"
-            rows:  1
-            columns:
-              - name: Intercept
-                title: ''
-                type: text
-              - name: Estimate
-                type: number
-              - name: se
-                type: number
-              - name: Z
-                type: number
-              - name: p
-                type: number
-                format: zto,pvalue
-              - name: CILow
-                title: CI Lower Bound
-                type: number
-                format: zto
-              - name: CIHigh
-                title: CI Upper Bound
-                type: number
-                format: zto
-                
-          - name: vhModelPlot
-            title: Density Plot
-            type: Image
-            width:  600
-            height: 450
-            renderFun: .vhModelPlot
 
     - name:  TOSToutput
       title: "Two One-Sided Tests Equivalence Testing"

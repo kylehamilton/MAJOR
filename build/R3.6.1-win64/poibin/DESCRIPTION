@@ -1,0 +1,16 @@
+Package: poibin
+Type: Package
+Title: The Poisson Binomial Distribution
+Version: 1.4
+Date: 2019-12-12
+Author: Yili Hong
+Maintainer: Yili Hong <yilihong@vt.edu>
+Description: Implementation of both the exact and approximation methods for computing the cdf of the Poisson binomial distribution. It also provides the pmf, quantile function, and random number generation for the Poisson binomial distribution. We would like to acknowledge that the C code for FFT is adopted from R distribution (fft.c, by Ross Ihaka from University of Auckland, dated February 1997).
+License: GPL-2
+LazyLoad: yes
+NeedsCompilation: yes
+Packaged: 2019-12-12 22:22:10 UTC; yilihong
+Repository: CRAN
+Date/Publication: 2019-12-13 05:40:02 UTC
+Built: R 3.6.1; x86_64-w64-mingw32; 2019-12-16 15:13:54 UTC; windows
+Archs: i386, x64

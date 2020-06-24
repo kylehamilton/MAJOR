@@ -1,0 +1,34 @@
+Cochran1954             Fly counts example data
+CrinsEtAl2014           Pediatric liver transplant example data
+GoralczykEtAl2011       Liver transplant example data
+HinksEtAl2010           JIA example data
+Peto1980                Aspirin after myocardial infarction example
+                        data
+RhodesEtAlPrior         Heterogeneity priors for continuous outcomes
+                        (standardized mean differences) as proposed by
+                        Rhodes et al. (2015).
+Rubin1981               8-schools example data
+SidikJonkman2007        Postoperative complication odds example data
+SnedecorCochran         Artificial insemination of cows example data
+TurnerEtAlPrior         (Log-Normal) heterogeneity priors for binary
+                        outcomes as proposed by Turner et al. (2015).
+bayesmeta               Bayesian random-effects meta-analysis
+bayesmeta-package       Bayesian Random-Effects Meta-Analysis
+dhalflogistic           Half-logistic distribution.
+dhalfnormal             Half-normal, half-Student-t and half-Cauchy
+                        distributions.
+dinvchi                 Inverse-Chi distribution.
+dlomax                  The Lomax distribution.
+drayleigh               The Rayleigh distribution.
+forest.bayesmeta        Generate a forest plot for a 'bayesmeta' object
+                        (based on the 'metafor' package's plotting
+                        functions).
+forestplot.bayesmeta    Generate a forest plot for a 'bayesmeta' object
+                        (based on the 'forestplot' package's plotting
+                        functions).
+funnel.bayesmeta        Generate a funnel plot for a 'bayesmeta'
+                        object.
+normalmixture           Compute normal mixtures
+plot.bayesmeta          Generate summary plots for a 'bayesmeta'
+                        object.
+pppvalue                Posterior predictive p-values
