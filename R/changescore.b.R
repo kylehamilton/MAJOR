@@ -114,8 +114,8 @@ changeScoreClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                         # LOOK INTO THIS AND MAKE SURE YOU DIDNT MESS THIS UP
                         # LOOK INTO THIS AND MAKE SURE YOU DIDNT MESS THIS UP
                         
-                        datT <- escalc(measure = mdmseasure, m1i=m1i_post, m2i=m1i_pre, sd1i=sd1i_pre, ni=n1i_pre, ri=ri, data=dataTreatment)
-                        datC <- escalc(measure = mdmseasure, m1i=m2i_post, m2i=m2i_pre, sd1i=sd2i_pre, ni=n2i_pre, ri=ri, data=dataControl)
+                        datT <- escalc(measure = mdmseasure, m1i=m1i_post, m2i=m1i_pre, sd1i=sd1i_pre, sd2i=sd1i_post, ni=n1i_pre, ri=ri, data=dataTreatment)
+                        datC <- escalc(measure = mdmseasure, m1i=m2i_post, m2i=m2i_pre, sd1i=sd2i_pre, sd2i=sd2i_post, ni=n2i_pre, ri=ri, data=dataControl)
                         dat <- data.frame(yi = datT$yi - datC$yi, vi = datT$vi + datC$vi)
                         
                         res <-
@@ -132,8 +132,8 @@ changeScoreClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                         # LOOK INTO THIS AND MAKE SURE YOU DIDNT MESS THIS UP
                         # LOOK INTO THIS AND MAKE SURE YOU DIDNT MESS THIS UP
                         
-                        datT <- escalc(measure = mdmseasure, m1i=m1i_post, m2i=m1i_pre, sd1i=sd1i_pre, ni=n1i_pre, ri=ri, data=dataTreatment)
-                        datC <- escalc(measure = mdmseasure, m1i=m2i_post, m2i=m2i_pre, sd1i=sd2i_pre, ni=n2i_pre, ri=ri, data=dataControl)
+                        datT <- escalc(measure = mdmseasure, m1i=m1i_post, m2i=m1i_pre, sd1i=sd1i_pre, sd2i=sd1i_post, ni=n1i_pre, ri=ri, data=dataTreatment)
+                        datC <- escalc(measure = mdmseasure, m1i=m2i_post, m2i=m2i_pre, sd1i=sd2i_pre, sd2i=sd2i_post, ni=n2i_pre, ri=ri, data=dataControl)
                         dat <- data.frame(yi = datT$yi - datC$yi, vi = datT$vi + datC$vi)
                         
                         res <-
