@@ -118,6 +118,18 @@ options:
         - name: "SMCR"
           title: Standardized mean change using raw score standardization
       default: SMCR
+
+    - name: fsntype
+      title: Fail-Safe N method
+      type: List
+      options:
+        - name: "Rosenthal"
+          title: Rosenthal
+        - name: "Orwin"
+          title: Orwin
+        - name: "Rosenberg"
+          title: Rosenberg
+      default: Rosenthal
       
     - name: testType
       title: Knapp and Hartung Adjustment

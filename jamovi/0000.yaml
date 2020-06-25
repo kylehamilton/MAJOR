@@ -10,6 +10,12 @@ date: '2017-11-10'
 type: R
 description: An interface for Jamovi and the R package Metafor
 analyses:
+  - title: Change Score
+    name: changeScore
+    ns: MAJOR
+    menuGroup: MAJOR
+    menuTitle: Change Score
+    menuSubgroup: Meta Analysis
   - title: Correlation Coefficients
     name: MetaCorr
     ns: MAJOR
@@ -75,12 +81,6 @@ analyses:
     menuGroup: MAJOR
     menuTitle: Mean Differences
     menuSubgroup: Multilevel Models
-  - title: Change Score
-    name: changeScore
-    ns: MAJOR
-    menuGroup: MAJOR
-    menuTitle: Change Score
-    menuSubgroup: Meta Analysis
 usesNative: true
 minApp: 1.0.8
 

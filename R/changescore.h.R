@@ -20,6 +20,7 @@ changeScoreOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             slab = NULL,
             methodmetacor = "FE",
             cormeasure = "SMCR",
+            fsntype = "Rosenthal",
             testType = FALSE, ...) {
 
             super$initialize(
@@ -132,6 +133,14 @@ changeScoreOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "SMCC",
                     "SMCR"),
                 default="SMCR")
+            private$..fsntype <- jmvcore::OptionList$new(
+                "fsntype",
+                fsntype,
+                options=list(
+                    "Rosenthal",
+                    "Orwin",
+                    "Rosenberg"),
+                default="Rosenthal")
             private$..testType <- jmvcore::OptionBool$new(
                 "testType",
                 testType,
@@ -151,6 +160,7 @@ changeScoreOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..slab)
             self$.addOption(private$..methodmetacor)
             self$.addOption(private$..cormeasure)
+            self$.addOption(private$..fsntype)
             self$.addOption(private$..testType)
         }),
     active = list(
@@ -168,6 +178,7 @@ changeScoreOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         slab = function() private$..slab$value,
         methodmetacor = function() private$..methodmetacor$value,
         cormeasure = function() private$..cormeasure$value,
+        fsntype = function() private$..fsntype$value,
         testType = function() private$..testType$value),
     private = list(
         ..n1i_pre = NA,
@@ -184,6 +195,7 @@ changeScoreOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..slab = NA,
         ..methodmetacor = NA,
         ..cormeasure = NA,
+        ..fsntype = NA,
         ..testType = NA)
 )
 
@@ -191,7 +203,8 @@ changeScoreResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         textRICH = function() private$.items[["textRICH"]],
-        tableTauSqaured = function() private$.items[["tableTauSqaured"]]),
+        tableTauSqaured = function() private$.items[["tableTauSqaured"]],
+        fsnRICH = function() private$.items[["fsnRICH"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -277,6 +290,25 @@ changeScoreResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `name`="QallPval", 
                         `title`="p", 
                         `type`="number", 
+                        `format`="zto,pvalue"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="fsnRICH",
+                title="",
+                rows=4,
+                columns=list(
+                    list(
+                        `name`="label", 
+                        `title`="Test Name", 
+                        `type`="text"),
+                    list(
+                        `name`="failSafeNumber", 
+                        `title`="value", 
+                        `type`="integer", 
+                        `format`="zto"),
+                    list(
+                        `name`="p", 
+                        `type`="number", 
                         `format`="zto,pvalue"))))}))
 
 changeScoreBase <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -316,11 +348,13 @@ changeScoreBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param slab .
 #' @param methodmetacor .
 #' @param cormeasure .
+#' @param fsntype .
 #' @param testType .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$textRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$tableTauSqaured} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$fsnRICH} \tab \tab \tab \tab \tab a table \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -346,6 +380,7 @@ changeScore <- function(
     slab,
     methodmetacor = "FE",
     cormeasure = "SMCR",
+    fsntype = "Rosenthal",
     testType = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
@@ -395,6 +430,7 @@ changeScore <- function(
         slab = slab,
         methodmetacor = methodmetacor,
         cormeasure = cormeasure,
+        fsntype = fsntype,
         testType = testType)
 
     analysis <- changeScoreClass$new(

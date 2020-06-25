@@ -25,6 +25,9 @@ changeScoreClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             
             #Study Labels
             slab <- self$options$slab
+            
+            #Options
+            fsntype <- self$options$fsntype
         # I'll come back later and add this, I have a meeting soon and I just want to get this to work before I go
            # moderator <- self$options$moderatorcor
            # moderatorType <- self$options$moderatorType
@@ -282,6 +285,48 @@ changeScoreClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                             QallPval = res$QEp[1]
                         )
                     )
+                    #Pub Bias
+                    failsafePB <-
+                        metafor::fsn(yi = res$yi,
+                                     vi = res$vi,
+                                     type = fsntype)
+                    ranktestPB <- metafor::ranktest(res)
+                    regtestPB <- metafor::regtest(res)
+                    fsnRICH <- self$results$fsnRICH
+                    fsnRICH$setRow(
+                        rowNo = 1,
+                        values = list(
+                            label = "Fail-Safe N",
+                            failSafeNumber = failsafePB$fsnum[1],
+                            p = failsafePB$pval[1])
+                    )
+                    
+                    fsnRICH$setRow(
+                        rowNo = 2,
+                        values = list(
+                            label = "Begg and Mazumdar Rank Correlation",
+                            failSafeNumber = ranktestPB$tau[1],
+                            p = ranktestPB$pval[1])
+                    )
+                    
+                    fsnRICH$setRow(
+                        rowNo = 3,
+                        values = list(
+                            label = "Egger's Regression",
+                            failSafeNumber = regtestPB[["zval"]],
+                            p = regtestPB[["pval"]])
+                    )
+                    
+                    fsnTitle <-
+                        paste("Publication Bias Assessment")
+                    fsnNote <-
+                        paste("Fail-safe N Calculation Using the ",
+                              fsntype,
+                              " Approach",
+                              sep = "")
+                    fsnRICH$setTitle(title = fsnTitle)
+                    fsnRICH$setNote("fsnNoteTable", fsnNote)
+                    
                     
                 }
 

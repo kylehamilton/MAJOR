@@ -8,6 +8,9 @@ import(pwr)
 import(poibin)
 import(stringr)
 import(esc)
+export(changeScoreClass)
+export(changeScoreOptions)
+
 export(MetaCorrClass)
 export(MetaCorrOptions)
 
@@ -40,6 +43,3 @@ export(multiLevelMetaCorrOptions)
 
 export(multiLevelMetaMeanDiffClass)
 export(multiLevelMetaMeanDiffOptions)
-
-export(changeScoreClass)
-export(changeScoreOptions)

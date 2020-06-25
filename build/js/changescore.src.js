@@ -3,7 +3,7 @@
 
 'use strict';
 
-const options = [{"name":"data","type":"Data"},{"name":"n1i_pre","title":"Treatment group sample size","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"m1i_pre","title":"Treatment group pretest mean","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"sd1i_pre","title":"Treatment group pretest standard deviation","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"m1i_post","title":"Treatment group post test mean","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"sd1i_post","title":"Treatment group post test standard deviation","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"n2i_pre","title":"Control group sample size","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"m2i_pre","title":"Control group pretest mean","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"sd2i_pre","title":"Control group pretest standard deviation","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"m2i_post","title":"Control group post test mean","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"sd2i_post","title":"Control group post test standard deviation","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"ri","title":"Correlations","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"slab","title":"Study label","suggested":["nominal"],"type":"Variable"},{"name":"methodmetacor","title":"Model estimator","type":"List","options":[{"name":"DL","title":"DerSimonian-Laird"},{"name":"HE","title":"Hedges"},{"name":"HS","title":"Hunter-Schmidt"},{"name":"SJ","title":"Sidik-Jonkman"},{"name":"ML","title":"Maximum-Likelihood"},{"name":"REML","title":"Restricted Maximum-Likelihood"},{"name":"EB","title":"Empirical Bayes"},{"name":"PM","title":"Paule-Mandel"},{"name":"FE","title":"Fixed-Effect"}],"default":"FE"},{"name":"cormeasure","title":"Effect size model measures","type":"List","options":[{"name":"MC","title":"Raw mean change"},{"name":"SMCC","title":"Standardized mean change using change score standardization."},{"name":"SMCR","title":"Standardized mean change using raw score standardization"}],"default":"SMCR"},{"name":"testType","title":"Knapp and Hartung Adjustment","type":"Bool","default":false}];
+const options = [{"name":"data","type":"Data"},{"name":"n1i_pre","title":"Treatment group sample size","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"m1i_pre","title":"Treatment group pretest mean","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"sd1i_pre","title":"Treatment group pretest standard deviation","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"m1i_post","title":"Treatment group post test mean","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"sd1i_post","title":"Treatment group post test standard deviation","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"n2i_pre","title":"Control group sample size","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"m2i_pre","title":"Control group pretest mean","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"sd2i_pre","title":"Control group pretest standard deviation","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"m2i_post","title":"Control group post test mean","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"sd2i_post","title":"Control group post test standard deviation","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"ri","title":"Correlations","suggested":["continuous"],"permitted":["numeric"],"type":"Variable"},{"name":"slab","title":"Study label","suggested":["nominal"],"type":"Variable"},{"name":"methodmetacor","title":"Model estimator","type":"List","options":[{"name":"DL","title":"DerSimonian-Laird"},{"name":"HE","title":"Hedges"},{"name":"HS","title":"Hunter-Schmidt"},{"name":"SJ","title":"Sidik-Jonkman"},{"name":"ML","title":"Maximum-Likelihood"},{"name":"REML","title":"Restricted Maximum-Likelihood"},{"name":"EB","title":"Empirical Bayes"},{"name":"PM","title":"Paule-Mandel"},{"name":"FE","title":"Fixed-Effect"}],"default":"FE"},{"name":"cormeasure","title":"Effect size model measures","type":"List","options":[{"name":"MC","title":"Raw mean change"},{"name":"SMCC","title":"Standardized mean change using change score standardization."},{"name":"SMCR","title":"Standardized mean change using raw score standardization"}],"default":"SMCR"},{"name":"fsntype","title":"Fail-Safe N method","type":"List","options":[{"name":"Rosenthal","title":"Rosenthal"},{"name":"Orwin","title":"Orwin"},{"name":"Rosenberg","title":"Rosenberg"}],"default":"Rosenthal"},{"name":"testType","title":"Knapp and Hartung Adjustment","type":"Bool","default":false}];
 
 const view = function() {
     
@@ -223,6 +223,18 @@ view.layout = ui.extend({
 					type: DefaultControls.ComboBox,
 					typeName: 'ComboBox',
 					name: "cormeasure"
+				}
+			]
+		},
+		{
+			type: DefaultControls.LayoutBox,
+			typeName: 'LayoutBox',
+			margin: "large",
+			controls: [
+				{
+					type: DefaultControls.ComboBox,
+					typeName: 'ComboBox',
+					name: "fsntype"
 				}
 			]
 		},

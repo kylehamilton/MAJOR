@@ -105,5 +105,10 @@ children:
   - type: LayoutBox
     margin: large
     children:
+      - type: ComboBox
+        name: fsntype
+  - type: LayoutBox
+    margin: large
+    children:
       - type: CheckBox
         name: testType
