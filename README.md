@@ -34,7 +34,6 @@ Thank you for contributing!
 - [x] Basic funnel plot
 - [x] Basic forest plot
 - [x] Basic publication bias
-- [ ] Vevea and Hedges weight function model with the weightr package
 - [ ] Add labels for plots
 - [ ] Add additional plots and tests from metafor
 - [ ] Figure out Jamovi icon
