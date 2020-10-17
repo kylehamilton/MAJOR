@@ -603,6 +603,51 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           #
           #
           # self$results$weightFunctionModel$setContent(wfRES)
+        
+        # Test of Excess Significance
+        
+        TES <- tes(res)
+        resultsTES <- self$results$resultsTES
+        resultsTES$setRow(
+        rowNo = 1,
+        values = list(
+          label = "Observed Number of Significant Findings",
+          tesNumberOutput = TES[["O"]]
+        )
+    )
+        resultsTES$setRow(
+          rowNo = 2,
+          values = list(
+            label = "Expected Number of Significant Findings",
+            tesNumberOutput = TES[["k"]]
+          )
+        )
+        resultsTES$setRow(
+          rowNo = 3,
+          values = list(
+            label = "Observed Number / Expected Number",
+            tesNumberOutput = TES[["OEratio"]]
+          )
+        )
+        
+        tesQuantile <- quantile(TES[["power"]])
+        tesQuantile25 <- as.numeric(tesQuantile[2])
+        tesQuantile75 <- as.numeric(tesQuantile[4])
+        
+        resultsTES2 <- self$results$resultsTES2
+        resultsTES2$setRow(
+          rowNo = 1,
+          values = list(
+            tesOutputMin = min(TES[["power"]]),
+            tesOutputQ1 = tesQuantile25,
+            tesOutputMed = median(TES[["power"]]),
+            tesOutputQ3 = tesQuantile75,
+            tesOutputMax = max(TES[["power"]])
+          )
+        )
+        
+        
+        resultsTES2
           #Model Fit
           modelFitRICH <- self$results$modelFitRICH
           modelFitRICH$setRow(

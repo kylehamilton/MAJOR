@@ -134,7 +134,48 @@ items:
       height: 450
       renderFun: .funplot
       refs: [ metafor ] 
-      
+
+    - name:  resultsTES
+      title: Test of Excess Significance | Significant Findings
+      type: Table
+      rows:  3
+      refs: [ tes ]
+      columns:
+        - name: label
+          title: ''
+          type: text
+        - name: tesNumberOutput
+          title: ''
+          type: number
+          format: zto
+          
+    - name:  resultsTES2
+      title: Test of Excess Significance | Estimated Power of Tests
+      type: Table
+      rows:  1
+      refs: [ tes ]
+      columns:
+        - name: tesOutputMin
+          title: 'Min'
+          type: number
+          format: zto
+        - name: tesOutputQ1
+          title: 'Q1'
+          type: number
+          format: zto
+        - name: tesOutputMed
+          title: 'Median'
+          type: number
+          format: zto
+        - name: tesOutputQ3
+          title: 'Q3'
+          type: number
+          format: zto
+        - name: tesOutputMax
+          title: 'Max'
+          type: number
+          format: zto
+
     - name:  TOSToutput
       title: "Two One-Sided Tests Equivalence Testing"
       refs: [ TOSTER ]

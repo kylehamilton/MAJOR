@@ -42,4 +42,13 @@
         `publisher`="Perspectives on Psychological Science", 
         `volume`=9, 
         `pages`="666-681", 
-        `url`="https://doi.org/10.1177/1745691614553988"))
+        `url`="https://doi.org/10.1177/1745691614553988"), 
+    `tes`=list(
+        `type`="article", 
+        `author`="Francis, G.", 
+        `year`=2013, 
+        `title`="Replication, statistical consistency, and publication bias", 
+        `publisher`="Journal of Mathematical Psychology", 
+        `volume`=57, 
+        `pages`="153-169", 
+        `url`="https://doi.org/10.1016/j.jmp.2013.02.003"))

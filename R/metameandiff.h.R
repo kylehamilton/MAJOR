@@ -346,6 +346,8 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         plot = function() private$.items[["plot"]],
         fsnRICH = function() private$.items[["fsnRICH"]],
         funplot = function() private$.items[["funplot"]],
+        resultsTES = function() private$.items[["resultsTES"]],
+        resultsTES2 = function() private$.items[["resultsTES2"]],
         TOSToutput = function() private$.items[["TOSToutput"]],
         TOSToutputtext = function() private$.items[["TOSToutputtext"]],
         tostplot = function() private$.items[["tostplot"]],
@@ -515,6 +517,56 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "metafor")))
             self$add(jmvcore::Table$new(
                 options=options,
+                name="resultsTES",
+                title="Test of Excess Significance | Significant Findings",
+                rows=3,
+                refs=list(
+                    "tes"),
+                columns=list(
+                    list(
+                        `name`="label", 
+                        `title`="", 
+                        `type`="text"),
+                    list(
+                        `name`="tesNumberOutput", 
+                        `title`="", 
+                        `type`="number", 
+                        `format`="zto"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="resultsTES2",
+                title="Test of Excess Significance | Estimated Power of Tests",
+                rows=1,
+                refs=list(
+                    "tes"),
+                columns=list(
+                    list(
+                        `name`="tesOutputMin", 
+                        `title`="Min", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="tesOutputQ1", 
+                        `title`="Q1", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="tesOutputMed", 
+                        `title`="Median", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="tesOutputQ3", 
+                        `title`="Q3", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="tesOutputMax", 
+                        `title`="Max", 
+                        `type`="number", 
+                        `format`="zto"))))
+            self$add(jmvcore::Table$new(
+                options=options,
                 name="TOSToutput",
                 title="Two One-Sided Tests Equivalence Testing",
                 refs=list(
@@ -672,7 +724,8 @@ metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
                 analysisId = analysisId,
                 revision = revision,
                 pause = NULL,
-                completeWhenFilled = FALSE)
+                completeWhenFilled = FALSE,
+                requiresMissings = FALSE)
         }))
 
 #' Mean Differences (n, M, SD)
@@ -719,6 +772,8 @@ metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$fsnRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$funplot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$resultsTES} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$resultsTES2} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$TOSToutput} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$TOSToutputtext} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$tostplot} \tab \tab \tab \tab \tab an image \cr

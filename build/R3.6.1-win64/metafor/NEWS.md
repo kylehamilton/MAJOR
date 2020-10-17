@@ -1,3 +1,103 @@
+# metafor 2.5-51 (2020-10-14)
+
+- the `metafor` package now makes use of the `mathjaxr` package to nicely render equations shown in the HTML help pages
+
+- added `selmodel()` for fitting a wide variety of selection models (and added the corresponding `plot.rma.uni.selmodel()` function for drawing the estimated selection function)
+
+- added `tes()` function for the test of excess significance
+
+- added `rcalc()`, `matreg()`, `dfround()`, and `vec2mat()` functions
+
+- the various `cumul()` functions provide `I^2` and `H^2` also for fixed-effects models; accordingly, `plot.cumul.rma()` now also works with such models
+
+- `simulate.rma()` gains `yilim` argument
+
+- added `weighted` argument to `fsn()` (for Orwin's method)
+
+- added some more transformation functions
+
+- `bldiag()` now properly handles ?x0 or 0x? matrices
+
+- p-values are still given to 2 digits when `digits = 1`
+
+- `summary.escalc()` also provides the p-values (of the Wald-type tests); but when using the `transf` argument, the sampling variances, standard errors, test statistics, and p-values are no longer shown
+
+- `rma.uni()` no longer constrains a fixed tau2 value to 0 when k=1
+
+- started using the `pbapply` package for showing progress bars, also when using parallel processing
+
+- to avoid potential confusion, all references to 'credibility intervals' have been removed from the documentation; these intervals are now exclusively referred to as 'prediction intervals'; in the output, the bounds are therefore indicated now as `pi.lb` and `pi.ub` (instead of `cr.lb` and `cr.ub`); the corresponding argument names were changed in `addpoly.default()`; argument `addcred` was changed to `addpred` in `addpoly.rma()` and `forest.rma()`; however, code using the old arguments names should continue to work
+
+- `vif()` gains `btt` argument and can now also compute generalized variance inflation factors; a proper `print.vif.rma()` function was added
+
+- in the various `forest()` functions, the right header is now suppressed when `annotate=FALSE` and `header=TRUE`
+
+- the `forest` and `funnel` arguments of `reporter.rma.uni()` can now also be logicals to suppress the drawing of these plots
+
+- one can now use `weights(...,  type="rowsum")` for intercept-only `rma.mv` models (to obtain 'row-sum weights')
+
+- `forest.rma()` gains `colout` argument (to adjust the color of the observed effect sizes or outcomes)
+
+- slight speedup in functions that repeatedly fit `rma.uni()` models by skipping the computation of the pseudo R^2 statistic
+
+- `funnel.default()` and `funnel.rma()` gain `label` and `offset` arguments
+
+- `funnel.default()` and `funnel.rma()` gain `lty` argument; the reference line is now drawn by default as a dotted line (like the line for the pseudo confidence region)
+
+- `regtest()` now shows the 'limit estimate' of the (average) true effect when using `sei`, `vi`, `ninv`, or `sqrtninv` as predictor (and the model does not contain any other moderators)
+
+- show nicer network graphs for `dat.hasselblad1998` and `dat.senn2013` in the help files
+
+- refactored various functions (for cleaner/simpler code)
+
+- added 12 new datasets (`dat.anand1999`, `dat.baskerville2012`, `dat.cannon2006`, `dat.cohen1981`, `dat.craft2003`, `dat.damico2009`, `dat.dorn2007`, `dat.hahn2001`, `dat.kalaian1996`, `dat.kearon1998`, `dat.lau1992`, `dat.vanhowe1999`)
+
+- fixed `level` not getting passed down to the various `cumul()` functions
+
+- improved the documentation a bit
+
+# metafor 2.4-0 (2020-03-19)
+
+- version jump to 2.4-0 for CRAN release (from now on, even minor numbers for CRAN releases, odd numbers for development versions)
+
+- the various `forest()` functions gain `header` argument
+
+- `escalc()` gains `include` argument
+
+- setting `verbose=3` in model fitting functions sets `options(warn=1)`
+
+- `forest.rma()` and `forest.default()` now throw informative errors when misusing `order` and `subset` arguments
+
+- fixed failing tests due to the `stringsAsFactors=FALSE` change in the upcoming version of R
+
+- `print.infl.rma.uni()` gains `infonly` argument, to only show the influential studies
+
+- removed `MASS` from `Suggests` (no longer needed)
+
+- argument `btt` can now also take a string to grep for
+
+- added `optimParallel` as possible optimizer in `rma.mv()`
+
+- added (for now undocumented) option to fit models in `rma.glmm()` via the `GLMMadaptive` package (instead of `lme4`); to try this, use: `control=list(package="GLMMadaptive")`
+
+- started to use numbering scheme for devel version (the number after the dash indicates the devel version)
+
+- added `contrmat()` function (for creating a matrix that indicates which groups have been compared against each other in each row of a dataset)
+
+- added `to.wide()` function (for restructuring long format datasets into the wide format needed for contrast-based analyses)
+
+- `I^2` and `H^2` are also shown in output for fixed-effects models
+
+- argument `grid` in `baujat()` can now also be a color name
+
+- added (for now undocumented) `time` argument to more functions that are computationally expensive
+
+- added (for now undocumented) `textpos` argument to the various forest functions
+
+- added a new dataset (`dat.graves2010`)
+
+- added more tests
+
 # metafor 2.1-0 (2019-05-13)
 
 - added `formula()` method for objects of class `rma`
@@ -66,7 +166,7 @@
 
 - `funnel.default()` and `funnel.rma()` can now take vectors as input for the `col` and `bg` arguments (and also for `pch`); both functions also gain a `legend` argument
 
-- `addpoly()` functions can now also show credibility interval bounds
+- `addpoly()` functions can now also show prediction interval bounds
 
 - removed 'formula interface' from `escalc()`; until this actually adds some kind of extra functionality, this just makes `escalc()` more confusing to use
 
@@ -390,7 +490,7 @@
 
 - more optimizers are now available for the `rma.mv()` function via the `nloptr` package by setting `control = list(optimizer="nloptr")`; when using this optimizer, the default is to use the BOBYQA implementation from that package with a relative convergence criterion of 1e-8 on the function value (see documentation on how to change these defaults)
 
-- `predict.rma()` function now works for `rma.mv` objects with multiple tau^2 values even if the user specifies the `newmods` argument but not the `tau2.levels` argument (but a warning is issued and the credibility/prediction intervals are not computed)
+- `predict.rma()` function now works for `rma.mv` objects with multiple tau^2 values even if the user specifies the `newmods` argument but not the `tau2.levels` argument (but a warning is issued and the prediction intervals are not computed)
 
 - argument `var.names` now works properly in `escalc()` when the user has not made use of the `data` argument (thanks to Jarrett Byrnes for bringing this to my attention)
 
@@ -438,9 +538,9 @@
 
 - the various `hatvalues()` functions now have a new argument `type` to indicate whether only the diagonal elements of the hat matrix (default) or the entire hat matrix should be returned
 
-- `predict.rma()` function now works properly for `rma.mv` objects (also has a new argument `tau2.levels` to specify, where applicable, the levels of the inner factor when computing credibility/prediction intervals)
+- `predict.rma()` function now works properly for `rma.mv` objects (also has a new argument `tau2.levels` to specify, where applicable, the levels of the inner factor when computing prediction intervals)
 
-- `forest.rma()` function now provides a bit more control over the color of the summary polygon and is now compatible with `rma.mv` objects; also, has a new argument `lty`, which provides more control over the line type for the individual CIs and the credibility interval
+- `forest.rma()` function now provides a bit more control over the color of the summary polygon and is now compatible with `rma.mv` objects; also, has a new argument `lty`, which provides more control over the line type for the individual CIs and the prediction interval
 
 - `addpoly.default()` and `addpoly.rma()` now have a `border` argument (for consistency with the `forest.rma()` function); `addpoly.rma()` now yields the correct CI bounds when the model was fitted with `knha=TRUE`
 
@@ -448,7 +548,7 @@
 
 - the various `forest()` functions now return information about the chosen values for arguments `xlim`, `alim`, `at`, `ylim`, `rows`, `cex`, `cex.lab`, and `cex.axis` invisibly (useful for tweaking the default values); thanks to Michael Dewey for the suggestion
 
-- the various `forest()` functions now have a new argument, `clim`, to set limits for the confidence/credibility/prediction interval bounds
+- the various `forest()` functions now have a new argument, `clim`, to set limits for the confidence/prediction interval bounds
 
 - `cumul.mh()` and `cumul.peto()` now get the order of the studies right when there are missing values in the data
 
@@ -634,7 +734,7 @@
 
 - added several method functions for objects of class `rma.glmm` (not all methods yet implemented; to be completed in the future)
 
-- rma.uni() now allows the user to specify a formula for the `yi` argument, so instead of rma(yi, vi, mods=~mod1+mod2), one can specify the same model with rma(yi~mod1+mod2, vi)
+- `rma.uni()` now allows the user to specify a formula for the `yi` argument, so instead of rma(yi, vi, mods=~mod1+mod2), one can specify the same model with rma(yi~mod1+mod2, vi)
 
 - `rma.uni()` now has a `weights` argument to specify the inverse of the sampling variances (instead of using the `vi` or `sei` arguments); for now, this is all this argument should be used for (in the future, this argument may potentially be used to allow the user to define alternative weights)
 
@@ -678,7 +778,7 @@
 
 - the `permutest.rma.uni()` function now uses an algorithm to find only the unique permutations of the model matrix (which may be much smaller than the total number of permutations), making the exact permutation test feasible in a larger set of circumstances (thanks to John Hodgson for making me aware of this issue and to Hans-Jörg Viechtbauer for coming up with a recursive algorithm for finding the unique permutations)
 
-- credibility interval in `forest.rma()` is now indicated with a dotted (instead of a dashed) line; ends of the interval are now marked with vertical bars
+- prediction interval in `forest.rma()` is now indicated with a dotted (instead of a dashed) line; ends of the interval are now marked with vertical bars
 
 - completely rewrote the `funnel.rma()` function which now supports many more options for the values to put on the y-axis; `trimfill.rma.uni()` function was adapted accordingly
 
@@ -702,9 +802,9 @@
 
 - `plot.infl.rma.uni()` function now allows the user to specify which plots to draw (and the layout) and adds the option to show study labels on the x-axis
 
-- added proper `print()` method for objects generated by the `confint.rma.uni()`, `confint.mh()`, and `confint.peto()` functions
+- added proper `print()` method for objects generated by the `confint.rma.uni()`, `confint.rma.mh()`, and `confint.rma.peto()` functions
 
-- when `transf` or `atransf` argument was a monotonically *decreasing* function, then confidence, prediction, and credibility interval bounds were in reversed order; various functions now check for this and order the bounds correctly
+- when `transf` or `atransf` argument was a monotonically *decreasing* function, then confidence and prediction interval bounds were in reversed order; various functions now check for this and order the bounds correctly
 
 - `trimfill.rma.uni()` now only prints information about the number of imputed studies when actually printing the model object
 
@@ -789,7 +889,7 @@
 
 # metafor 1.4-0 (2010-07-30)
 
-- a papar about the package has now been published in the Journal of Statistical Software (http://www.jstatsoft.org/v36/i03/)
+- a paper about the package has now been published in the Journal of Statistical Software (https://www.jstatsoft.org/v36/i03/)
 
 - added citation info; see: `citation("metafor")`
 
@@ -863,7 +963,7 @@
 
 - `forest()` function now uses the `level` argument properly to adjust the CI level of the summary estimate for models without moderators (i.e., for fixed- and random-effets models)
 
-- `forest()` function can now also show the credibility interval as a dashed line for a random-effects model
+- `forest()` function can now also show the prediction interval as a dashed line for a random-effects model
 
 - information about the measure used is now passed on to the `forest()` and `funnel()` functions, which try to set an appropriate x-axis title accordingly
 
