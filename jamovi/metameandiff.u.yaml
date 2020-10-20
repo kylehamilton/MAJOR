@@ -149,11 +149,14 @@ children:
     collapsed: true
     stretchFactor: 1
     children:
-      - type: LayoutBox
-        margin: large
+      - type: Label
+        label: Fail Safe N
         children:
           - type: ComboBox
             name: fsntype
+      - type: Label
+        label: Test of Excess Significance
+        children:
           - type: ComboBox
             name: tesAlternative
           - type: TextBox
@@ -183,5 +186,15 @@ children:
             useSingleCell: true
           - type: CheckBox
             name: showTOST
+  - type: CollapseBox
+    label: Additional Options
+    collapsed: true
+    stretchFactor: 1
+    children:
+      - type: LayoutBox
+        children:
           - type: CheckBox
             name: showInfPlot
+          - type: CheckBox
+            name: showLL
+            

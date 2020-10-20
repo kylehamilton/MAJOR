@@ -38,7 +38,8 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             upperTOST = 0.5,
             alphaTOST = 0.05,
             showTOST = FALSE,
-            showInfPlot = FALSE, ...) {
+            showInfPlot = FALSE,
+            showLL = FALSE, ...) {
 
             super$initialize(
                 package='MAJOR',
@@ -262,6 +263,10 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "showInfPlot",
                 showInfPlot,
                 default=FALSE)
+            private$..showLL <- jmvcore::OptionBool$new(
+                "showLL",
+                showLL,
+                default=FALSE)
 
             self$.addOption(private$..n1i)
             self$.addOption(private$..m1i)
@@ -296,6 +301,7 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..alphaTOST)
             self$.addOption(private$..showTOST)
             self$.addOption(private$..showInfPlot)
+            self$.addOption(private$..showLL)
         }),
     active = list(
         n1i = function() private$..n1i$value,
@@ -330,7 +336,8 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         upperTOST = function() private$..upperTOST$value,
         alphaTOST = function() private$..alphaTOST$value,
         showTOST = function() private$..showTOST$value,
-        showInfPlot = function() private$..showInfPlot$value),
+        showInfPlot = function() private$..showInfPlot$value,
+        showLL = function() private$..showLL$value),
     private = list(
         ..n1i = NA,
         ..m1i = NA,
@@ -364,7 +371,8 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..upperTOST = NA,
         ..alphaTOST = NA,
         ..showTOST = NA,
-        ..showInfPlot = NA)
+        ..showInfPlot = NA,
+        ..showLL = NA)
 )
 
 metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -376,6 +384,7 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         summaryOutputText = function() private$.items[["summaryOutputText"]],
         summaryOutputText2 = function() private$.items[["summaryOutputText2"]],
         plot = function() private$.items[["plot"]],
+        selModelOutput = function() private$.items[["selModelOutput"]],
         fsnRICH = function() private$.items[["fsnRICH"]],
         funplot = function() private$.items[["funplot"]],
         resultsTES = function() private$.items[["resultsTES"]],
@@ -384,6 +393,7 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         TOSToutput = function() private$.items[["TOSToutput"]],
         TOSToutputtext = function() private$.items[["TOSToutputtext"]],
         tostplot = function() private$.items[["tostplot"]],
+        likelihoodPlot = function() private$.items[["likelihoodPlot"]],
         diagPlotAll = function() private$.items[["diagPlotAll"]]),
     private = list(),
     public=list(
@@ -520,6 +530,24 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 renderFun=".plot",
                 refs=list(
                     "metafor")))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="selModelOutput",
+                refs=list(
+                    "metafor"),
+                title="Selection Model Results",
+                rows=1,
+                columns=list(
+                    list(
+                        `name`="deltaLabel", 
+                        `title`="", 
+                        `type`="text"),
+                    list(
+                        `name`="deltaK", 
+                        `type`="number"),
+                    list(
+                        `name`="deltaEstimate", 
+                        `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="fsnRICH",
@@ -662,6 +690,15 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 renderFun=".tostplot",
                 refs=list(
                     "TOSTER")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="likelihoodPlot",
+                title="Likelihood Plot",
+                width=600,
+                height=450,
+                renderFun=".likelihoodPlot",
+                refs=list(
+                    "llplot")))
             self$add(R6::R6Class(
                 inherit = jmvcore::Group,
                 active = list(
@@ -802,6 +839,7 @@ metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param alphaTOST .
 #' @param showTOST .
 #' @param showInfPlot .
+#' @param showLL .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$textRICH} \tab \tab \tab \tab \tab a table \cr
@@ -810,6 +848,7 @@ metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$summaryOutputText} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$summaryOutputText2} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$selModelOutput} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$fsnRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$funplot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$resultsTES} \tab \tab \tab \tab \tab a table \cr
@@ -818,6 +857,7 @@ metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$TOSToutput} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$TOSToutputtext} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$tostplot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$likelihoodPlot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$diagPlotAll$diagplot1} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$diagPlotAll$diagplot2} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$diagPlotAll$diagplot3} \tab \tab \tab \tab \tab an image \cr
@@ -870,7 +910,8 @@ metaMeanDiff <- function(
     upperTOST = 0.5,
     alphaTOST = 0.05,
     showTOST = FALSE,
-    showInfPlot = FALSE) {
+    showInfPlot = FALSE,
+    showLL = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('metaMeanDiff requires jmvcore to be installed (restart may be required)')
@@ -929,7 +970,8 @@ metaMeanDiff <- function(
         upperTOST = upperTOST,
         alphaTOST = alphaTOST,
         showTOST = showTOST,
-        showInfPlot = showInfPlot)
+        showInfPlot = showInfPlot,
+        showLL = showLL)
 
     analysis <- metaMeanDiffClass$new(
         options = options,

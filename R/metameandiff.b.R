@@ -35,6 +35,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         tesAlternative <- self$options$tesAlternative
         tesAlpha <- self$options$tesAlpha
         tesH0 <- self$options$tesH0
+        selModelOutput <- self$results$selModelOutput
 
         ready <- TRUE
         if (is.null(self$options$n1i) ||
@@ -559,53 +560,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
                 sep = "")
         fsnRICH$setTitle(title = fsnTitle)
         fsnRICH$setNote("fsnNoteTable", fsnNote)
-        #fsnRICH <- self$results$fsnRICH
-          # failsafePB <-
-          #   metafor::fsn(yi = res$yi,
-          #                vi = res$vi,
-          #                type = fsntype)
-          # ranktestPB <- metafor::ranktest(res)
-          # regtestPB <- metafor::regtest(res)
-          # 
-          # 
-          # fsnRICH <- self$results$pubBias$fsnRICH
-          # 
-          # fsnRICH$setRow(
-          #   rowNo = 1,
-          #   values = list(failSafeNumber = failsafePB$fsnum[1],
-          #                 p = failsafePB$pval[1])
-          # )
-          # fsnTitle <-
-          #   paste("Fail-Safe N Analysis (File Drawer Analysis)")
-          # fsnNote <-
-          #   paste("Fail-safe N Calculation Using the ",
-          #         fsntype,
-          #         " Approach",
-          #         sep = "")
-          # fsnRICH$setTitle(title = fsnTitle)
-          # fsnRICH$setNote("fsnNoteTable", fsnNote)
-          # 
-          # rankRICH <- self$results$pubBias$rankRICH
-          # rankRICH$setRow(
-          #   rowNo = 1,
-          #   values = list(rankTau = ranktestPB$tau[1],
-          #                 p = ranktestPB$pval[1])
-          # )
-          # 
-          # regRICH <- self$results$pubBias$regRICH
-          # regRICH$setRow(rowNo = 1,
-          #                values = list(Z = regtestPB$zval[1],
-          #                              p = regtestPB$pval[1]))
-          
-          # # Extracting the effect sizes and sampling variances:
-          # effect <- res$yi
-          # v <- res$vi
-          #
-          # # The weight-function model with no mean model:
-          # wfRES <- weightr::weightfunct(effect, v)
-          #
-          #
-          # self$results$weightFunctionModel$setContent(wfRES)
+
         
         # Test of Excess Significance
         
@@ -675,6 +630,22 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         
         tesOutput3$setContent(tesResults3)
 
+        # Selection Models for pub bias
+        
+        selOutput <- selmodel(res, type="negexp")
+        
+        selModelOutput <- self$results$selModelOutput
+        
+        selModelOutput$setRow(
+          rowNo = 1,
+          values = list(
+            deltaLabel = "Intercept",
+            #deltaK = selOutput[["ptable"]][["k"]][[1]],
+            deltaK = 1,
+            deltaEstimate = selOutput[["delta"]][[1]]
+          )
+        )
+        
         
           #Model Fit
           modelFitRICH <- self$results$modelFitRICH
@@ -873,6 +844,8 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           imageDiagPlot7 <- self$results$diagPlotAll$diagplot7
           imageDiagPlot8 <- self$results$diagPlotAll$diagplot8
           imageDiagPlot9 <- self$results$diagPlotAll$diagplot9
+          # new plots from metafor 10/20/2020 wkh
+          imageLLPlot <- self$results$likelihoodPlot
           
           image$setState(res)
           imageFUN$setState(res)
@@ -887,12 +860,20 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           imageDiagPlot7$setState(inf)
           imageDiagPlot8$setState(inf)
           imageDiagPlot9$setState(res)
+          imageLLPlot$setState(res)
           
           #Display TOST Image
           if (self$options$showTOST == TRUE) {
             imageTOST$setVisible(visible = TRUE)
           } else {
             imageTOST$setVisible(visible = FALSE)
+          }  
+          
+          #Display LL Plot Image
+          if (self$options$showLL== TRUE) {
+            imageLLPlot$setVisible(visible = TRUE)
+          } else {
+            imageLLPlot$setVisible(visible = FALSE)
           }  
           
           #Display Diagnostic Plots
@@ -1090,7 +1071,31 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         }
         TRUE
       },
+    .likelihoodPlot = function(imageLLPlot, ...) {
+      # <-- the plot function
+      plotLL<- imageLLPlot$state
       
+      ready <- TRUE
+      if (is.null(self$options$n1i) ||
+          is.null(self$options$m1i) ||
+          is.null(self$options$sd1i) ||
+          is.null(self$options$n2i) ||
+          is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
+        ready <- FALSE
+        jmvcore::reject(
+          "Sample Size, Mean, and Standard Deviation fields must be populated to generate this plot",
+          code = ''
+        )
+      } else {
+        data_test <- NA
+        data_test$yi <- plotLL$yi
+        data_test$vi <- plotLL$vi
+        
+        llplot_output <- llplot(measure="GEN", yi=yi, vi=vi, data=data_test, lwd=1, refline=NA, xlim=c(-3,3))
+        print(llplot_output)
+      }
+      TRUE
+    },      
       .tostplot = function(imageTOST, ...) {
         # <-- the plot function
         plotDataTOST <- imageTOST$state

@@ -51,4 +51,13 @@
         `publisher`="Journal of Mathematical Psychology", 
         `volume`=57, 
         `pages`="153-169", 
-        `url`="https://doi.org/10.1016/j.jmp.2013.02.003"))
+        `url`="https://doi.org/10.1016/j.jmp.2013.02.003"), 
+    `llplot`=list(
+        `type`="article", 
+        `author`="van Houwelingen, H. C., Zwinderman, K. H., Stijnen, T.", 
+        `year`=1993, 
+        `title`="A bivariate approach to meta-analysis", 
+        `publisher`="Statistics in Medicine", 
+        `volume`=12, 
+        `pages`="2273-2284", 
+        `url`="https://doi.org/10.1002/sim.4780122405"))

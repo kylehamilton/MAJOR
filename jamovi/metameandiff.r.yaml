@@ -110,7 +110,20 @@ items:
       renderFun: .plot
       refs: [ metafor ]
 
-
+    - name:  selModelOutput
+      type: Table
+      refs: [ metafor ]
+      title: "Selection Model Results"
+      rows:  1
+      columns:
+        - name: deltaLabel
+          title: ''
+          type: text
+        - name: deltaK
+          type: number
+        - name: deltaEstimate
+          type: number
+          
     - name:  fsnRICH
       title: ""
       type: Table
@@ -229,6 +242,14 @@ items:
       height: 450
       renderFun: .tostplot
       refs: [ TOSTER ]
+
+    - name: likelihoodPlot
+      title: Likelihood Plot
+      type: Image
+      width:  600
+      height: 450
+      renderFun: .likelihoodPlot
+      refs: [ llplot ]
 
     - name: diagPlotAll
       title: Outlier and Influential Case Diagnostics
