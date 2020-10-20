@@ -384,6 +384,7 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         summaryOutputText = function() private$.items[["summaryOutputText"]],
         summaryOutputText2 = function() private$.items[["summaryOutputText2"]],
         plot = function() private$.items[["plot"]],
+        selModelOutput = function() private$.items[["selModelOutput"]],
         fsnRICH = function() private$.items[["fsnRICH"]],
         funplot = function() private$.items[["funplot"]],
         resultsTES = function() private$.items[["resultsTES"]],
@@ -529,6 +530,24 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 renderFun=".plot",
                 refs=list(
                     "metafor")))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="selModelOutput",
+                refs=list(
+                    "metafor"),
+                title="Selection Model Results",
+                rows=1,
+                columns=list(
+                    list(
+                        `name`="deltaLabel", 
+                        `title`="", 
+                        `type`="text"),
+                    list(
+                        `name`="deltaK", 
+                        `type`="number"),
+                    list(
+                        `name`="deltaEstimate", 
+                        `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="fsnRICH",
@@ -829,6 +848,7 @@ metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$summaryOutputText} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$summaryOutputText2} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$selModelOutput} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$fsnRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$funplot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$resultsTES} \tab \tab \tab \tab \tab a table \cr
