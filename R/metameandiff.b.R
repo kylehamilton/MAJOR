@@ -873,6 +873,8 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           imageDiagPlot7 <- self$results$diagPlotAll$diagplot7
           imageDiagPlot8 <- self$results$diagPlotAll$diagplot8
           imageDiagPlot9 <- self$results$diagPlotAll$diagplot9
+          # new plots from metafor 10/20/2020 wkh
+          imageLLPlot <- self$results$likelihoodPlot
           
           image$setState(res)
           imageFUN$setState(res)
@@ -887,12 +889,20 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           imageDiagPlot7$setState(inf)
           imageDiagPlot8$setState(inf)
           imageDiagPlot9$setState(res)
+          imageLLPlot$setState(res)
           
           #Display TOST Image
           if (self$options$showTOST == TRUE) {
             imageTOST$setVisible(visible = TRUE)
           } else {
             imageTOST$setVisible(visible = FALSE)
+          }  
+          
+          #Display LL Plot Image
+          if (self$options$showLL== TRUE) {
+            imageLLPlot$setVisible(visible = TRUE)
+          } else {
+            imageLLPlot$setVisible(visible = FALSE)
           }  
           
           #Display Diagnostic Plots
@@ -1090,7 +1100,31 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         }
         TRUE
       },
+    .likelihoodPlot = function(imageLLPlot, ...) {
+      # <-- the plot function
+      plotLL<- imageLLPlot$state
       
+      ready <- TRUE
+      if (is.null(self$options$n1i) ||
+          is.null(self$options$m1i) ||
+          is.null(self$options$sd1i) ||
+          is.null(self$options$n2i) ||
+          is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
+        ready <- FALSE
+        jmvcore::reject(
+          "Sample Size, Mean, and Standard Deviation fields must be populated to generate this plot",
+          code = ''
+        )
+      } else {
+        data_test <- NA
+        data_test$yi <- plotLL$yi
+        data_test$vi <- plotLL$vi
+        
+        llplot_output <- llplot(measure="GEN", yi=yi, vi=vi, data=data_test, lwd=1, refline=NA, xlim=c(-3,3))
+        print(llplot_output)
+      }
+      TRUE
+    },      
       .tostplot = function(imageTOST, ...) {
         # <-- the plot function
         plotDataTOST <- imageTOST$state

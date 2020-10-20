@@ -230,6 +230,14 @@ items:
       renderFun: .tostplot
       refs: [ TOSTER ]
 
+    - name: likelihoodPlot
+      title: Likelihood Plot
+      type: Image
+      width:  600
+      height: 450
+      renderFun: .likelihoodPlot
+      refs: [ llplot ]
+
     - name: diagPlotAll
       title: Outlier and Influential Case Diagnostics
       type: Group

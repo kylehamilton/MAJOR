@@ -22,14 +22,14 @@ RemoteHost: api.github.com
 RemoteRepo: metafor
 RemoteUsername: kylehamilton
 RemoteRef: master
-RemoteSha: f7c0bfa1b89dec300e3db15ccd36e93554b30831
+RemoteSha: a95461cc2984822e4067754978afd9a41fb1b7d0
 GithubRepo: metafor
 GithubUsername: kylehamilton
 GithubRef: master
-GithubSHA1: f7c0bfa1b89dec300e3db15ccd36e93554b30831
+GithubSHA1: a95461cc2984822e4067754978afd9a41fb1b7d0
 NeedsCompilation: no
-Packaged: 2020-10-20 03:27:57 UTC; Kyle Hamilton
+Packaged: 2020-10-20 19:56:50 UTC; Kyle Hamilton
 Author: Wolfgang Viechtbauer [aut, cre]
     (<https://orcid.org/0000-0003-3463-4063>)
 Maintainer: Wolfgang Viechtbauer <wvb@metafor-project.org>
-Built: R 3.6.1; ; 2020-10-20 03:28:01 UTC; windows
+Built: R 3.6.1; ; 2020-10-20 19:56:53 UTC; windows

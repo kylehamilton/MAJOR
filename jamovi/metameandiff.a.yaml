@@ -205,7 +205,7 @@ options:
       default: Rosenthal
 
     - name: tesAlternative
-      title: Test of Excess Significance | Hypothesis test type
+      title: Hypothesis test type
       type: List
       options:
         - name: "two.sided"
@@ -218,14 +218,14 @@ options:
 
     - name: tesAlpha
       type: Number
-      title: Test of Excess Significance | Alpha level
+      title: Alpha level
       min: 0.000001
       max: 1
       default: 0.5
       
     - name: tesH0
       type: Number
-      title: Test of Excess Significance | Effect size under the null hypothesis
+      title: Effect size under the null hypothesis
       min: -9999
       max: 9999
       default: 0
@@ -287,4 +287,8 @@ options:
       type: Bool
       default: false
       
+    - name: showLL
+      title: Show Likelihood Plot
+      type: Bool
+      default: false      
 
