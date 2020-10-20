@@ -154,6 +154,14 @@ children:
         children:
           - type: ComboBox
             name: fsntype
+          - type: ComboBox
+            name: tesAlternative
+          - type: TextBox
+            name: tesAlpha
+            format: number
+          - type: TextBox
+            name: tesH0
+            format: number
   - type: CollapseBox
     label: Equivalence Test Options
     collapsed: true

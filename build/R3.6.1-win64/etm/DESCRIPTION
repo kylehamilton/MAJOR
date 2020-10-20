@@ -1,0 +1,18 @@
+Package: etm
+Type: Package
+Title: Empirical Transition Matrix
+Version: 1.0.5
+Author: Arthur Allignol
+Description: The etm (empirical transition matrix) package permits to estimate the matrix of transition probabilities for any time-inhomogeneous multistate model with finite state space using the Aalen-Johansen estimator. Functions for data preparation and for displaying are also included (Allignol et al., 2011 <doi:10.18637/jss.v038.i04>). Functionals of the Aalen-Johansen estimator, e.g., excess length-of-stay in an intermediate state, can also be computed (Allignol et al. 2011 <doi:10.1007/s00180-010-0200-x>). 
+Maintainer: Arthur Allignol <arthur.allignol@gmail.com>
+License: MIT + file LICENSE
+Depends: R (>= 3.0.0)
+Imports: survival, lattice, data.table, Rcpp (>= 0.11.4)
+Suggests: ggplot2, kmi, geepack
+LinkingTo: Rcpp, RcppArmadillo
+NeedsCompilation: yes
+Packaged: 2019-05-27 20:51:06 UTC; arthur
+Repository: CRAN
+Date/Publication: 2019-05-28 13:10:03 UTC
+Built: R 3.6.2; x86_64-w64-mingw32; 2019-12-27 17:59:08 UTC; windows
+Archs: i386, x64

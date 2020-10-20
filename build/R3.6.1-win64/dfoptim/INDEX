@@ -1,0 +1,5 @@
+dfoptim                 Derivative-Free Optimization
+hjk                     Hooke-Jeeves derivative-free minimization
+                        algorithm
+nmk                     Nelder-Mead optimziation algorithm for
+                        derivative-free optimization

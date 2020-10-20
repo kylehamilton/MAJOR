@@ -1,0 +1,65 @@
+citHeader("To cite Epi in publications use:")
+
+## R >= 2.8.0 passes package metadata to citation().
+if(!exists("meta") || is.null(meta)) meta <- packageDescription("Epi")
+year <- sub("-.*", "", meta$Date)
+note <- sprintf("R package version %s", meta$Version)
+
+citEntry(entry = "Manual",
+         title = "{Epi}: A Package for Statistical Analysis in Epidemiology",
+         author = personList(as.person("Bendix Carstensen"),
+	                     as.person("Martyn Plummer"),
+                             as.person("Esa Laara"),
+			     as.person("Michael Hills")),
+         year = year,
+         note = note,
+         url = "https://CRAN.R-project.org/package=Epi",
+
+         textVersion =
+         paste("Bendix Carstensen, Martyn Plummer, Esa Laara, Michael Hills",
+   	       sprintf("(%s).", year),
+               "Epi: A Package for Statistical Analysis in Epidemiology.",
+	       paste(note, ".", sep = ""),
+               "URL https://CRAN.R-project.org/package=Epi")
+)
+
+citEntry(entry = "Article",
+  title        = "{Lexis}: An {R} Class for Epidemiological Studies with Long-Term Follow-Up",
+  author       = personList(as.person("Martyn Plummer"),
+                   as.person("Bendix Carstensen")),
+  journal      = "Journal of Statistical Software",
+  year         = "2011",
+  volume       = "38",
+  number       = "5",
+  pages        = "1--12",
+  url          = "http://www.jstatsoft.org/v38/i05/",
+
+  textVersion  =
+  paste("Martyn Plummer, Bendix Carstensen (2011).",
+        "Lexis: An R Class for Epidemiological Studies with Long-Term Follow-Up.",
+        "Journal of Statistical Software, 38(5), 1-12.",
+        "URL http://www.jstatsoft.org/v38/i05/."),
+
+  header = "If you use Lexis objects/diagrams, please also cite:"
+)
+
+citEntry(entry = "Article",
+  title        = "Using {Lexis} Objects for Multi-State Models in {R}",
+  author       = personList(as.person("Bendix Carstensen"),
+                   as.person("Martyn Plummer")),
+  journal      = "Journal of Statistical Software",
+  year         = "2011",
+  volume       = "38",
+  number       = "6",
+  pages        = "1--18",
+  url          = "http://www.jstatsoft.org/v38/i06/",
+
+  textVersion  =
+  paste("Bendix Carstensen, Martyn Plummer (2011).",
+        "Using Lexis Objects for Multi-State Models in R.",
+        "Journal of Statistical Software, 38(6), 1-18.",
+        "URL http://www.jstatsoft.org/v38/i06/."),
+
+  header = "For use of Lexis objects in multi-state models, please also cite:"
+)
+

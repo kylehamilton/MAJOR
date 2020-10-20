@@ -1,0 +1,530 @@
+%\VignetteIndexEntry{Years of life lost (YLL)}
+\SweaveOpts{results=verbatim,keep.source=TRUE,include=FALSE,eps=FALSE}
+\documentclass[a4paper,twoside,12pt]{report}
+
+\newcommand{\Title}{Years of Life Lost (YLL)
+  to disease\\Diabetes in DK as example}
+\newcommand{\Tit}{YLL}
+\newcommand{\Version}{February 1.2}
+\newcommand{\Dates}{November 2017}
+\newcommand{\Where}{SDC}
+\newcommand{\Homepage}{\url{http://bendixcarstensen.com/Epi}}
+\newcommand{\Faculty}{\begin{tabular}{rl}
+Bendix Carstensen
+  & Steno Diabetes Center, Gentofte, Denmark\\
+  & {\small \& Department of Biostatistics,
+               University of Copenhagen} \\
+  & \texttt{b@bxc.dk}\\
+  & \url{http://BendixCarstensen.com} \\[1em]
+                      \end{tabular}}
+\input{topreport}
+<<echo=FALSE>>=
+options( width=90,
+         SweaveHooks=list( fig=function()
+         par(mar=c(3,3,1,1),mgp=c(3,1,0)/1.6,las=1,bty="n") ) )
+@ %
+\renewcommand{\rwpre}{./yll}
+
+\chapter{Theory and technicalities}
+
+This vignette for the \texttt{Epi} package describes the
+probabilistic and demographic background for and technical implementation
+of the \texttt{erl} and \texttt{yll} functions that computes the
+expected residual life time and years of life lost in an illness-death
+model.
+
+\section{Years of life lost (YLL)}
+
+\ldots to diabetes or any other disease for that matter.
+
+The general concept in calculation of ``years lost to\ldots'' is the
+comparison of the expected lifetime between two groups of persons; one
+with and one without disease (in this example DM). The expected
+lifetime is the area under the survival curve, so basically the
+exercise requires that two survival curves that are deemed relevant be
+available.
+
+The years of life lost is therefore just the area between the survival
+curves for those ``Well'', $S_W(t)$, and for those ``Diseased'',
+$S_D(t)$:
+\[
+  \YLL = \int_0^\infty S_W(t) - S_D(t) \dif t
+\]
+The time $t$ could of course be age, but it could also be ``time after
+age 50'' and the survival curves compared would then be survival
+curves \emph{conditional} on survival till age 50, and the YLL would
+be the years of life lost for a 50-year old person with diabetes.
+
+If we are referring to the expected lifetime we will more precisely use
+the label expected residual lifetime, ERL.
+
+\section{Constructing the survival curves}
+
+YLL can be computed in two different ways, depending on the way the
+survival curve and hence the expected lifetime of a person
+\emph{without} diabetes is computed:
+\begin{itemize}
+\item Assume that the ``Well'' persons are \emph{immune} to disease
+  --- using only the non-DM mortality rates throughout for calculation
+  of expected life time.
+\item Assume that the ``Well'' persons \emph{can} acquire the disease and
+  thereby see an increased mortality, thus involving all three rates
+  shown in figure \ref{fig:states}.
+\end{itemize}
+The former gives a higher YLL because the comparison is to persons
+assumed immune to DM (and yet with the same mortality as non-immune
+prior to diagnosis), the latter gives a more realistic picture of the
+comparison of group of persons with and without diabetes at a given
+age that can be interpreted in the real world.
+
+The differences can be illustrated by figure \ref{fig:states}; the
+immune approach corresponds to an assumption of $\lambda(t)=0$ in the
+calculation of the survival curve for a person in the ``Well'' state.
+
+Calculation of the survival of a diseased person already in the ``DM''
+state is unaffected by assumptions about $\lambda$.
+
+<<states,fig=TRUE,height=5,width=5,echo=FALSE>>=
+library( Epi )
+TM <- matrix(NA,4,4)
+rownames(TM) <-
+colnames(TM) <- c("Well","DM","Dead","Dead(DM)") 
+TM[1,2:3] <- TM[2,4] <- 1
+zz <- boxes( TM, boxpos=list(x=c(20,80,20,80),y=c(80,80,20,20)), wm=1.5, hm=4 )
+@ 
+<<states,fig=TRUE,height=4,width=5,echo=FALSE>>=
+zz$Arrowtext <- c( expression(lambda),   
+                   expression(mu[W]),    
+                   expression(mu[D][M]) )
+boxes( zz )
+@ %
+\insfig{states}{0.7}{Illness-death model describing diabetes incidence
+  and -mortality.}
+
+\subsection{Total mortality --- a shortcut?}
+
+A practical crude shortcut could be to compare the ERL in the diabetic
+population to the ERL for the \emph{entire} population (that is use
+the total mortality ignoring diabetes status).
+
+Note however that this approach also counts the mortality of persons
+that acquired the disease earlier, thus making the comparison
+population on average more ill than the population we aim at, namely
+those well at a given time, which only then become more gradually ill. 
+
+How large these effects are can however be empirically explored, as we
+shall do later.
+
+\subsection{Disease duration}
+
+In the exposition above there is no explicit provision for the effect of
+disease duration, but if we were able to devise mortality rates for
+any combination of age and duration, this could be taken into account.
+
+There are however severe limitations in this as we in principle would
+want to have duration effects as long as the age-effects --- in
+principle for all $(a,d)$ where $d\leq A$, where $A$ is the age at
+which we condition. So even if we were only to compute ERL from
+age, say, 40 we would still need duration effects up to 60 years
+(namely to age 100).
+
+The incorporation of duration effects is in principle trivial from a
+computational point of view, but we would be forced to entertain
+models predicting duration effects way beyond what is actually
+observed disease duration in any practical case.
+
+\subsection{Computing integrals}
+
+The practical calculations of survival curves, ERL and YLL involves
+calculation of (cumulative) integrals of rates and functions of these
+as we shall see below. This is easy if we have a closed form
+expression of the function, so its value may be computed at any time
+point --- this will be the case if we model rates by smooth parametric
+functions.
+
+Computing the (cumulative) integral of a function is done as follows: 
+\begin{itemize}
+\item Compute the value of the function (mortality rate for example)
+  at the midpoints of a sequence of narrow equidistant intervals ---
+  for example one- or three month intervals of age, say.
+\item Take the cumulative sum of these values multiplied by the
+  interval length --- this will be a very close approximation to the
+  cumulative integral evaluated at the end of each interval.
+\item If the intervals are really small (like 1/100 year), the
+  distinction between the value at the middle and at the end of each
+  interval becomes irrelevant.
+\end{itemize}
+Note that in the above it is assumed that the rates are given in units
+corresponding to the interval length --- or more precisely, as the
+cumulative rates over the interval.
+
+\section{Survival functions in the illness-death model}
+
+The survival functions for persons in the ``Well'' state can be
+computed under two fundamentally different scenarios, depending on
+whether persons in the ``Well'' state are assumed to be immune to the
+disease ($\lambda(a)=0$) or not.
+
+\subsection{Immune approach}
+
+In this case both survival functions for person in the two states are
+the usual simple transformation of the cumulative mortality rates:
+\[
+ S_W(a) = \exp\left(-\int_0^a\!\!\mu_W(u) \dif u \right), \qquad
+ S_D(a) = \exp\left(-\int_0^a\!\!\mu_D(u) \dif u \right)
+\]
+
+\subsubsection{Conditional survival functions}
+
+If we want the \emph{conditional} survival functions given survival to
+age $A$, say, they are just:
+\[
+ S_W(a|A) = S_W(a)/S_W(A), \qquad S_D(a|A) = S_D(a)/S_D(A)
+\]
+
+\subsection{Non-immune approach}
+
+For a diseased person, the survival function in this states is the same
+as above, but the survival function for a person without disease (at
+age 0) is (see figure \ref{fig:states}):
+\[
+S(a) = \ptxt{Well}\!(a) + \ptxt{DM}\!(a)
+\]
+In the appendix of the paper \cite{Carstensen.2008c} is an indication
+of how to compute the probability of being in any of the four states
+shown in figure \ref{fig:states}, which I shall repeat here:
+
+In terms of the rates, the probability of being in the ``Well'' box is
+simply the probability of escaping both death (at a rate of $\mu_W(a)$)
+and diabetes (at a rate of $\lambda(a)$):
+\[  
+   \ptxt{Well}(a)  = \exp\left(\!-\int_0^a\!\!\mu_W(u)+\lambda(u) \right) \dif u
+\]
+The probability of being alive with diabetes at age $a$, is computed given that
+ diabetes occurred at age $s$ ($s<a$) and then integrated over $s$ from $0$
+ to $a$:
+\begin{align*}
+ \ptxt{DM}(a) = \int_0^a\!\! & \ptxt{survive to $s$, DM diagnosed at $s$} \\
+                & \times \ptxt{survive with DM from $s$ to $a$} \dif s \\
+              = \int_0^a\!\! & \lambda(s) 
+                           \exp\left(\!-\int_0^s\!\!\mu_W(u)+\lambda(u) \dif u \right) \\
+                & \times \exp\left(\!-\int_s^a\!\!\mu_D(u) \dif u \right) \dif s
+\end{align*}
+Sometimes we will use a version where the mortality among diabetes
+patients depend both on age $a$ and duration of diabetes, $d$,
+$\mu_D(a,d)$, in which case we get:
+\begin{align*}
+ \ptxt{DM}(a) = \int_0^a \! & \lambda(s) 
+                           \exp\left(-\int_0^s\!\mu_W(u)+\lambda(u) \dif u \right) \\
+                & \times \exp\left(-\int_s^a\!\mu_D(u,u-s) \dif u \right) \dif s
+\end{align*}
+because the integration variable $u$ is the age-scale and the second
+integral refers to mortality among persons diagnosed at age $s$, that
+is, with duration $u-s$ at age $u$.
+
+The option of using duration-dependent mortality rates among diseased
+individuals is not implemented yet.
+
+\subsubsection{Conditional survival functions}
+
+Unlike the immune approach, the conditional survival function in the
+more realistic case is not just a ratio of the unconditional to the
+value at the conditioning age, $A$, say. This would amount to
+conditioning on being merely \emph{alive} at age $A$, but what we want
+is to condition on being in the ``Well'' state at age $A$.
+
+The formulae for the conditional probabilities of being either in
+``Well'' or ``DM'', given being in ``Well'' at age $A$ are basically
+replicates of the unconditional, albeit with changes in integration
+limits:
+\begin{align*}
+\ptxt{Well|Well at $A$}(a) &= \exp\left(-\int_A^a \! \mu_W(u)+\lambda(u) \right) \dif u \\
+  \ptxt{DM|Well at $A$}(a) &= \int_A^a \! \lambda(s) 
+                               \exp\left(-\int_A^s\!\mu_W(u)+\lambda(u) \dif u \right) \\
+                           & \qquad \times \exp\left(-\int_s^a\!\mu_D(u,u-s) \dif u \right) \dif s
+\end{align*}
+The calculation of these conditional survival functions is implemented
+but not allowing for duration-dependence. Thus it is only implemented
+assuming $\mu_D(a,d)=\mu_D(a)$.
+
+\chapter{Analyses for DM in Denmark}
+
+The rates we use as basis for the following calculations are derived
+from the NDR, where we have omitted the blood-glucose criteria,
+because there is compelling evidence that these have quite a low
+specificity (particularly in the younger ages among women), and do
+not substantially contribute to the sensitivity.
+
+As noted above the calculations of YLL requires access to
+(age-specific) rates of incidence of DM and mortality for persons with
+and without DM.
+
+\section{Modeling mortality and incidence data}
+
+We read in the dataset of DM and population mortality and incidence, \texttt{DMepi}:
+<<>>=
+data( DMepi )
+@ % 
+The dataset \texttt{DMepi} contains diabetes events, deaths and
+person-years for persons without diabetes and deaths and person-years
+for persons with diabetes:
+<<>>=
+str( DMepi )
+head( DMepi )
+@ %
+For each combination of sex, age, period and date of birth in 1 year
+age groups, we have the person-years in the ``Well'' (\texttt{Y.nD})
+and the ``DM'' (\texttt{Y.DM}) states, as well as the number of deaths
+from these (\texttt{D.nD}, \texttt{D.DM}) and the number of incident
+diabetes cases from the ``Well'' state (\texttt{X}).
+
+In order to compute the years of life lost to diabetes and how this
+has changed over time, we fit models for the mortality and incidence
+of both groups (and of course, separately for men and women). The
+models we use will be age-period-cohort models \cite{Carstensen.2007a}
+providing estimated mortality rates for ages 0--99 and dates
+1.1.1996--1.1.2016.
+
+First we transform the age and period variables to reflect the mean
+age and period in each of the Lexis triangles. We also compute the
+total number of deaths and amount of risk time, as we are going to
+model the total mortality as well. Finally we restrict the dataset to
+ages over 30 only:
+<<>>=
+DMepi <- transform( subset( DMepi, A>30 ),
+                    D.T = D.nD + D.DM, 
+                    Y.T = Y.nD + Y.DM )
+head(DMepi)
+@ %
+With the correct age and period coding in the Lexis triangles, we fit
+models for the mortalities and incidences. Note that we for
+comparative purposes also fit a model for the \emph{total} mortality,
+ignoring the 
+<<>>=
+# Knots used in all models
+( a.kn <- seq(40,95,,6) )
+( p.kn <- seq(1997,2015,,4) )
+( c.kn <- seq(1910,1976,,6) )
+# Check the number of events between knots
+ae <- xtabs( cbind(D.nD,D.DM,X) ~ cut(A,c(30,a.kn,Inf)) + sex, data=DMepi )
+ftable( addmargins(ae,1), col.vars=3:2 )
+pe <- xtabs( cbind(D.nD,D.DM,X) ~ cut(P,c(1990,p.kn,Inf)) + sex, data=DMepi )
+ftable( addmargins(pe,1), col.vars=3:2 )
+ce <- xtabs( cbind(D.nD,D.DM,X) ~ cut(P-A,c(-Inf,c.kn,Inf)) + sex, data=DMepi )
+ftable( addmargins(ce,1), col.vars=3:2 )
+# Fit an APC-model for all transitions, seperately for men and women
+mW.m <- glm( D.nD ~ -1 + Ns(A  ,knots=a.kn,int=TRUE) +
+                         Ns(  P,knots=p.kn,ref=2005) +
+                         Ns(P-A,knots=c.kn,ref=1950), 
+           offset = log(Y.nD),
+           family = poisson,
+             data = subset( DMepi, sex=="M" ) )
+mD.m <- update( mW.m,  D.DM ~ . , offset=log(Y.DM) )
+mT.m <- update( mW.m,  D.T  ~ . , offset=log(Y.T ) )
+lW.m <- update( mW.m,  X ~ . )
+# Model for women
+mW.f <- update( mW.m, data = subset( DMepi, sex=="F" ) )
+mD.f <- update( mD.m, data = subset( DMepi, sex=="F" ) )
+mT.f <- update( mT.m, data = subset( DMepi, sex=="F" ) )
+lW.f <- update( lW.m, data = subset( DMepi, sex=="F" ) )
+@ % 
+
+\section{Residual life time and years lost to DM}
+
+We now collect the estimated years of life lost classified by method
+(immune assumption or not), sex, age and calendar time:
+<<>>=
+a.ref <- 30:90
+p.ref <- 1996:2016
+aYLL <- NArray( list( type = c("Imm","Tot","Sus"),
+                       sex = levels( DMepi$sex ),
+                       age = a.ref,
+                      date = p.ref ) )
+str( aYLL )
+system.time(
+for( ip in p.ref )
+   {
+   nd <- data.frame( A = seq(30,90,0.2)+0.1,
+                     P = ip,
+                  Y.nD = 1,
+                  Y.DM = 1,
+                  Y.T  = 1 )
+   muW.m <- ci.pred( mW.m, nd )[,1]
+   muD.m <- ci.pred( mD.m, nd )[,1]
+   muT.m <- ci.pred( mT.m, nd )[,1]
+   lam.m <- ci.pred( lW.m, nd )[,1]
+   muW.f <- ci.pred( mW.f, nd )[,1]
+   muD.f <- ci.pred( mD.f, nd )[,1]
+   muT.f <- ci.pred( mT.f, nd )[,1]
+   lam.f <- ci.pred( lW.f, nd )[,1]
+   aYLL["Imm","M",,paste(ip)] <- yll( int=0.2, muW.m, muD.m, lam=NULL, 
+                                      A=a.ref, age.in=30, note=FALSE )[-1]
+   aYLL["Imm","F",,paste(ip)] <- yll( int=0.2, muW.f, muD.f, lam=NULL,  
+                                      A=a.ref, age.in=30, note=FALSE )[-1]
+   aYLL["Tot","M",,paste(ip)] <- yll( int=0.2, muT.m, muD.m, lam=NULL,  
+                                      A=a.ref, age.in=30, note=FALSE )[-1]
+   aYLL["Tot","F",,paste(ip)] <- yll( int=0.2, muT.f, muD.f, lam=NULL,  
+                                      A=a.ref, age.in=30, note=FALSE )[-1]
+   aYLL["Sus","M",,paste(ip)] <- yll( int=0.2, muW.m, muD.m, lam=lam.m, 
+                                      A=a.ref, age.in=30, note=FALSE )[-1]
+   aYLL["Sus","F",,paste(ip)] <- yll( int=0.2, muW.f, muD.f, lam=lam.f, 
+                                      A=a.ref, age.in=30, note=FALSE )[-1]
+   } )
+round( ftable( aYLL[,,seq(1,61,10),], col.vars=c(3,2) ), 1 )
+@ %
+We now have the relevant points for the graph showing YLL to diabetes
+for men and women by age, and calendar year, both under the immunity
+and susceptibility models for the calculation of YLL.
+<<imm,fig=TRUE,width=8,height=5>>=
+plyll <- function(wh){
+par( mfrow=c(1,2), mar=c(3,3,1,1), mgp=c(3,1,0)/1.6, bty="n", las=1 )
+
+matplot( a.ref, aYLL[wh,"M",,],
+         type="l", lty=1, col="blue", lwd=1:2,
+         ylim=c(0,12), xlab="Age",
+         ylab="Years lost to DM", yaxs="i" )
+abline(v=50,h=1:10,col=gray(0.7))
+text( 90, 11, "Men", col="blue", adj=1 )
+text( 40, aYLL[wh,"M","40","1996"], "1996", adj=c(0,0), col="blue" )
+text( 43, aYLL[wh,"M","44","2016"], "2016", adj=c(1,1), col="blue" )
+
+matplot( a.ref, aYLL[wh,"F",,],
+         type="l", lty=1, col="red", lwd=1:2,
+         ylim=c(0,12), xlab="Age",
+         ylab="Years lost to DM", yaxs="i" )
+abline(v=50,h=1:10,col=gray(0.7))
+text( 90, 11, "Women", col="red", adj=1 )
+text( 40, aYLL[wh,"F","40","1996"], "1996", adj=c(0,0), col="red" )
+text( 43, aYLL[wh,"F","44","2016"], "2016", adj=c(1,1), col="red" )
+}
+plyll("Imm")
+@ %
+<<tot,fig=TRUE,width=8,height=5>>=
+plyll("Tot")
+@ %
+<<sus,fig=TRUE,width=8,height=5>>=
+plyll("Sus")
+@ %
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{yll-imm}
+  \caption{Years of life lost to DM: the difference in expected
+    residual life time at different ages between persons with and
+    without diabetes, assuming the persons without diabetes at a given
+    age remain free from diabetes (immunity assumption --- not
+    reasonable). The lines refer to date of evaluation; the top lines
+    refer to 1.1.1996 the bottom ones to 1.1.2016. Blue curves are
+    men, red women.}
+  \label{fig:imm}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{yll-sus}
+  \caption{Years of life lost to DM: the difference in expected
+    residual life time at different ages between persons with and
+    without diabetes, allowing the persons without diabetes at a given
+    to contract diabetes and thus be subject to higher mortality. The
+    lines refer to date of evaluation; the top lines refer to 1.1.1996
+    the bottom ones to 1.1.2016. Blue curves are men, red women.}
+  \label{fig:sus}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{yll-tot}
+  \caption{Years of life lost to DM: the difference in expected
+    residual life time at different ages between persons with and
+    without diabetes. Allowance for susceptibility is approximated by
+    using the total population mortality instead of non-DM
+    mortality. The lines refer to date of evaluation; the top lines
+    refer to 1.1.1996 the bottom ones to 1.1.2016. Blue curves are
+    men, red women.}
+  \label{fig:tot}
+\end{figure}
+
+From figure \ref{fig:sus} we see that for men aged 50 the years lost to
+diabetes has decreased from a bit over 8 to a bit less than 6 years,
+and for women from 8.5 to 5 years; so a greater improvement for women.
+
+\chapter{Practical implementation}
+
+We have devised functions that wraps these formulae up for practical
+use.
+
+\section{Function definitions}
+
+% The following code sources the originally formatted code in erl.R in
+% order to make it printable with all the formatting and comments in
+% it. However the sourcing does not work when compiling the vignettes
+% in R CMD build. So when checking the code we comment this out by
+% putting eval=FALSE. So depending on whether we actually construct
+% the pdf for the inst/doc folder or test (upload) the package, one of
+% the following two chunks are run with eval=FALSE and the other with
+% eval=TRUE.
+<<CHANGE1,echo=FALSE,results=hide,eval=FALSE>>=
+source( "../R/erl.R", keep.source=TRUE )
+@ %
+% When checking the package
+<<CHANGE2,echo=FALSE,results=hide,eval=TRUE>>=
+surv1 <- Epi::surv1
+surv2 <- Epi::surv2
+erl1 <- Epi::erl1
+erl <- Epi::erl
+yll <- Epi::yll
+@ %
+When using the functions it is assumed that the functions $\mu_W$,
+$\mu_D$ and $\lambda$ are given as vectors corresponding to
+equidistantly (usually tightly) spaced ages from 0 to $K$ where K is
+the age where everyone can safely be assumed dead.
+
+\texttt{surv1} is a simple function that computes the survival
+function from a vector of mortality rates, and optionally the
+conditional survival given being alive at prespecified ages:
+<<>>=
+surv1
+@ %
+\texttt{erl1} basically just expands the result of \texttt{surv1} with
+a column of expected residual life times:
+<<>>=
+erl1
+@ %
+We also define a function, \texttt{surv2}, that computes the survival
+function for a non-diseased person that may become diseased with rate
+\texttt{lam} and after that die at a rate of \texttt{muD}
+(corresponding to the formulae above). This is the sane way of
+handling years of life lost to a particular illness:
+<<>>=
+surv2
+@ %
+Finally we devised a function using these to compute the expected
+residual lifetime at select ages:
+<<>>=
+erl
+@ %
+\ldots and a wrapper for this if we only want the years of life lost
+returned:
+<<>>=
+yll
+@ %
+
+\bibliographystyle{plain}
+
+\begin{thebibliography}{1}
+
+\bibitem{Carstensen.2007a}
+B~Carstensen.
+\newblock Age-{P}eriod-{C}ohort models for the {L}exis diagram.
+\newblock {\em Statistics in Medicine}, 26(15):3018--3045, 2007.
+
+\bibitem{Carstensen.2008c}
+B~Carstensen, JK~Kristensen, P~Ottosen, and K~Borch-Johnsen.
+\newblock The {D}anish {N}ational {D}iabetes {R}egister: {T}rends in incidence,
+  prevalence and mortality.
+\newblock {\em Diabetologia}, 51:2187--2196, 2008.
+
+\end{thebibliography}
+
+\addcontentsline{toc}{chapter}{References}
+
+\end{document}

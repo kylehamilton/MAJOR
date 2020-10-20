@@ -28,6 +28,9 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             pchForest = "15",
             forestOrder = "fit",
             fsntype = "Rosenthal",
+            tesAlternative = "two.sided",
+            tesAlpha = 0.5,
+            tesH0 = 0,
             yaxis = "sei",
             yaxisInv = FALSE,
             enhanceFunnel = FALSE,
@@ -195,6 +198,26 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "Orwin",
                     "Rosenberg"),
                 default="Rosenthal")
+            private$..tesAlternative <- jmvcore::OptionList$new(
+                "tesAlternative",
+                tesAlternative,
+                options=list(
+                    "two.sided",
+                    "less",
+                    "greater"),
+                default="two.sided")
+            private$..tesAlpha <- jmvcore::OptionNumber$new(
+                "tesAlpha",
+                tesAlpha,
+                min=0.000001,
+                max=1,
+                default=0.5)
+            private$..tesH0 <- jmvcore::OptionNumber$new(
+                "tesH0",
+                tesH0,
+                min=-9999,
+                max=9999,
+                default=0)
             private$..yaxis <- jmvcore::OptionList$new(
                 "yaxis",
                 yaxis,
@@ -262,6 +285,9 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..pchForest)
             self$.addOption(private$..forestOrder)
             self$.addOption(private$..fsntype)
+            self$.addOption(private$..tesAlternative)
+            self$.addOption(private$..tesAlpha)
+            self$.addOption(private$..tesH0)
             self$.addOption(private$..yaxis)
             self$.addOption(private$..yaxisInv)
             self$.addOption(private$..enhanceFunnel)
@@ -294,6 +320,9 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         pchForest = function() private$..pchForest$value,
         forestOrder = function() private$..forestOrder$value,
         fsntype = function() private$..fsntype$value,
+        tesAlternative = function() private$..tesAlternative$value,
+        tesAlpha = function() private$..tesAlpha$value,
+        tesH0 = function() private$..tesH0$value,
         yaxis = function() private$..yaxis$value,
         yaxisInv = function() private$..yaxisInv$value,
         enhanceFunnel = function() private$..enhanceFunnel$value,
@@ -325,6 +354,9 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..pchForest = NA,
         ..forestOrder = NA,
         ..fsntype = NA,
+        ..tesAlternative = NA,
+        ..tesAlpha = NA,
+        ..tesH0 = NA,
         ..yaxis = NA,
         ..yaxisInv = NA,
         ..enhanceFunnel = NA,
@@ -348,6 +380,7 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         funplot = function() private$.items[["funplot"]],
         resultsTES = function() private$.items[["resultsTES"]],
         resultsTES2 = function() private$.items[["resultsTES2"]],
+        tesOutput3 = function() private$.items[["tesOutput3"]],
         TOSToutput = function() private$.items[["TOSToutput"]],
         TOSToutputtext = function() private$.items[["TOSToutputtext"]],
         tostplot = function() private$.items[["tostplot"]],
@@ -565,6 +598,10 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `title`="Max", 
                         `type`="number", 
                         `format`="zto"))))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="tesOutput3",
+                title="Test of Excess Significance | Results"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="TOSToutput",
@@ -754,6 +791,9 @@ metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param pchForest .
 #' @param forestOrder .
 #' @param fsntype .
+#' @param tesAlternative .
+#' @param tesAlpha .
+#' @param tesH0 .
 #' @param yaxis .
 #' @param yaxisInv .
 #' @param enhanceFunnel .
@@ -774,6 +814,7 @@ metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$funplot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$resultsTES} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$resultsTES2} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$tesOutput3} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$TOSToutput} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$TOSToutputtext} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$tostplot} \tab \tab \tab \tab \tab an image \cr
@@ -819,6 +860,9 @@ metaMeanDiff <- function(
     pchForest = "15",
     forestOrder = "fit",
     fsntype = "Rosenthal",
+    tesAlternative = "two.sided",
+    tesAlpha = 0.5,
+    tesH0 = 0,
     yaxis = "sei",
     yaxisInv = FALSE,
     enhanceFunnel = FALSE,
@@ -875,6 +919,9 @@ metaMeanDiff <- function(
         pchForest = pchForest,
         forestOrder = forestOrder,
         fsntype = fsntype,
+        tesAlternative = tesAlternative,
+        tesAlpha = tesAlpha,
+        tesH0 = tesH0,
         yaxis = yaxis,
         yaxisInv = yaxisInv,
         enhanceFunnel = enhanceFunnel,

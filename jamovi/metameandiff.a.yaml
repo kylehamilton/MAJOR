@@ -204,6 +204,32 @@ options:
           title: Rosenberg
       default: Rosenthal
 
+    - name: tesAlternative
+      title: Test of Excess Significance | Hypothesis test type
+      type: List
+      options:
+        - name: "two.sided"
+          title: Two Sided
+        - name: "less"
+          title: Less
+        - name: "greater"
+          title: Greater
+      default: two.sided
+
+    - name: tesAlpha
+      type: Number
+      title: Test of Excess Significance | Alpha level
+      min: 0.000001
+      max: 1
+      default: 0.5
+      
+    - name: tesH0
+      type: Number
+      title: Test of Excess Significance | Effect size under the null hypothesis
+      min: -9999
+      max: 9999
+      default: 0
+      
     - name: yaxis
       title: Funnel plot y-axis options
       type: List

@@ -134,7 +134,7 @@ items:
       height: 450
       renderFun: .funplot
       refs: [ metafor ] 
-
+          
     - name:  resultsTES
       title: Test of Excess Significance | Significant Findings
       type: Table
@@ -176,6 +176,10 @@ items:
           type: number
           format: zto
 
+    - name:  tesOutput3
+      title: "Test of Excess Significance | Results"
+      type: Html
+          
     - name:  TOSToutput
       title: "Two One-Sided Tests Equivalence Testing"
       refs: [ TOSTER ]

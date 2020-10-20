@@ -32,7 +32,10 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         lowerTOST <- self$options$lowerTOST
         upperTOST <- self$options$upperTOST
         alphaTOST <- self$options$alphaTOST
-        
+        tesAlternative <- self$options$tesAlternative
+        tesAlpha <- self$options$tesAlpha
+        tesH0 <- self$options$tesH0
+
         ready <- TRUE
         if (is.null(self$options$n1i) ||
             is.null(self$options$m1i) ||
@@ -606,7 +609,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         
         # Test of Excess Significance
         
-        TES <- tes(res)
+        TES <- tes(res, H0 = tesH0, alternative = tesAlternative, alpha = tesAlpha)
         resultsTES <- self$results$resultsTES
         resultsTES$setRow(
         rowNo = 1,
@@ -647,7 +650,32 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         )
         
         
-        resultsTES2
+        tesNote2 <-
+          paste("Estimated Power of Tests (based on theta = ",
+                round(TES[["theta"]], 4),
+                ")",
+                sep = "")
+
+        resultsTES2$setNote("tesNoteTable", tesNote2)
+        
+        tesOutput3 <- self$results$tesOutput3
+        tesResults3 <-
+          paste(
+            "Test of Excess Significance: p = ",
+            round(TES[["pval"]], 4),
+            " ( X^2 = ",
+            round(TES[["X2"]], 4),
+            ", df = 1). Limit Estimate: ",
+            round(TES[["theta.lim"]], 4),
+            " (where p = ",
+            round(TES[["tes.alpha"]], 4),
+            ")",
+            sep = ""
+          )
+        
+        tesOutput3$setContent(tesResults3)
+
+        
           #Model Fit
           modelFitRICH <- self$results$modelFitRICH
           modelFitRICH$setRow(

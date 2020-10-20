@@ -1,0 +1,34 @@
+------------------------------------------------------------------------------
+  dfoptim                                                               NEWS
+------------------------------------------------------------------------------
+
+Changes in version 2018.2-1 (2018-4-01)
+	o Set oshrink=1 to enable "restarting" of Nelder-Mead due to stagnation (thanks to Simon Wessing)
+
+Changes in version 2017.12-1 (2017-12-20)
+	o fixed a bug in the code, which impacts the "restarting" of Nelder-Mead due to stagnation (thanks to Simon Wessing)
+
+Changes in version 2016.7-1 (2011-07-08)
+
+    o Used a slightly modified code for hjk() and hjkb()
+
+Changes in version 2011.8-1 (2011-08-12)
+
+    o Bounds constrained Hooke-Jeeves hjkb()
+
+Changes in version 2011.7-2 (2011-07-26)
+
+    o Bounds constrained Nelder-Mead nmkb().
+
+Changes in version 2011.7-1
+
+    o Hooke-Jeeves minimization routine hjk().
+
+Changes in version 2011.5-1
+  
+    o Fixed minor bug in the re-definition of objective function inside
+      for maximization.
+
+Initial version
+
+    o Nelder-Mead minimization routine nmk().
