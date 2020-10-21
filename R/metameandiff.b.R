@@ -36,7 +36,8 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         tesAlpha <- self$options$tesAlpha
         tesH0 <- self$options$tesH0
         selModelOutput <- self$results$selModelOutput
-
+        data2 <- self$data
+        
         ready <- TRUE
         if (is.null(self$options$n1i) ||
             is.null(self$options$m1i) ||
@@ -146,6 +147,8 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
               jmvcore::reject("Must Supply a Moderator Variable", code =
                                 '')
             }
+            
+            
             
             data <-
               data.frame(

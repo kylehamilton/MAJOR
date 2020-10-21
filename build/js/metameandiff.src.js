@@ -129,20 +129,6 @@ view.layout = ui.extend({
 							isTarget: true
 						}
 					]
-				},
-				{
-					type: DefaultControls.TargetLayoutBox,
-					typeName: 'TargetLayoutBox',
-					label: "Moderator (optional)",
-					controls: [
-						{
-							type: DefaultControls.VariablesListBox,
-							typeName: 'VariablesListBox',
-							name: "moderatorcor",
-							maxItemCount: 1,
-							isTarget: true
-						}
-					]
 				}
 			]
 		},
@@ -195,6 +181,28 @@ view.layout = ui.extend({
 							typeName: 'CheckBox',
 							name: "testType",
 							useSingleCell: true
+						}
+					]
+				}
+			]
+		},
+		{
+			type: DefaultControls.VariableSupplier,
+			typeName: 'VariableSupplier',
+			persistentItems: false,
+			stretchFactor: 1,
+			controls: [
+				{
+					type: DefaultControls.TargetLayoutBox,
+					typeName: 'TargetLayoutBox',
+					label: "Moderator",
+					controls: [
+						{
+							type: DefaultControls.VariablesListBox,
+							typeName: 'VariablesListBox',
+							name: "moderatorcor",
+							maxItemCount: 1,
+							isTarget: true
 						}
 					]
 				}
