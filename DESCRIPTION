@@ -8,5 +8,5 @@ Description: This module allows you to run a meta-analysis and is based on the R
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: jmvcore (>= 0.5.5), R6, bayesmeta, ggplot2, TOSTER, pkgconfig, graphics, stats, pwr, stringr, poibin, esc, remotes, nlme, pbapply, numDeriv, utils, grDevices, lme4, minqa, nloptr, dfoptim, ucminf, CompQuadForm, mvtnorm, BiasedUrn, Epi, gsl, sp, boot, R.rsp, methods, Matrix 
+Imports: jmvcore (>= 0.5.5), R6, bayesmeta, ggplot2, TOSTER, pkgconfig, graphics, stats, pwr, stringr, poibin, esc, remotes, nlme, pbapply, numDeriv, utils, grDevices, lme4, CompQuadForm, mvtnorm, BiasedUrn, Epi, gsl, sp, boot, R.rsp, methods, Matrix 
 Remotes: kylehamilton/metafor

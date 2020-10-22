@@ -36,7 +36,8 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         tesAlpha <- self$options$tesAlpha
         tesH0 <- self$options$tesH0
         selModelOutput <- self$results$selModelOutput
-
+        data2 <- self$data
+        
         ready <- TRUE
         if (is.null(self$options$n1i) ||
             is.null(self$options$m1i) ||
@@ -47,7 +48,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           # I really need to think of a better error message this is a place holder until I figure something out
           jmvcore::reject(
             "Sample Size, Mean, Standard Deviation and Study Label fields must be populated to run analysis",
-            code = ''
+            code = 'samplesize_mean_sd_label_BLANK'
           )
         }
         if (is.null(self$options$slab) == TRUE) {
@@ -147,6 +148,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
                                 '')
             }
             
+            
             data <-
               data.frame(
                 n1i = self$data[[self$options$n1i]],
@@ -164,7 +166,6 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             data[[n2i]] <- jmvcore::toNumeric(data[[n2i]])
             data[[m2i]] <- jmvcore::toNumeric(data[[m2i]])
             data[[sd2i]] <- jmvcore::toNumeric(data[[sd2i]])
-            data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
             
             if (self$options$testType == FALSE) {
               res <-

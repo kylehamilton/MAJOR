@@ -10,8 +10,7 @@ Encoding: UTF-8
 LazyData: true
 Imports: jmvcore (>= 0.5.5), R6, bayesmeta, ggplot2, TOSTER, pkgconfig,
         graphics, stats, pwr, stringr, poibin, esc, remotes, nlme,
-        pbapply, numDeriv, utils, grDevices, lme4, minqa, nloptr,
-        dfoptim, ucminf, CompQuadForm, mvtnorm, BiasedUrn, Epi, gsl,
-        sp, boot, R.rsp, methods, Matrix
+        pbapply, numDeriv, utils, grDevices, lme4, CompQuadForm,
+        mvtnorm, BiasedUrn, Epi, gsl, sp, boot, R.rsp, methods, Matrix
 Remotes: kylehamilton/metafor
-Built: R 3.6.1; ; 2020-10-20 21:12:43 UTC; windows
+Built: R 3.6.1; ; 2020-10-22 00:07:17 UTC; windows
