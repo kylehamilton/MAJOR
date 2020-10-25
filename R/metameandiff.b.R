@@ -38,6 +38,8 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         selModelOutput <- self$results$selModelOutput
         puniformModelOutput <- self$results$puniformModelOutput
         puniformModelOutput2 <- self$results$puniformModelOutput2
+        puniformSide <- self$options$puniformSide
+        selModelType <- self$options$selModelType
         
         data2 <- self$data
         
@@ -636,33 +638,75 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
 
         # Selection Models for pub bias
         
-        selOutput <- selmodel(res, type="negexp")
+        if(selModelType == "stepfun"){
+          selOutput <- try(selmodel(res, type="stepfun", steps=c(0.05, 1)), silent = TRUE)
+        } else {
+          selOutput <- try(selmodel(res, type=selModelType), silent = TRUE)
+        }
         
         selModelOutput <- self$results$selModelOutput
         
+        if (is.character(selOutput) == TRUE) {
+          selModelOutput$setRow(
+            rowNo = 1,
+            values = list(
+              deltaEstimate = 0,
+              deltaSE = 0,
+              deltaZ = 0,
+              deltaPVAL = 0,
+              deltaCILB = 0,
+              deltaCIUB = 0
+            )
+          )
+          selModelOutput$setNote("selModelOutputType", "Error during optimization, select another model type")
+        }  
+        
+        if (is.list(selOutput) == TRUE) {
         selModelOutput$setRow(
           rowNo = 1,
           values = list(
-            deltaLabel = "Intercept",
-            #deltaK = selOutput[["ptable"]][["k"]][[1]],
-            deltaK = 1,
-            deltaEstimate = selOutput[["delta"]][[1]]
+            deltaEstimate = selOutput[["delta"]][[1]],
+            deltaSE = selOutput[["se.delta"]],
+            deltaZ = selOutput[["zval.delta"]],
+            deltaPVAL = selOutput[["pval.delta"]],
+            deltaCILB = selOutput [["ci.lb.delta"]],
+            deltaCIUB = selOutput [["ci.ub.delta"]]
           )
         )
+        if(selModelType == "beta"){selModelOutput$setNote("selModelOutputType", "Beta selection model (Citkowicz and Vevea 2017)")}
+        if(selModelType == "halfnorm"){selModelOutput$setNote("selModelOutputType", "Half-Normal selection model (Preston et al. 2004)")}
+        if(selModelType == "negexp"){selModelOutput$setNote("selModelOutputType", "Negative-Exponential	 selection model (Preston et al. 2004)")}
+        if(selModelType == "logistic"){selModelOutput$setNote("selModelOutputType", "Logistic selection model (Preston et al. 2004)")}
+        if(selModelType == "power"){selModelOutput$setNote("selModelOutputType", "Power selection model")}
+        if(selModelType == "stepfun"){selModelOutput$setNote("selModelOutputType", "Vevea and Hedges Weight Function Model (Vevea and Hedges 1995)")}
+        }
+        
+
         
         # puniform
-        
+        puniformSide
         #puniformOutput <- try(puniform(yi=res$yi, vi=res$vi, side= "left"))
-        puniformOutput <- try(puniform(n1i=data$n1i, n2i=data$n2i, m1i=data$m1i, m2i=data$m2i, sd1i=data$sd1i, sd2i=data$sd2i, side= "left"))
+        puniformOutput <-
+          try(puniform(
+            n1i = data$n1i,
+            n2i = data$n2i,
+            m1i = data$m1i,
+            m2i = data$m2i,
+            sd1i = data$sd1i,
+            sd2i = data$sd2i,
+            side = puniformSide
+          ),
+          silent = TRUE)
+        
         
         
         ### atempt to get jamovi to skip errors so the rest of teh work will still process
-        if (puniformOutput == class("try-error")){
+        if (is.character(puniformOutput) == TRUE){
           puniformModelOutput <- self$results$puniformModelOutput
           puniformModelOutput$setRow(
             rowNo = 1,
             values = list(
-              Lpb = 1,
+              Lpb = 0,
               pval = 0.99
             )
           )
@@ -670,16 +714,18 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           puniformModelOutput2$setRow(
             rowNo = 1,
             values = list(
-              est = 1,
-              cilb = 1,
-              ciub = 1,
-              lzero = 1,
+              est = 0,
+              cilb = 0,
+              ciub = 0,
+              lzero = 0,
               pval = 0.99,
-              ksig = 1
+              ksig = -1
             )
           )
+          puniformModelOutput$setNote("puniformError1", "Error")
+          puniformModelOutput2$setNote("puniformError2", "Error")
         }
-        else {
+        if (is.list(puniformOutput) == TRUE) {
         puniformModelOutput <- self$results$puniformModelOutput
         puniformModelOutput$setRow(
           rowNo = 1,
@@ -1072,6 +1118,17 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             puniformModelOutput$setVisible(visible = FALSE)
             puniformModelOutput2$setVisible(visible = FALSE)
           } 
+          
+          #Display selection model output
+          if (self$options$showSelmodel== TRUE) {
+            selModelOutput$setVisible(visible = TRUE)
+            #puniformModelOutput2$setVisible(visible = TRUE)
+          } else {
+            selModelOutput$setVisible(visible = FALSE)
+            #puniformModelOutput2$setVisible(visible = FALSE)
+          } 
+          
+          
           
           #Display Trim and Fill Funnel Plot
           # if (self$options$showFunTrimPlot == TRUE) {
