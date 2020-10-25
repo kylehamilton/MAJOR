@@ -151,7 +151,37 @@ options:
     - name: xAxisTitle
       title: x-axis title
       type: String
+      
+    - name: forestPlotSize
+      title: Forest plot size
+      type: List
+      options:
+        - name: "SMALL"
+          title: Small
+        - name: "MEDIUM"
+          title: Medium
+        - name: "LARGE"
+          title: Large
+        - name: "SMALLWIDE"
+          title: Small Wide
+        - name: "MEDIUMWIDE"
+          title: Medium Wide
+        - name: "LARGEWIDE"
+          title: Large Wide
+      default: SMALL
 
+    - name: funnelPlotSize
+      title: Funnel plot size
+      type: List
+      options:
+        - name: "SMALL"
+          title: Small
+        - name: "MEDIUM"
+          title: Medium
+        - name: "LARGE"
+          title: Large
+      default: SMALL
+      
     - name: pchForest
       title: Effect size points
       type: List
@@ -229,6 +259,11 @@ options:
       min: -9999
       max: 9999
       default: 0
+
+    - name: showTes
+      title: Show Test of Excess Significance output
+      type: Bool
+      default: false    
       
     - name: yaxis
       title: Funnel plot y-axis options
@@ -292,3 +327,7 @@ options:
       type: Bool
       default: false      
 
+    - name: showPuniform
+      title: Show p-uniform output
+      type: Bool
+      default: false      

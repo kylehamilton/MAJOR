@@ -25,12 +25,15 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             showweights = FALSE,
             steps = 5,
             xAxisTitle = NULL,
+            forestPlotSize = "SMALL",
+            funnelPlotSize = "SMALL",
             pchForest = "15",
             forestOrder = "fit",
             fsntype = "Rosenthal",
             tesAlternative = "two.sided",
             tesAlpha = 0.5,
             tesH0 = 0,
+            showTes = FALSE,
             yaxis = "sei",
             yaxisInv = FALSE,
             enhanceFunnel = FALSE,
@@ -39,7 +42,8 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             alphaTOST = 0.05,
             showTOST = FALSE,
             showInfPlot = FALSE,
-            showLL = FALSE, ...) {
+            showLL = FALSE,
+            showPuniform = FALSE, ...) {
 
             super$initialize(
                 package='MAJOR',
@@ -167,6 +171,25 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             private$..xAxisTitle <- jmvcore::OptionString$new(
                 "xAxisTitle",
                 xAxisTitle)
+            private$..forestPlotSize <- jmvcore::OptionList$new(
+                "forestPlotSize",
+                forestPlotSize,
+                options=list(
+                    "SMALL",
+                    "MEDIUM",
+                    "LARGE",
+                    "SMALLWIDE",
+                    "MEDIUMWIDE",
+                    "LARGEWIDE"),
+                default="SMALL")
+            private$..funnelPlotSize <- jmvcore::OptionList$new(
+                "funnelPlotSize",
+                funnelPlotSize,
+                options=list(
+                    "SMALL",
+                    "MEDIUM",
+                    "LARGE"),
+                default="SMALL")
             private$..pchForest <- jmvcore::OptionList$new(
                 "pchForest",
                 pchForest,
@@ -219,6 +242,10 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 min=-9999,
                 max=9999,
                 default=0)
+            private$..showTes <- jmvcore::OptionBool$new(
+                "showTes",
+                showTes,
+                default=FALSE)
             private$..yaxis <- jmvcore::OptionList$new(
                 "yaxis",
                 yaxis,
@@ -267,6 +294,10 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "showLL",
                 showLL,
                 default=FALSE)
+            private$..showPuniform <- jmvcore::OptionBool$new(
+                "showPuniform",
+                showPuniform,
+                default=FALSE)
 
             self$.addOption(private$..n1i)
             self$.addOption(private$..m1i)
@@ -287,12 +318,15 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..showweights)
             self$.addOption(private$..steps)
             self$.addOption(private$..xAxisTitle)
+            self$.addOption(private$..forestPlotSize)
+            self$.addOption(private$..funnelPlotSize)
             self$.addOption(private$..pchForest)
             self$.addOption(private$..forestOrder)
             self$.addOption(private$..fsntype)
             self$.addOption(private$..tesAlternative)
             self$.addOption(private$..tesAlpha)
             self$.addOption(private$..tesH0)
+            self$.addOption(private$..showTes)
             self$.addOption(private$..yaxis)
             self$.addOption(private$..yaxisInv)
             self$.addOption(private$..enhanceFunnel)
@@ -302,6 +336,7 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..showTOST)
             self$.addOption(private$..showInfPlot)
             self$.addOption(private$..showLL)
+            self$.addOption(private$..showPuniform)
         }),
     active = list(
         n1i = function() private$..n1i$value,
@@ -323,12 +358,15 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         showweights = function() private$..showweights$value,
         steps = function() private$..steps$value,
         xAxisTitle = function() private$..xAxisTitle$value,
+        forestPlotSize = function() private$..forestPlotSize$value,
+        funnelPlotSize = function() private$..funnelPlotSize$value,
         pchForest = function() private$..pchForest$value,
         forestOrder = function() private$..forestOrder$value,
         fsntype = function() private$..fsntype$value,
         tesAlternative = function() private$..tesAlternative$value,
         tesAlpha = function() private$..tesAlpha$value,
         tesH0 = function() private$..tesH0$value,
+        showTes = function() private$..showTes$value,
         yaxis = function() private$..yaxis$value,
         yaxisInv = function() private$..yaxisInv$value,
         enhanceFunnel = function() private$..enhanceFunnel$value,
@@ -337,7 +375,8 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         alphaTOST = function() private$..alphaTOST$value,
         showTOST = function() private$..showTOST$value,
         showInfPlot = function() private$..showInfPlot$value,
-        showLL = function() private$..showLL$value),
+        showLL = function() private$..showLL$value,
+        showPuniform = function() private$..showPuniform$value),
     private = list(
         ..n1i = NA,
         ..m1i = NA,
@@ -358,12 +397,15 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..showweights = NA,
         ..steps = NA,
         ..xAxisTitle = NA,
+        ..forestPlotSize = NA,
+        ..funnelPlotSize = NA,
         ..pchForest = NA,
         ..forestOrder = NA,
         ..fsntype = NA,
         ..tesAlternative = NA,
         ..tesAlpha = NA,
         ..tesH0 = NA,
+        ..showTes = NA,
         ..yaxis = NA,
         ..yaxisInv = NA,
         ..enhanceFunnel = NA,
@@ -372,7 +414,8 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..alphaTOST = NA,
         ..showTOST = NA,
         ..showInfPlot = NA,
-        ..showLL = NA)
+        ..showLL = NA,
+        ..showPuniform = NA)
 )
 
 metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -384,12 +427,21 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         summaryOutputText = function() private$.items[["summaryOutputText"]],
         summaryOutputText2 = function() private$.items[["summaryOutputText2"]],
         plot = function() private$.items[["plot"]],
+        plotMed = function() private$.items[["plotMed"]],
+        plotLarge = function() private$.items[["plotLarge"]],
+        plotSmallWide = function() private$.items[["plotSmallWide"]],
+        plotMedWide = function() private$.items[["plotMedWide"]],
+        plotLargeWide = function() private$.items[["plotLargeWide"]],
         selModelOutput = function() private$.items[["selModelOutput"]],
         fsnRICH = function() private$.items[["fsnRICH"]],
         funplot = function() private$.items[["funplot"]],
+        funplotMed = function() private$.items[["funplotMed"]],
+        funplotLarge = function() private$.items[["funplotLarge"]],
         resultsTES = function() private$.items[["resultsTES"]],
         resultsTES2 = function() private$.items[["resultsTES2"]],
         tesOutput3 = function() private$.items[["tesOutput3"]],
+        puniformModelOutput = function() private$.items[["puniformModelOutput"]],
+        puniformModelOutput2 = function() private$.items[["puniformModelOutput2"]],
         TOSToutput = function() private$.items[["TOSToutput"]],
         TOSToutputtext = function() private$.items[["TOSToutputtext"]],
         tostplot = function() private$.items[["tostplot"]],
@@ -530,6 +582,51 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 renderFun=".plot",
                 refs=list(
                     "metafor")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plotMed",
+                title="Forest Plot",
+                width=600,
+                height=625,
+                renderFun=".plot",
+                refs=list(
+                    "metafor")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plotLarge",
+                title="Forest Plot",
+                width=600,
+                height=900,
+                renderFun=".plot",
+                refs=list(
+                    "metafor")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plotSmallWide",
+                title="Forest Plot",
+                width=900,
+                height=450,
+                renderFun=".plot",
+                refs=list(
+                    "metafor")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plotMedWide",
+                title="Forest Plot",
+                width=900,
+                height=625,
+                renderFun=".plot",
+                refs=list(
+                    "metafor")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plotLargeWide",
+                title="Forest Plot",
+                width=900,
+                height=900,
+                renderFun=".plot",
+                refs=list(
+                    "metafor")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="selModelOutput",
@@ -573,6 +670,24 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 title="Funnel Plot",
                 width=600,
                 height=450,
+                renderFun=".funplot",
+                refs=list(
+                    "metafor")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="funplotMed",
+                title="Funnel Plot",
+                width=750,
+                height=563,
+                renderFun=".funplot",
+                refs=list(
+                    "metafor")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="funplotLarge",
+                title="Funnel Plot",
+                width=900,
+                height=675,
                 renderFun=".funplot",
                 refs=list(
                     "metafor")))
@@ -630,6 +745,58 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 options=options,
                 name="tesOutput3",
                 title="Test of Excess Significance | Results"))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="puniformModelOutput",
+                title="Publication bias test p-uniform",
+                rows=1,
+                columns=list(
+                    list(
+                        `name`="Lpb", 
+                        `title`="Test Statistic", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="pval", 
+                        `title`="p-value", 
+                        `type`="number", 
+                        `format`="pvalue"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="puniformModelOutput2",
+                title="Effect size estimation p-uniform",
+                rows=1,
+                columns=list(
+                    list(
+                        `name`="est", 
+                        `title`="Effect Size Estimate", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="cilb", 
+                        `title`="CI Lower Bound", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="ciub", 
+                        `title`="CI upper Bound", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="lzero", 
+                        `title`="Z", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="pval", 
+                        `title`="p-value", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="ksig", 
+                        `title`="Number of Significant Studies", 
+                        `type`="number", 
+                        `format`="zto"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="TOSToutput",
@@ -731,49 +898,49 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                             title="DFFITS Values",
                             width=750,
                             height=300,
-                            renderFun=".influDiagPlot2"))
+                            renderFun=".influDiagPlot1"))
                         self$add(jmvcore::Image$new(
                             options=options,
                             name="diagplot3",
                             title="Cook's Distances",
                             width=750,
                             height=300,
-                            renderFun=".influDiagPlot3"))
+                            renderFun=".influDiagPlot1"))
                         self$add(jmvcore::Image$new(
                             options=options,
                             name="diagplot4",
                             title="Covariance Ratios",
                             width=750,
                             height=300,
-                            renderFun=".influDiagPlot4"))
+                            renderFun=".influDiagPlot1"))
                         self$add(jmvcore::Image$new(
                             options=options,
                             name="diagplot5",
                             title="Leave-one-out Tau Estimates",
                             width=750,
                             height=300,
-                            renderFun=".influDiagPlot5"))
+                            renderFun=".influDiagPlot1"))
                         self$add(jmvcore::Image$new(
                             options=options,
                             name="diagplot6",
                             title="Leave-one-out (residual) Heterogeneity Test Statistics",
                             width=750,
                             height=300,
-                            renderFun=".influDiagPlot6"))
+                            renderFun=".influDiagPlot1"))
                         self$add(jmvcore::Image$new(
                             options=options,
                             name="diagplot7",
                             title="Hat Values",
                             width=750,
                             height=300,
-                            renderFun=".influDiagPlot7"))
+                            renderFun=".influDiagPlot1"))
                         self$add(jmvcore::Image$new(
                             options=options,
                             name="diagplot8",
                             title="Weights",
                             width=750,
                             height=300,
-                            renderFun=".influDiagPlot8"))
+                            renderFun=".influDiagPlot1"))
                         self$add(jmvcore::Image$new(
                             options=options,
                             name="diagplot9",
@@ -825,12 +992,15 @@ metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param showweights .
 #' @param steps .
 #' @param xAxisTitle .
+#' @param forestPlotSize .
+#' @param funnelPlotSize .
 #' @param pchForest .
 #' @param forestOrder .
 #' @param fsntype .
 #' @param tesAlternative .
 #' @param tesAlpha .
 #' @param tesH0 .
+#' @param showTes .
 #' @param yaxis .
 #' @param yaxisInv .
 #' @param enhanceFunnel .
@@ -840,6 +1010,7 @@ metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param showTOST .
 #' @param showInfPlot .
 #' @param showLL .
+#' @param showPuniform .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$textRICH} \tab \tab \tab \tab \tab a table \cr
@@ -848,12 +1019,21 @@ metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$summaryOutputText} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$summaryOutputText2} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plotMed} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plotLarge} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plotSmallWide} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plotMedWide} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plotLargeWide} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$selModelOutput} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$fsnRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$funplot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$funplotMed} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$funplotLarge} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$resultsTES} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$resultsTES2} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$tesOutput3} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$puniformModelOutput} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$puniformModelOutput2} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$TOSToutput} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$TOSToutputtext} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$tostplot} \tab \tab \tab \tab \tab an image \cr
@@ -897,12 +1077,15 @@ metaMeanDiff <- function(
     showweights = FALSE,
     steps = 5,
     xAxisTitle,
+    forestPlotSize = "SMALL",
+    funnelPlotSize = "SMALL",
     pchForest = "15",
     forestOrder = "fit",
     fsntype = "Rosenthal",
     tesAlternative = "two.sided",
     tesAlpha = 0.5,
     tesH0 = 0,
+    showTes = FALSE,
     yaxis = "sei",
     yaxisInv = FALSE,
     enhanceFunnel = FALSE,
@@ -911,7 +1094,8 @@ metaMeanDiff <- function(
     alphaTOST = 0.05,
     showTOST = FALSE,
     showInfPlot = FALSE,
-    showLL = FALSE) {
+    showLL = FALSE,
+    showPuniform = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('metaMeanDiff requires jmvcore to be installed (restart may be required)')
@@ -957,12 +1141,15 @@ metaMeanDiff <- function(
         showweights = showweights,
         steps = steps,
         xAxisTitle = xAxisTitle,
+        forestPlotSize = forestPlotSize,
+        funnelPlotSize = funnelPlotSize,
         pchForest = pchForest,
         forestOrder = forestOrder,
         fsntype = fsntype,
         tesAlternative = tesAlternative,
         tesAlpha = tesAlpha,
         tesH0 = tesH0,
+        showTes = showTes,
         yaxis = yaxis,
         yaxisInv = yaxisInv,
         enhanceFunnel = enhanceFunnel,
@@ -971,7 +1158,8 @@ metaMeanDiff <- function(
         alphaTOST = alphaTOST,
         showTOST = showTOST,
         showInfPlot = showInfPlot,
-        showLL = showLL)
+        showLL = showLL,
+        showPuniform = showPuniform)
 
     analysis <- metaMeanDiffClass$new(
         options = options,

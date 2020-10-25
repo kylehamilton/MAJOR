@@ -51,6 +51,13 @@ children:
             maxItemCount: 1
             isTarget: true
       - type: TargetLayoutBox
+        label: Moderator
+        children:
+          - type: VariablesListBox
+            name: moderatorcor
+            maxItemCount: 1
+            isTarget: true
+      - type: TargetLayoutBox
         label: Study Label
         children:
           - type: VariablesListBox
@@ -85,17 +92,6 @@ children:
           - type: CheckBox
             name: testType
             useSingleCell: true
-  - type: VariableSupplier
-    persistentItems: false
-    stretchFactor: 1
-    children:
-      - type: TargetLayoutBox
-        label: Moderator
-        children:
-          - type: VariablesListBox
-            name: moderatorcor
-            maxItemCount: 1
-            isTarget: true
   - type: CollapseBox
     label: Plots
     collapsed: true
@@ -128,26 +124,27 @@ children:
           - type: ComboBox
             name: forestOrder
             useSingleCell: true
+          - type: ComboBox
+            name: forestPlotSize
+            useSingleCell: true
       - type: Label
         label: Funnel Plot
         children:
-          - type: LayoutBox
-            margin: none
-            style: inline
-            children:
-              - type: ComboBox
-                name: yaxis
-                label: Y-Axis
-              - type: CheckBox
-                name: yaxisInv
-                label: Inverse
-                verticalAlignment: center
-                enable: '(!yaxis:lni)'
-              - type: CheckBox
-                name: enhanceFunnel
-                label: Contour-Enhanced
-                verticalAlignment: center
-                enable: '(yaxis:sei || yaxis:vi)'
+          - type: CheckBox
+            name: yaxisInv
+            label: Inverse
+            verticalAlignment: center
+            enable: '(!yaxis:lni)'
+          - type: CheckBox
+            name: enhanceFunnel
+            label: Contour-Enhanced
+            verticalAlignment: center
+            enable: '(yaxis:sei || yaxis:vi)'
+          - type: ComboBox
+            name: yaxis
+            label: Y-Axis
+          - type: ComboBox
+            name: funnelPlotSize
   - type: CollapseBox
     label: Publication Bias
     collapsed: true
@@ -169,6 +166,13 @@ children:
           - type: TextBox
             name: tesH0
             format: number
+          - type: CheckBox
+            name: showTes
+      - type: Label
+        label: p-uniform
+        children:
+          - type: CheckBox
+            name: showPuniform
   - type: CollapseBox
     label: Equivalence Test Options
     collapsed: true

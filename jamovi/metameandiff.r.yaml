@@ -110,6 +110,46 @@ items:
       renderFun: .plot
       refs: [ metafor ]
 
+    - name: plotMed
+      title: Forest Plot
+      type: Image
+      width:  600
+      height: 625
+      renderFun: .plot
+      refs: [ metafor ]
+
+    - name: plotLarge
+      title: Forest Plot
+      type: Image
+      width:  600
+      height: 900
+      renderFun: .plot
+      refs: [ metafor ]
+
+    - name: plotSmallWide
+      title: Forest Plot
+      type: Image
+      width:  900
+      height: 450
+      renderFun: .plot
+      refs: [ metafor ]
+
+    - name: plotMedWide
+      title: Forest Plot
+      type: Image
+      width:  900
+      height: 625
+      renderFun: .plot
+      refs: [ metafor ]
+
+    - name: plotLargeWide
+      title: Forest Plot
+      type: Image
+      width:  900
+      height: 900
+      renderFun: .plot
+      refs: [ metafor ]
+      
     - name:  selModelOutput
       type: Table
       refs: [ metafor ]
@@ -147,7 +187,23 @@ items:
       height: 450
       renderFun: .funplot
       refs: [ metafor ] 
-          
+
+    - name: funplotMed
+      title: Funnel Plot
+      type: Image
+      width:  750
+      height: 563
+      renderFun: .funplot
+      refs: [ metafor ] 
+      
+    - name: funplotLarge
+      title: Funnel Plot
+      type: Image
+      width:  900
+      height: 675
+      renderFun: .funplot
+      refs: [ metafor ]
+      
     - name:  resultsTES
       title: Test of Excess Significance | Significant Findings
       type: Table
@@ -192,6 +248,50 @@ items:
     - name:  tesOutput3
       title: "Test of Excess Significance | Results"
       type: Html
+
+    - name:  puniformModelOutput
+      title: Publication bias test p-uniform
+      type: Table
+      rows:  1
+      columns:
+        - name: Lpb
+          title: 'Test Statistic'
+          type: number
+          format: zto
+        - name: pval
+          title: 'p-value'
+          type: number
+          format: pvalue   
+
+    - name:  puniformModelOutput2
+      title: Effect size estimation p-uniform
+      type: Table
+      rows:  1
+      columns:
+        - name: est
+          title: 'Effect Size Estimate'
+          type: number
+          format: zto
+        - name: cilb
+          title: 'CI Lower Bound'
+          type: number
+          format: zto 
+        - name: ciub
+          title: 'CI upper Bound'
+          type: number
+          format: zto
+        - name: lzero
+          title: 'Z'
+          type: number
+          format: zto
+        - name: pval
+          title: 'p-value'
+          type: number
+          format: zto
+        - name: ksig
+          title: 'Number of Significant Studies'
+          type: number
+          format: zto
           
     - name:  TOSToutput
       title: "Two One-Sided Tests Equivalence Testing"
@@ -230,7 +330,7 @@ items:
             title: 'Z-Value Upper Limit Confidence Interval TOST'
             type: number
             format: zto
-          
+
     - name:  TOSToutputtext
       title: "Two One-Sided Tests Equivalence Testing: Text Summary"
       type: Html
@@ -267,49 +367,49 @@ items:
             type: Image
             width:  750
             height: 300
-            renderFun: .influDiagPlot2
+            renderFun: .influDiagPlot1
             
           - name: diagplot3
             title: Cook's Distances
             type: Image
             width:  750
             height: 300
-            renderFun: .influDiagPlot3
+            renderFun: .influDiagPlot1
             
           - name: diagplot4
             title: Covariance Ratios
             type: Image
             width:  750
             height: 300
-            renderFun: .influDiagPlot4
+            renderFun: .influDiagPlot1
             
           - name: diagplot5
             title: Leave-one-out Tau Estimates
             type: Image
             width:  750
             height: 300
-            renderFun: .influDiagPlot5
+            renderFun: .influDiagPlot1
             
           - name: diagplot6
             title: Leave-one-out (residual) Heterogeneity Test Statistics
             type: Image
             width:  750
             height: 300
-            renderFun: .influDiagPlot6
+            renderFun: .influDiagPlot1
             
           - name: diagplot7
             title: Hat Values
             type: Image
             width:  750
             height: 300
-            renderFun: .influDiagPlot7
+            renderFun: .influDiagPlot1
             
           - name: diagplot8
             title: Weights
             type: Image
             width:  750
             height: 300
-            renderFun: .influDiagPlot8
+            renderFun: .influDiagPlot1
             
           - name: diagplot9
             title: Q-Q Plot
