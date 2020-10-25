@@ -36,6 +36,9 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         tesAlpha <- self$options$tesAlpha
         tesH0 <- self$options$tesH0
         selModelOutput <- self$results$selModelOutput
+        puniformModelOutput <- self$results$puniformModelOutput
+        puniformModelOutput2 <- self$results$puniformModelOutput2
+        
         data2 <- self$data
         
         ready <- TRUE
@@ -647,6 +650,58 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           )
         )
         
+        # puniform
+        
+        #puniformOutput <- try(puniform(yi=res$yi, vi=res$vi, side= "left"))
+        puniformOutput <- try(puniform(n1i=data$n1i, n2i=data$n2i, m1i=data$m1i, m2i=data$m2i, sd1i=data$sd1i, sd2i=data$sd2i, side= "left"))
+        
+        
+        ### atempt to get jamovi to skip errors so the rest of teh work will still process
+        if (puniformOutput == class("try-error")){
+          puniformModelOutput <- self$results$puniformModelOutput
+          puniformModelOutput$setRow(
+            rowNo = 1,
+            values = list(
+              Lpb = 1,
+              pval = 0.99
+            )
+          )
+          puniformModelOutput2 <- self$results$puniformModelOutput2
+          puniformModelOutput2$setRow(
+            rowNo = 1,
+            values = list(
+              est = 1,
+              cilb = 1,
+              ciub = 1,
+              lzero = 1,
+              pval = 0.99,
+              ksig = 1
+            )
+          )
+        }
+        else {
+        puniformModelOutput <- self$results$puniformModelOutput
+        puniformModelOutput$setRow(
+          rowNo = 1,
+          values = list(
+            Lpb = puniformOutput[["L.pb"]],
+            pval = puniformOutput[["pval.pb"]]
+          )
+        )
+        puniformModelOutput2 <- self$results$puniformModelOutput2
+        puniformModelOutput2$setRow(
+          rowNo = 1,
+          values = list(
+            est = puniformOutput[["est"]],
+            cilb = puniformOutput[["ci.lb"]],
+            ciub = puniformOutput[["ci.ub"]],
+            lzero = puniformOutput[["L.0"]],
+            pval = puniformOutput[["pval"]],
+            ksig = puniformOutput[["ksig"]]
+          )
+        )
+        }
+        ### end of attempot to get errors to not ruin my day!
         
           #Model Fit
           modelFitRICH <- self$results$modelFitRICH
@@ -832,10 +887,41 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           # `self$options` contains the options
           # `self$results` contains the results object (to populate)
           
+          #Forest Plots
           image <- self$results$plot
+
+          forestSmall <- self$results$plot
+          forestMedium <- self$results$plotMed
+          forestLarge <- self$results$plotLarge
+          forestSmallWide <- self$results$plotSmallWide
+          forestMediumWide <- self$results$plotMedWide
+          forestLargeWide <- self$results$plotLargeWide
+          
+          forestSmall$setState(res)
+          forestMedium$setState(res)
+          forestLarge$setState(res)
+          forestSmallWide$setState(res)
+          forestMediumWide$setState(res)
+          forestLargeWide$setState(res)
+          
+          ## Funnel
           imageFUN <- self$results$funplot
+          
+          funPlot <- self$results$funplot
+          funPlotMed <- self$results$funplotMed
+          funPlotLarge <- self$results$funplotLarge
+          
+          funPlot$setState(res)
+          funPlotMed$setState(res)
+          funPlotLarge$setState(res)
+          
+          
           # imageFUNTRIM <- self$results$funplotTrimGroup$funplotTrim
+          
           imageTOST <- self$results$tostplot
+          
+          
+          
           imageDiagPlot1 <- self$results$diagPlotAll$diagplot1
           imageDiagPlot2 <- self$results$diagPlotAll$diagplot2
           imageDiagPlot3 <- self$results$diagPlotAll$diagplot3
@@ -862,6 +948,73 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           imageDiagPlot8$setState(inf)
           imageDiagPlot9$setState(res)
           imageLLPlot$setState(res)
+
+          #Forest Plot Size
+          if (self$options$forestPlotSize == "SMALL") {
+            forestSmall$setVisible(visible = TRUE)
+            forestMedium$setVisible(visible = FALSE)
+            forestLarge$setVisible(visible = FALSE)
+            forestSmallWide$setVisible(visible = FALSE)
+            forestMediumWide$setVisible(visible = FALSE)
+            forestLargeWide$setVisible(visible = FALSE)
+            }
+          if (self$options$forestPlotSize == "MEDIUM") {
+            forestSmall$setVisible(visible = FALSE)
+            forestMedium$setVisible(visible = TRUE)
+            forestLarge$setVisible(visible = FALSE)
+            forestSmallWide$setVisible(visible = FALSE)
+            forestMediumWide$setVisible(visible = FALSE)
+            forestLargeWide$setVisible(visible = FALSE)
+          }
+          if (self$options$forestPlotSize == "LARGE") {
+            forestSmall$setVisible(visible = FALSE)
+            forestMedium$setVisible(visible = FALSE)
+            forestLarge$setVisible(visible = TRUE)
+            forestSmallWide$setVisible(visible = FALSE)
+            forestMediumWide$setVisible(visible = FALSE)
+            forestLargeWide$setVisible(visible = FALSE)
+          }
+          if (self$options$forestPlotSize == "SMALLWIDE") {
+            forestSmall$setVisible(visible = FALSE)
+            forestMedium$setVisible(visible = FALSE)
+            forestLarge$setVisible(visible = FALSE)
+            forestSmallWide$setVisible(visible = TRUE)
+            forestMediumWide$setVisible(visible = FALSE)
+            forestLargeWide$setVisible(visible = FALSE)
+          }
+          if (self$options$forestPlotSize == "MEDIUMWIDE") {
+            forestSmall$setVisible(visible = FALSE)
+            forestMedium$setVisible(visible = FALSE)
+            forestLarge$setVisible(visible = FALSE)
+            forestSmallWide$setVisible(visible = FALSE)
+            forestMediumWide$setVisible(visible = TRUE)
+            forestLargeWide$setVisible(visible = FALSE)
+          }
+          if (self$options$forestPlotSize == "LARGEWIDE") {
+            forestSmall$setVisible(visible = FALSE)
+            forestMedium$setVisible(visible = FALSE)
+            forestLarge$setVisible(visible = FALSE)
+            forestSmallWide$setVisible(visible = FALSE)
+            forestMediumWide$setVisible(visible = FALSE)
+            forestLargeWide$setVisible(visible = TRUE)
+          }
+          
+          #Funnel Plot Size
+          if (self$options$funnelPlotSize == "SMALL") {
+            funPlot$setVisible(visible = TRUE)
+            funPlotMed$setVisible(visible = FALSE)
+            funPlotLarge$setVisible(visible = FALSE)
+          }
+          if (self$options$funnelPlotSize == "MEDIUM") {
+            funPlot$setVisible(visible = FALSE)
+            funPlotMed$setVisible(visible = TRUE)
+            funPlotLarge$setVisible(visible = FALSE)
+          }
+          if (self$options$funnelPlotSize == "LARGE") {
+            funPlot$setVisible(visible = FALSE)
+            funPlotMed$setVisible(visible = FALSE)
+            funPlotLarge$setVisible(visible = TRUE)
+          }
           
           #Display TOST Image
           if (self$options$showTOST == TRUE) {
@@ -899,6 +1052,27 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             imageDiagPlot8$setVisible(visible = FALSE)
             imageDiagPlot9$setVisible(visible = FALSE)
           }
+          
+          #Display TES output
+          if (self$options$showTes== TRUE) {
+            resultsTES$setVisible(visible = TRUE)
+            resultsTES2$setVisible(visible = TRUE)
+            tesOutput3$setVisible(visible = TRUE)
+          } else {
+            resultsTES$setVisible(visible = FALSE)
+            resultsTES2$setVisible(visible = FALSE)
+            tesOutput3$setVisible(visible = FALSE)
+          } 
+          
+          #Display p-uniform output
+          if (self$options$showPuniform== TRUE) {
+            puniformModelOutput$setVisible(visible = TRUE)
+            puniformModelOutput2$setVisible(visible = TRUE)
+          } else {
+            puniformModelOutput$setVisible(visible = FALSE)
+            puniformModelOutput2$setVisible(visible = FALSE)
+          } 
+          
           #Display Trim and Fill Funnel Plot
           # if (self$options$showFunTrimPlot == TRUE) {
           #   imageFUNTRIM$setVisible(visible = TRUE)
@@ -921,136 +1095,25 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           ready <- FALSE
         }
         
-        influDiagPlot1 <- plot(plotDataInfluence, plotinf=1)
-        print(influDiagPlot1)
+        influDiagPlot1 <- try(plot(plotDataInfluence, plotinf=1), silent = TRUE)
+        influDiagPlot2 <- try(plot(plotDataInfluence, plotinf=2), silent = TRUE)
+        influDiagPlot3 <- try(plot(plotDataInfluence, plotinf=3), silent = TRUE)
+        influDiagPlot4 <- try(plot(plotDataInfluence, plotinf=4), silent = TRUE)
+        influDiagPlot5 <- try(plot(plotDataInfluence, plotinf=5), silent = TRUE)
+        influDiagPlot6 <- try(plot(plotDataInfluence, plotinf=6), silent = TRUE)
+        influDiagPlot7 <- try(plot(plotDataInfluence, plotinf=7), silent = TRUE)
+        influDiagPlot8 <- try(plot(plotDataInfluence, plotinf=8), silent = TRUE)
+        
+        try(print(influDiagPlot1), silent = TRUE)
+        try(print(influDiagPlot2), silent = TRUE)
+        try( print(influDiagPlot3), silent = TRUE)
+        try( print(influDiagPlot4), silent = TRUE)
+        try(print(influDiagPlot5), silent = TRUE)
+        try(print(influDiagPlot6), silent = TRUE)
+        try(print(influDiagPlot7), silent = TRUE)
+        try(print(influDiagPlot8), silent = TRUE)
         TRUE
       },
-      .influDiagPlot2 = function(imageDiagPlot1, ...) {
-        # <-- the plot function
-        plotDataInfluence <- imageDiagPlot1$state
-        
-        ready <- TRUE
-        if (is.null(self$options$n1i) ||
-            is.null(self$options$m1i) ||
-            is.null(self$options$sd1i) ||
-            is.null(self$options$n2i) ||
-            is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
-          ready <- FALSE
-        }
-        
-        influDiagPlot2 <- plot(plotDataInfluence, plotinf=2)
-        print(influDiagPlot2)
-        TRUE
-      },
-      
-      .influDiagPlot3 = function(imageDiagPlot1, ...) {
-        # <-- the plot function
-        plotDataInfluence <- imageDiagPlot1$state
-        
-        ready <- TRUE
-        if (is.null(self$options$n1i) ||
-            is.null(self$options$m1i) ||
-            is.null(self$options$sd1i) ||
-            is.null(self$options$n2i) ||
-            is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
-          ready <- FALSE
-        }
-        
-        influDiagPlot3 <- plot(plotDataInfluence, plotinf=3)
-        print(influDiagPlot3)
-        TRUE
-      },
-      
-      .influDiagPlot4 = function(imageDiagPlot1, ...) {
-        # <-- the plot function
-        plotDataInfluence <- imageDiagPlot1$state
-        
-        ready <- TRUE
-        if (is.null(self$options$n1i) ||
-            is.null(self$options$m1i) ||
-            is.null(self$options$sd1i) ||
-            is.null(self$options$n2i) ||
-            is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
-          ready <- FALSE
-        }
-        
-        influDiagPlot4 <- plot(plotDataInfluence, plotinf=4)
-        print(influDiagPlot4)
-        TRUE
-      },
-      
-      .influDiagPlot5 = function(imageDiagPlot1, ...) {
-        # <-- the plot function
-        plotDataInfluence <- imageDiagPlot1$state
-        
-        ready <- TRUE
-        if (is.null(self$options$n1i) ||
-            is.null(self$options$m1i) ||
-            is.null(self$options$sd1i) ||
-            is.null(self$options$n2i) ||
-            is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
-          ready <- FALSE
-        }
-        
-        influDiagPlot5 <- plot(plotDataInfluence, plotinf=5)
-        print(influDiagPlot5)
-        TRUE
-      },
-      
-      .influDiagPlot6 = function(imageDiagPlot1, ...) {
-        # <-- the plot function
-        plotDataInfluence <- imageDiagPlot1$state
-        
-        ready <- TRUE
-        if (is.null(self$options$n1i) ||
-            is.null(self$options$m1i) ||
-            is.null(self$options$sd1i) ||
-            is.null(self$options$n2i) ||
-            is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
-          ready <- FALSE
-        }
-        
-        influDiagPlot6 <- plot(plotDataInfluence, plotinf=6)
-        print(influDiagPlot6)
-        TRUE
-      },
-      
-      .influDiagPlot7 = function(imageDiagPlot1, ...) {
-        # <-- the plot function
-        plotDataInfluence <- imageDiagPlot1$state
-        
-        ready <- TRUE
-        if (is.null(self$options$n1i) ||
-            is.null(self$options$m1i) ||
-            is.null(self$options$sd1i) ||
-            is.null(self$options$n2i) ||
-            is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
-          ready <- FALSE
-        }
-        
-        influDiagPlot7 <- plot(plotDataInfluence, plotinf=7)
-        print(influDiagPlot7)
-        TRUE
-      },
-      
-      .influDiagPlot8 = function(imageDiagPlot1, ...) {
-        # <-- the plot function
-        plotDataInfluence <- imageDiagPlot1$state
-        
-        ready <- TRUE
-        if (is.null(self$options$n1i) ||
-            is.null(self$options$m1i) ||
-            is.null(self$options$sd1i) ||
-            is.null(self$options$n2i) ||
-            is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
-          ready <- FALSE
-        }
-        
-        influDiagPlot8 <- plot(plotDataInfluence, plotinf=8)
-        print(influDiagPlot8)
-        TRUE
-      },
-      
       .influDiagPlot9 = function(imageDiagPlot9, ...) {
         # <-- the plot function
         plotDataInfluence <- imageDiagPlot9$state
@@ -1062,13 +1125,14 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             is.null(self$options$n2i) ||
             is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
           ready <- FALSE
+          #imageDiagPlot9$setStatus(`error`)
           jmvcore::reject(
             "Sample Size, Mean, Standard Deviation and Study Label fields must be populated to run analysis",
             code = ''
           )
         } else {
-          influDiagPlot9 <- qqnorm(plotDataInfluence)
-          print(influDiagPlot9)
+          influDiagPlot9 <- try(qqnorm(plotDataInfluence), silent = TRUE)
+          try(print(influDiagPlot9), silent = TRUE)
         }
         TRUE
       },
@@ -1092,8 +1156,8 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         data_test$yi <- plotLL$yi
         data_test$vi <- plotLL$vi
         
-        llplot_output <- llplot(measure="GEN", yi=yi, vi=vi, data=data_test, lwd=1, refline=NA, xlim=c(-3,3))
-        print(llplot_output)
+        llplot_output <- try(llplot(measure="GEN", yi=yi, vi=vi, data=data_test, lwd=1, refline=NA, xlim=c(-3,3)), silent = TRUE)
+        try(print(llplot_output), silent = TRUE)
       }
       TRUE
     },      
@@ -1206,7 +1270,18 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
               steps = steps,
               pch = pch
             )
+          plotMed <- plot
+          plotLarge <- plot
+          plotSmallWide <- plot
+          plotMedWide <- plot
+          plotLargeWide <- plot
+          
           print(plot)
+          print(plotMed)
+          print(plotLarge)
+          print(plotSmallWide)
+          print(plotMedWide)
+          print(plotLargeWide)
           TRUE
         }
       },
@@ -1320,7 +1395,15 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
               plotFUN <- metafor::funnel(plotDataFUN, yaxis = yaxis)
             }
           }
-          print(plotFUN)
+          funplot <- plotFUN
+          funplotMed <- plotFUN
+          funplotLarge <- plotFUN
+          
+          print(funplot)
+          print(funplotMed)
+          print(funplotLarge)
+          
+          
           TRUE
         }
       }
