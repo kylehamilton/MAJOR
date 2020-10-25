@@ -264,6 +264,16 @@ options:
       title: Show Test of Excess Significance output
       type: Bool
       default: false    
+
+    - name: puniformSide
+      title: Effect size direction
+      type: List
+      options:
+        - name: "right"
+          title: Right
+        - name: "left"
+          title: Left
+      default: right
       
     - name: yaxis
       title: Funnel plot y-axis options

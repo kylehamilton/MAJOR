@@ -194,6 +194,11 @@ children:
             useSingleCell: true
           - type: CheckBox
             name: showTOST
+  - type: LayoutBox
+    margin: large
+    children:
+      - type: ComboBox
+        name: puniformSide
   - type: CollapseBox
     label: Additional Options
     collapsed: true

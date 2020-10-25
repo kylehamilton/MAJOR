@@ -34,6 +34,7 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             tesAlpha = 0.5,
             tesH0 = 0,
             showTes = FALSE,
+            puniformSide = "right",
             yaxis = "sei",
             yaxisInv = FALSE,
             enhanceFunnel = FALSE,
@@ -246,6 +247,13 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "showTes",
                 showTes,
                 default=FALSE)
+            private$..puniformSide <- jmvcore::OptionList$new(
+                "puniformSide",
+                puniformSide,
+                options=list(
+                    "right",
+                    "left"),
+                default="right")
             private$..yaxis <- jmvcore::OptionList$new(
                 "yaxis",
                 yaxis,
@@ -327,6 +335,7 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..tesAlpha)
             self$.addOption(private$..tesH0)
             self$.addOption(private$..showTes)
+            self$.addOption(private$..puniformSide)
             self$.addOption(private$..yaxis)
             self$.addOption(private$..yaxisInv)
             self$.addOption(private$..enhanceFunnel)
@@ -367,6 +376,7 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         tesAlpha = function() private$..tesAlpha$value,
         tesH0 = function() private$..tesH0$value,
         showTes = function() private$..showTes$value,
+        puniformSide = function() private$..puniformSide$value,
         yaxis = function() private$..yaxis$value,
         yaxisInv = function() private$..yaxisInv$value,
         enhanceFunnel = function() private$..enhanceFunnel$value,
@@ -406,6 +416,7 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..tesAlpha = NA,
         ..tesH0 = NA,
         ..showTes = NA,
+        ..puniformSide = NA,
         ..yaxis = NA,
         ..yaxisInv = NA,
         ..enhanceFunnel = NA,
@@ -1001,6 +1012,7 @@ metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param tesAlpha .
 #' @param tesH0 .
 #' @param showTes .
+#' @param puniformSide .
 #' @param yaxis .
 #' @param yaxisInv .
 #' @param enhanceFunnel .
@@ -1086,6 +1098,7 @@ metaMeanDiff <- function(
     tesAlpha = 0.5,
     tesH0 = 0,
     showTes = FALSE,
+    puniformSide = "right",
     yaxis = "sei",
     yaxisInv = FALSE,
     enhanceFunnel = FALSE,
@@ -1150,6 +1163,7 @@ metaMeanDiff <- function(
         tesAlpha = tesAlpha,
         tesH0 = tesH0,
         showTes = showTes,
+        puniformSide = puniformSide,
         yaxis = yaxis,
         yaxisInv = yaxisInv,
         enhanceFunnel = enhanceFunnel,

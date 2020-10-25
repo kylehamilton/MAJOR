@@ -38,6 +38,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         selModelOutput <- self$results$selModelOutput
         puniformModelOutput <- self$results$puniformModelOutput
         puniformModelOutput2 <- self$results$puniformModelOutput2
+        puniformSide <- self$options$puniformSide
         
         data2 <- self$data
         
@@ -664,18 +665,29 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         )
         }
         # puniform
-        
+        puniformSide
         #puniformOutput <- try(puniform(yi=res$yi, vi=res$vi, side= "left"))
-        puniformOutput <- try(puniform(n1i=data$n1i, n2i=data$n2i, m1i=data$m1i, m2i=data$m2i, sd1i=data$sd1i, sd2i=data$sd2i, side= "left"))
+        puniformOutput <-
+          try(puniform(
+            n1i = data$n1i,
+            n2i = data$n2i,
+            m1i = data$m1i,
+            m2i = data$m2i,
+            sd1i = data$sd1i,
+            sd2i = data$sd2i,
+            side = puniformSide
+          ),
+          silent = TRUE)
+        
         
         
         ### atempt to get jamovi to skip errors so the rest of teh work will still process
-        if (puniformOutput == class("try-error")){
+        if (is.character(puniformOutput) == TRUE){
           puniformModelOutput <- self$results$puniformModelOutput
           puniformModelOutput$setRow(
             rowNo = 1,
             values = list(
-              Lpb = 1,
+              Lpb = 0,
               pval = 0.99
             )
           )
@@ -683,16 +695,18 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           puniformModelOutput2$setRow(
             rowNo = 1,
             values = list(
-              est = 1,
-              cilb = 1,
-              ciub = 1,
-              lzero = 1,
+              est = 0,
+              cilb = 0,
+              ciub = 0,
+              lzero = 0,
               pval = 0.99,
-              ksig = 1
+              ksig = -1
             )
           )
+          puniformModelOutput$setNote("puniformError1", "Error")
+          puniformModelOutput2$setNote("puniformError2", "Error")
         }
-        else {
+        if (is.list(puniformOutput) == TRUE) {
         puniformModelOutput <- self$results$puniformModelOutput
         puniformModelOutput$setRow(
           rowNo = 1,
