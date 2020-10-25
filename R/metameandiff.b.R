@@ -636,10 +636,23 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
 
         # Selection Models for pub bias
         
-        selOutput <- selmodel(res, type="negexp")
+        selOutput <- try(selmodel(res, type="beta"), silent = TRUE)
         
         selModelOutput <- self$results$selModelOutput
         
+        if (is.character(selOutput) == TRUE) {
+          selModelOutput$setRow(
+            rowNo = 1,
+            values = list(
+              deltaLabel = "Error",
+              #deltaK = selOutput[["ptable"]][["k"]][[1]],
+              deltaK = 1,
+              deltaEstimate = 1
+            )
+          )
+        }  
+        
+        if (is.list(selOutput) == TRUE) {
         selModelOutput$setRow(
           rowNo = 1,
           values = list(
@@ -649,7 +662,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             deltaEstimate = selOutput[["delta"]][[1]]
           )
         )
-        
+        }
         # puniform
         
         #puniformOutput <- try(puniform(yi=res$yi, vi=res$vi, side= "left"))
