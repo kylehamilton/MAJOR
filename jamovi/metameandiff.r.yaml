@@ -149,20 +149,32 @@ items:
       height: 900
       renderFun: .plot
       refs: [ metafor ]
-      
+
     - name:  selModelOutput
+      title: Selection Model Results
       type: Table
       refs: [ metafor ]
-      title: "Selection Model Results"
       rows:  1
       columns:
-        - name: deltaLabel
-          title: ''
-          type: text
-        - name: deltaK
-          type: number
         - name: deltaEstimate
+          title: "Estimate"
           type: number
+        - name: deltaSE
+          title: 'SE'
+          type: number
+          format: zto
+        - name: deltaPVAL
+          title: 'p-value'
+          type: number
+          format: pval
+        - name: deltaCILB
+          title: 'CI Lower Bound'
+          type: number
+          format: zto 
+        - name: deltaCIUB
+          title: 'CI Upper Bound'
+          type: number
+          format: zto
           
     - name:  fsnRICH
       title: ""

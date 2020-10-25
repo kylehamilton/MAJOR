@@ -274,6 +274,24 @@ options:
         - name: "left"
           title: Left
       default: right
+
+    - name: selModelType
+      title: Selection model type
+      type: List
+      options:
+        - name: "beta"
+          title: Beta
+        - name: "halfnorm"
+          title: Half normal
+        - name: "negexp"
+          title: Negative exponential
+        - name: "logistic"
+          title: Logistic
+        - name: "power"
+          title: Power
+        - name: "stepfun"
+          title: Step function
+      default: beta
       
     - name: yaxis
       title: Funnel plot y-axis options
@@ -341,3 +359,9 @@ options:
       title: Show p-uniform output
       type: Bool
       default: false      
+      
+    - name: showSelmodel
+      title: Show selection model output
+      type: Bool
+      default: false        
+      

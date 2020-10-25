@@ -35,6 +35,7 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             tesH0 = 0,
             showTes = FALSE,
             puniformSide = "right",
+            selModelType = "beta",
             yaxis = "sei",
             yaxisInv = FALSE,
             enhanceFunnel = FALSE,
@@ -44,7 +45,8 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             showTOST = FALSE,
             showInfPlot = FALSE,
             showLL = FALSE,
-            showPuniform = FALSE, ...) {
+            showPuniform = FALSE,
+            showSelmodel = FALSE, ...) {
 
             super$initialize(
                 package='MAJOR',
@@ -254,6 +256,17 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "right",
                     "left"),
                 default="right")
+            private$..selModelType <- jmvcore::OptionList$new(
+                "selModelType",
+                selModelType,
+                options=list(
+                    "beta",
+                    "halfnorm",
+                    "negexp",
+                    "logistic",
+                    "power",
+                    "stepfun"),
+                default="beta")
             private$..yaxis <- jmvcore::OptionList$new(
                 "yaxis",
                 yaxis,
@@ -306,6 +319,10 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "showPuniform",
                 showPuniform,
                 default=FALSE)
+            private$..showSelmodel <- jmvcore::OptionBool$new(
+                "showSelmodel",
+                showSelmodel,
+                default=FALSE)
 
             self$.addOption(private$..n1i)
             self$.addOption(private$..m1i)
@@ -336,6 +353,7 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..tesH0)
             self$.addOption(private$..showTes)
             self$.addOption(private$..puniformSide)
+            self$.addOption(private$..selModelType)
             self$.addOption(private$..yaxis)
             self$.addOption(private$..yaxisInv)
             self$.addOption(private$..enhanceFunnel)
@@ -346,6 +364,7 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..showInfPlot)
             self$.addOption(private$..showLL)
             self$.addOption(private$..showPuniform)
+            self$.addOption(private$..showSelmodel)
         }),
     active = list(
         n1i = function() private$..n1i$value,
@@ -377,6 +396,7 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         tesH0 = function() private$..tesH0$value,
         showTes = function() private$..showTes$value,
         puniformSide = function() private$..puniformSide$value,
+        selModelType = function() private$..selModelType$value,
         yaxis = function() private$..yaxis$value,
         yaxisInv = function() private$..yaxisInv$value,
         enhanceFunnel = function() private$..enhanceFunnel$value,
@@ -386,7 +406,8 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         showTOST = function() private$..showTOST$value,
         showInfPlot = function() private$..showInfPlot$value,
         showLL = function() private$..showLL$value,
-        showPuniform = function() private$..showPuniform$value),
+        showPuniform = function() private$..showPuniform$value,
+        showSelmodel = function() private$..showSelmodel$value),
     private = list(
         ..n1i = NA,
         ..m1i = NA,
@@ -417,6 +438,7 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..tesH0 = NA,
         ..showTes = NA,
         ..puniformSide = NA,
+        ..selModelType = NA,
         ..yaxis = NA,
         ..yaxisInv = NA,
         ..enhanceFunnel = NA,
@@ -426,7 +448,8 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..showTOST = NA,
         ..showInfPlot = NA,
         ..showLL = NA,
-        ..showPuniform = NA)
+        ..showPuniform = NA,
+        ..showSelmodel = NA)
 )
 
 metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -641,21 +664,35 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$add(jmvcore::Table$new(
                 options=options,
                 name="selModelOutput",
+                title="Selection Model Results",
                 refs=list(
                     "metafor"),
-                title="Selection Model Results",
                 rows=1,
                 columns=list(
                     list(
-                        `name`="deltaLabel", 
-                        `title`="", 
-                        `type`="text"),
-                    list(
-                        `name`="deltaK", 
+                        `name`="deltaEstimate", 
+                        `title`="Estimate", 
                         `type`="number"),
                     list(
-                        `name`="deltaEstimate", 
-                        `type`="number"))))
+                        `name`="deltaSE", 
+                        `title`="SE", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="deltaPVAL", 
+                        `title`="p-value", 
+                        `type`="number", 
+                        `format`="pval"),
+                    list(
+                        `name`="deltaCILB", 
+                        `title`="CI Lower Bound", 
+                        `type`="number", 
+                        `format`="zto"),
+                    list(
+                        `name`="deltaCIUB", 
+                        `title`="CI Upper Bound", 
+                        `type`="number", 
+                        `format`="zto"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="fsnRICH",
@@ -1013,6 +1050,7 @@ metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param tesH0 .
 #' @param showTes .
 #' @param puniformSide .
+#' @param selModelType .
 #' @param yaxis .
 #' @param yaxisInv .
 #' @param enhanceFunnel .
@@ -1023,6 +1061,7 @@ metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param showInfPlot .
 #' @param showLL .
 #' @param showPuniform .
+#' @param showSelmodel .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$textRICH} \tab \tab \tab \tab \tab a table \cr
@@ -1099,6 +1138,7 @@ metaMeanDiff <- function(
     tesH0 = 0,
     showTes = FALSE,
     puniformSide = "right",
+    selModelType = "beta",
     yaxis = "sei",
     yaxisInv = FALSE,
     enhanceFunnel = FALSE,
@@ -1108,7 +1148,8 @@ metaMeanDiff <- function(
     showTOST = FALSE,
     showInfPlot = FALSE,
     showLL = FALSE,
-    showPuniform = FALSE) {
+    showPuniform = FALSE,
+    showSelmodel = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('metaMeanDiff requires jmvcore to be installed (restart may be required)')
@@ -1164,6 +1205,7 @@ metaMeanDiff <- function(
         tesH0 = tesH0,
         showTes = showTes,
         puniformSide = puniformSide,
+        selModelType = selModelType,
         yaxis = yaxis,
         yaxisInv = yaxisInv,
         enhanceFunnel = enhanceFunnel,
@@ -1173,7 +1215,8 @@ metaMeanDiff <- function(
         showTOST = showTOST,
         showInfPlot = showInfPlot,
         showLL = showLL,
-        showPuniform = showPuniform)
+        showPuniform = showPuniform,
+        showSelmodel = showSelmodel)
 
     analysis <- metaMeanDiffClass$new(
         options = options,

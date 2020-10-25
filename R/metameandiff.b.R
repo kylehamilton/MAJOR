@@ -39,6 +39,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         puniformModelOutput <- self$results$puniformModelOutput
         puniformModelOutput2 <- self$results$puniformModelOutput2
         puniformSide <- self$options$puniformSide
+        selModelType <- self$options$selModelType
         
         data2 <- self$data
         
@@ -637,7 +638,11 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
 
         # Selection Models for pub bias
         
-        selOutput <- try(selmodel(res, type="beta"), silent = TRUE)
+        if(selModelType == "stepfun"){
+          selOutput <- try(selmodel(res, type="stepfun", steps=c(0.05, 1)), silent = TRUE)
+        } else {
+          selOutput <- try(selmodel(res, type=selModelType), silent = TRUE)
+        }
         
         selModelOutput <- self$results$selModelOutput
         
@@ -645,25 +650,39 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           selModelOutput$setRow(
             rowNo = 1,
             values = list(
-              deltaLabel = "Error",
-              #deltaK = selOutput[["ptable"]][["k"]][[1]],
-              deltaK = 1,
-              deltaEstimate = 1
+              deltaEstimate = 0,
+              deltaSE = 0,
+              deltaZ = 0,
+              deltaPVAL = 0,
+              deltaCILB = 0,
+              deltaCIUB = 0
             )
           )
+          selModelOutput$setNote("selModelOutputType", "Error during optimization, select another model type")
         }  
         
         if (is.list(selOutput) == TRUE) {
         selModelOutput$setRow(
           rowNo = 1,
           values = list(
-            deltaLabel = "Intercept",
-            #deltaK = selOutput[["ptable"]][["k"]][[1]],
-            deltaK = 1,
-            deltaEstimate = selOutput[["delta"]][[1]]
+            deltaEstimate = selOutput[["delta"]][[1]],
+            deltaSE = selOutput[["se.delta"]],
+            deltaZ = selOutput[["zval.delta"]],
+            deltaPVAL = selOutput[["pval.delta"]],
+            deltaCILB = selOutput [["ci.lb.delta"]],
+            deltaCIUB = selOutput [["ci.ub.delta"]]
           )
         )
+        if(selModelType == "beta"){selModelOutput$setNote("selModelOutputType", "Beta selection model (Citkowicz and Vevea 2017)")}
+        if(selModelType == "halfnorm"){selModelOutput$setNote("selModelOutputType", "Half-Normal selection model (Preston et al. 2004)")}
+        if(selModelType == "negexp"){selModelOutput$setNote("selModelOutputType", "Negative-Exponential	 selection model (Preston et al. 2004)")}
+        if(selModelType == "logistic"){selModelOutput$setNote("selModelOutputType", "Logistic selection model (Preston et al. 2004)")}
+        if(selModelType == "power"){selModelOutput$setNote("selModelOutputType", "Power selection model")}
+        if(selModelType == "stepfun"){selModelOutput$setNote("selModelOutputType", "Vevea and Hedges Weight Function Model (Vevea and Hedges 1995)")}
         }
+        
+
+        
         # puniform
         puniformSide
         #puniformOutput <- try(puniform(yi=res$yi, vi=res$vi, side= "left"))
@@ -1099,6 +1118,17 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             puniformModelOutput$setVisible(visible = FALSE)
             puniformModelOutput2$setVisible(visible = FALSE)
           } 
+          
+          #Display selection model output
+          if (self$options$showSelmodel== TRUE) {
+            selModelOutput$setVisible(visible = TRUE)
+            #puniformModelOutput2$setVisible(visible = TRUE)
+          } else {
+            selModelOutput$setVisible(visible = FALSE)
+            #puniformModelOutput2$setVisible(visible = FALSE)
+          } 
+          
+          
           
           #Display Trim and Fill Funnel Plot
           # if (self$options$showFunTrimPlot == TRUE) {

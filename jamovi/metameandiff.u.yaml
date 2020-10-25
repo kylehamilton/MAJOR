@@ -171,8 +171,17 @@ children:
       - type: Label
         label: p-uniform
         children:
+          - type: ComboBox
+            name: puniformSide
           - type: CheckBox
             name: showPuniform
+      - type: Label
+        label: Selection Models
+        children:            
+          - type: ComboBox
+            name: selModelType
+          - type: CheckBox
+            name: showSelmodel
   - type: CollapseBox
     label: Equivalence Test Options
     collapsed: true
@@ -194,11 +203,6 @@ children:
             useSingleCell: true
           - type: CheckBox
             name: showTOST
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: ComboBox
-        name: puniformSide
   - type: CollapseBox
     label: Additional Options
     collapsed: true
