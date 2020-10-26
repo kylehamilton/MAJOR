@@ -1110,43 +1110,7 @@ MetaCorrClass <- R6::R6Class(
         
         pcurveExplanation$setContent(outputPCurveExplanation)
         
-        #puniform code
-      
-      
-      # puni_test <- puniform::puniform(yi=res$yi, vi=res$vi, side="right", plot=FALSE)
-      # 
-      # 
-      # puniformTable <- self$results$puniformTable
-      # 
-      # puniformTable$setRow(
-      #   rowNo = 1,
-      #   values = list(
-      #     label = "Effect size estimation p-uniform",
-      #     est1 = puni_test$est,
-      #     cilb1 = puni_test$ci.lb,
-      #     ciub1 = puni_test$ci.ub,
-      #     L01 = puni_test$L.0,
-      #     pval1 = puni_test$pval.0,
-      #     ksig1 = puni_test$ksig)
-      # )
-      
-      
-      # puniformTable$setRow(
-      #   rowNo = 2,
-      #   values = list(
-      #     label = "Kendalls Tau",
-      #     failSafeNumber = ranktestPB$tau[1],
-      #     p = ranktestPB$pval[1])
-      # )
-      # 
-      # 
-      # puniformTable$setRow(
-      #   rowNo = 3,
-      #   values = list(
-      #     label = "Egger's Regression",
-      #     failSafeNumber = regtestPB[["zval"]],
-      #     p = regtestPB[["pval"]])
-      # )
+
 
 
       fsnTitle <-
