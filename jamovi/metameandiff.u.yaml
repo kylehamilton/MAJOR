@@ -169,6 +169,11 @@ children:
           - type: CheckBox
             name: showTes
       - type: Label
+        label: p-curve
+        children:
+          - type: CheckBox
+            name: showPcurve
+      - type: Label
         label: p-uniform
         children:
           - type: ComboBox
@@ -177,7 +182,7 @@ children:
             name: showPuniform
       - type: Label
         label: Selection Models
-        children:            
+        children:
           - type: ComboBox
             name: selModelType
           - type: CheckBox

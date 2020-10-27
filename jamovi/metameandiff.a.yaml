@@ -364,4 +364,8 @@ options:
       title: Show selection model output
       type: Bool
       default: false        
-      
+
+    - name: showPcurve
+      title: Show p-curve output
+      type: Bool
+      default: false        

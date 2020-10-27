@@ -261,6 +261,13 @@ items:
       title: "Test of Excess Significance | Results"
       type: Html
 
+    - name: pCurvePlot
+      title: p Curve Plot
+      type: Image
+      width:  900
+      height: 675
+      renderFun: .pcurveplot
+
     - name:  puniformModelOutput
       title: Publication bias test p-uniform
       type: Table

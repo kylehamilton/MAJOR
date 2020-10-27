@@ -673,7 +673,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         
         
         
-        ### atempt to get jamovi to skip errors so the rest of teh work will still process
+        ### atempt to get jamovi to skip errors so the rest of the work will still process
         if (is.character(puniformOutput) == TRUE){
           puniformModelOutput <- self$results$puniformModelOutput
           puniformModelOutput$setRow(
@@ -721,6 +721,12 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         )
         }
         ### end of attempot to get errors to not ruin my day!
+        
+        
+        
+        
+        
+        
         
           #Model Fit
           modelFitRICH <- self$results$modelFitRICH
@@ -906,6 +912,9 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           # `self$options` contains the options
           # `self$results` contains the results object (to populate)
           
+          pcurve_lists  <- list("TE" = as.numeric(res$yi), "seTE" = sqrt(res$vi), "studlab" = res$slab)
+          pcurve_dataframe <- as.data.frame(pcurve_lists)
+          
           #Forest Plots
           image <- self$results$plot
 
@@ -934,6 +943,9 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           funPlotMed$setState(res)
           funPlotLarge$setState(res)
           
+          pCurvePlotResults <- self$results$pCurvePlot
+          
+          pCurvePlotResults$setState(pcurve_dataframe)
           
           # imageFUNTRIM <- self$results$funplotTrimGroup$funplotTrim
           
@@ -958,13 +970,13 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           #imageFUNTRIM$setState(res)
           imageTOST$setState(resTOST)
           imageDiagPlot1$setState(inf)
-          imageDiagPlot2$setState(inf)
-          imageDiagPlot3$setState(inf)
-          imageDiagPlot4$setState(inf)
-          imageDiagPlot5$setState(inf)
-          imageDiagPlot6$setState(inf)
-          imageDiagPlot7$setState(inf)
-          imageDiagPlot8$setState(inf)
+          # imageDiagPlot2$setState(inf)
+          # imageDiagPlot3$setState(inf)
+          # imageDiagPlot4$setState(inf)
+          # imageDiagPlot5$setState(inf)
+          # imageDiagPlot6$setState(inf)
+          # imageDiagPlot7$setState(inf)
+          # imageDiagPlot8$setState(inf)
           imageDiagPlot9$setState(res)
           imageLLPlot$setState(res)
 
@@ -1082,6 +1094,13 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
             resultsTES2$setVisible(visible = FALSE)
             tesOutput3$setVisible(visible = FALSE)
           } 
+
+          #Display p-curve output
+          if (self$options$showPcurve== TRUE) {
+            pCurvePlotResults$setVisible(visible = TRUE)
+          } else {
+            pCurvePlotResults$setVisible(visible = FALSE)
+          } 
           
           #Display p-uniform output
           if (self$options$showPuniform== TRUE) {
@@ -1163,6 +1182,27 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         } else {
           influDiagPlot9 <- try(qqnorm(plotDataInfluence), silent = TRUE)
           try(print(influDiagPlot9), silent = TRUE)
+        }
+        TRUE
+      },
+      .pcurveplot = function(pCurvePlotResults, ...) {
+        # <-- the plot function
+        pCurve_res <- pCurvePlotResults$state
+        
+        ready <- TRUE
+        if (is.null(self$options$n1i) ||
+            is.null(self$options$m1i) ||
+            is.null(self$options$sd1i) ||
+            is.null(self$options$n2i) ||
+            is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
+          ready <- FALSE
+          #imageDiagPlot9$setStatus(`error`)
+          jmvcore::reject(
+            "Sample Size, Mean, Standard Deviation and Study Label fields must be populated to run analysis",
+            code = ''
+          )
+        } else {
+          invisible(pcurve(pCurve_res))
         }
         TRUE
       },

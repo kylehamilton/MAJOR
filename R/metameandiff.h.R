@@ -46,7 +46,8 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             showInfPlot = FALSE,
             showLL = FALSE,
             showPuniform = FALSE,
-            showSelmodel = FALSE, ...) {
+            showSelmodel = FALSE,
+            showPcurve = FALSE, ...) {
 
             super$initialize(
                 package='MAJOR',
@@ -323,6 +324,10 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "showSelmodel",
                 showSelmodel,
                 default=FALSE)
+            private$..showPcurve <- jmvcore::OptionBool$new(
+                "showPcurve",
+                showPcurve,
+                default=FALSE)
 
             self$.addOption(private$..n1i)
             self$.addOption(private$..m1i)
@@ -365,6 +370,7 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..showLL)
             self$.addOption(private$..showPuniform)
             self$.addOption(private$..showSelmodel)
+            self$.addOption(private$..showPcurve)
         }),
     active = list(
         n1i = function() private$..n1i$value,
@@ -407,7 +413,8 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         showInfPlot = function() private$..showInfPlot$value,
         showLL = function() private$..showLL$value,
         showPuniform = function() private$..showPuniform$value,
-        showSelmodel = function() private$..showSelmodel$value),
+        showSelmodel = function() private$..showSelmodel$value,
+        showPcurve = function() private$..showPcurve$value),
     private = list(
         ..n1i = NA,
         ..m1i = NA,
@@ -449,7 +456,8 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..showInfPlot = NA,
         ..showLL = NA,
         ..showPuniform = NA,
-        ..showSelmodel = NA)
+        ..showSelmodel = NA,
+        ..showPcurve = NA)
 )
 
 metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -474,6 +482,7 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         resultsTES = function() private$.items[["resultsTES"]],
         resultsTES2 = function() private$.items[["resultsTES2"]],
         tesOutput3 = function() private$.items[["tesOutput3"]],
+        pCurvePlot = function() private$.items[["pCurvePlot"]],
         puniformModelOutput = function() private$.items[["puniformModelOutput"]],
         puniformModelOutput2 = function() private$.items[["puniformModelOutput2"]],
         TOSToutput = function() private$.items[["TOSToutput"]],
@@ -793,6 +802,13 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 options=options,
                 name="tesOutput3",
                 title="Test of Excess Significance | Results"))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="pCurvePlot",
+                title="p Curve Plot",
+                width=900,
+                height=675,
+                renderFun=".pcurveplot"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="puniformModelOutput",
@@ -1062,6 +1078,7 @@ metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param showLL .
 #' @param showPuniform .
 #' @param showSelmodel .
+#' @param showPcurve .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$textRICH} \tab \tab \tab \tab \tab a table \cr
@@ -1083,6 +1100,7 @@ metaMeanDiffBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$resultsTES} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$resultsTES2} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$tesOutput3} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$pCurvePlot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$puniformModelOutput} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$puniformModelOutput2} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$TOSToutput} \tab \tab \tab \tab \tab a table \cr
@@ -1149,7 +1167,8 @@ metaMeanDiff <- function(
     showInfPlot = FALSE,
     showLL = FALSE,
     showPuniform = FALSE,
-    showSelmodel = FALSE) {
+    showSelmodel = FALSE,
+    showPcurve = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('metaMeanDiff requires jmvcore to be installed (restart may be required)')
@@ -1216,7 +1235,8 @@ metaMeanDiff <- function(
         showInfPlot = showInfPlot,
         showLL = showLL,
         showPuniform = showPuniform,
-        showSelmodel = showSelmodel)
+        showSelmodel = showSelmodel,
+        showPcurve = showPcurve)
 
     analysis <- metaMeanDiffClass$new(
         options = options,
