@@ -322,76 +322,27 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         #I took this entire bit of code from Emily Kothe and her amazing meta-analysis templates
         #https://osf.io/6bk7b/
         
-        res_back<-predict(res)
+        #res_back<-predict(res)
         
         summaryOutputText <- self$results$summaryOutputText
-        #if (self$options$moderatorType == "NON") {
-        outputTextSummary <-
-          paste(
-            "A meta-analysis was conducted (k=",
-            res$k,
-            "). The average difference between the two groups was g = ",
-            round(res$b[1], 2),
-            ", (p = ",
-            round(res$pval[1], 3),
-            ", 95% CI [",
-            round(res$ci.lb[1], 2),
-            ", ",
-            round(res$ci.ub[1], 2),
-            "]).",
-            ifelse(
-              res$pval[1] > 0.05,
-              " It is important to note that a p>.05 indicates lack of evidence of an effect (i.e. uncertainty) rather than evidence of no effect unless confidence intervals are sufficently narrow to rule out a clinically meaningful effect.",
-              ""
-            ),
-            sep = ""
-          )
-        #}
-        # if (self$options$moderatorType == "CAT") {
-        #   outputTextSummary <-
-        #     paste(
-        #       "A meta-analysis was conducted (k=",
-        #       res$k,
-        #       "). The average difference between the two groups was g = ",
-        #       round(res$b[1], 2),
-        #       ", (p = ",
-        #       round(res$pval[1], 3),
-        #       ", 95% CI [",
-        #       round(res$ci.lb[1], 2),
-        #       ", ",
-        #       round(res$ci.ub[1], 2),
-        #       "]).",
-        #       ifelse(
-        #         res$pval[1] > 0.05,
-        #         " It is important to note that a p>.05 indicates lack of evidence of an effect (i.e. uncertainty) rather than evidence of no effect unless confidence intervals are sufficently narrow to rule out a clinically meaningful effect.",
-        #         ""
-        #       ),
-        #       sep = ""
-        #     )
-        # }
-        # 
-        # if (self$options$moderatorType == "CON") {
-        #   outputTextSummary <-
-        #     paste(
-        #       "A meta-analysis was conducted (k=",
-        #       res$k,
-        #       "). The average difference between the two groups was g = ",
-        #       round(res$b[1], 2),
-        #       ", (p = ",
-        #       round(res$pval[1], 3),
-        #       ", 95% CI [",
-        #       round(res$ci.lb[1], 2),
-        #       ", ",
-        #       round(res$ci.ub[1], 2),
-        #       "]).",
-        #       ifelse(
-        #         res$pval[1] > 0.05,
-        #         " It is important to note that a p>.05 indicates lack of evidence of an effect (i.e. uncertainty) rather than evidence of no effect unless confidence intervals are sufficently narrow to rule out a clinically meaningful effect.",
-        #         ""
-        #       ),
-        #       sep = ""
-        #     )
-        # }        
+        if (self$options$moderatorType == "NON") {
+
+          textReport <- reporterMAJOR(res)
+          outputTextSummary <- textReport[[1]]
+        
+        }
+        
+        if (self$options$moderatorType == "CAT") {
+          
+          outputTextSummary <- "Text reporting does not currently work with moderators"
+          
+        }
+
+        if (self$options$moderatorType == "CON") {
+          
+          outputTextSummary <- "Text reporting does not currently work with moderators"
+          
+        }
         
         
         summaryOutputText$setContent(outputTextSummary)
@@ -400,52 +351,14 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         summaryOutputText2 <- self$results$summaryOutputText2
         
         if (self$options$moderatorType == "NON") {
-        outputTextSummary2 <-
-          paste(
-            "A Cochran's Q test was conducted to examine whether variations in the observed effect are likely to be attributable soley to sampling error (Q~(df=",
-            res$k[1]-1,
-            ")~=",
-            round(res$QE,2),
-            ", p=",
-            ifelse(res$QEp[1] < 0.001,
-                   "<.001",
-                   round(res$QEp[1],3)),
-            ".", 
-            ifelse(res$QEp[1] < 0.05, 
-                   " The variation in the effect is greater than would be expected from sampling error alone. It appears that the true effect varies betweeen studies.",
-                   "There is no evidence that the true effect size varies between studies."),
-            "The I^2^ statistics indicates the proportion of variance in the observed effect attributable to sampling error. In this instance, the I^2^ =",
-            round(res$I2[1],2),
-            " %.",
-            "Note, this statistic is not an absolute measure of heterogeneity (although it is often interpreted as such). It is strongly advise against using rules of thumb such as small, medium, or large when interpreting I^2^ values. Instead, researchers increasingly argue that the information provided credibility or prediction intervals is more useful in understanding the heterogeneity of true effect sizes in meta-analysis.",
-            "In this instance the 95% credibility intervals are",
-            round(res_back$cr.lb,2), ",", round(res_back$cr.ub,2),
-            ". That is, it is estimated that 95% of true effect sizes fall between g=",
-            round(res_back$cr.lb,2)," and g=", round(res_back$cr.ub,2), ".",
-            sep = ""
-          )
+
+          outputTextSummary2 <- textReport[[2]]
+          
         }
         if (self$options$moderatorType == "CAT" ||
             self$options$moderatorType == "CON") {
-          outputTextSummary2 <-
-            paste(
-              "A Cochran's Q test was conducted to examine whether variations in the observed effect are likely to be attributable soley to sampling error (Q~(df=",
-              res$k[1]-1,
-              ")~=",
-              round(res$QE,2),
-              ", p=",
-              ifelse(res$QEp[1] < 0.001,
-                     "<.001",
-                     round(res$QEp[1],3)),
-              ".", 
-              ifelse(res$QEp[1] < 0.05, 
-                     " The variation in the effect is greater than would be expected from sampling error alone. It appears that the true effect varies betweeen studies.",
-                     "There is no evidence that the true effect size varies between studies."),
-              "The I^2^ statistics indicates the proportion of variance in the observed effect attributable to sampling error. In this instance, the I^2^ =",
-              round(res$I2[1],2),
-              " %.",
-              sep = ""
-            ) 
+
+          outputTextSummary2 <- " "
         }
         
         
@@ -570,71 +483,131 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         
         # Test of Excess Significance
         
-        TES <- tes(res, H0 = tesH0, alternative = tesAlternative, alpha = tesAlpha)
         resultsTES <- self$results$resultsTES
-        resultsTES$setRow(
-        rowNo = 1,
-        values = list(
-          label = "Observed Number of Significant Findings",
-          tesNumberOutput = TES[["O"]]
-        )
-    )
-        resultsTES$setRow(
-          rowNo = 2,
-          values = list(
-            label = "Expected Number of Significant Findings",
-            tesNumberOutput = TES[["k"]]
+        
+        if (self$options$moderatorType == "NON") {
+          
+          TES <- tes(res, H0 = tesH0, alternative = tesAlternative, alpha = tesAlpha)
+          resultsTES$setRow(
+            rowNo = 1,
+            values = list(
+              label = "Observed Number of Significant Findings",
+              tesNumberOutput = TES[["O"]]
+            )
           )
-        )
-        resultsTES$setRow(
-          rowNo = 3,
-          values = list(
-            label = "Observed Number / Expected Number",
-            tesNumberOutput = TES[["OEratio"]]
+          resultsTES$setRow(
+            rowNo = 2,
+            values = list(
+              label = "Expected Number of Significant Findings",
+              tesNumberOutput = TES[["k"]]
+            )
           )
-        )
-        
-        tesQuantile <- quantile(TES[["power"]])
-        tesQuantile25 <- as.numeric(tesQuantile[2])
-        tesQuantile75 <- as.numeric(tesQuantile[4])
-        
-        resultsTES2 <- self$results$resultsTES2
-        resultsTES2$setRow(
-          rowNo = 1,
-          values = list(
-            tesOutputMin = min(TES[["power"]]),
-            tesOutputQ1 = tesQuantile25,
-            tesOutputMed = median(TES[["power"]]),
-            tesOutputQ3 = tesQuantile75,
-            tesOutputMax = max(TES[["power"]])
+          resultsTES$setRow(
+            rowNo = 3,
+            values = list(
+              label = "Observed Number / Expected Number",
+              tesNumberOutput = TES[["OEratio"]]
+            )
           )
-        )
+          
+          tesQuantile <- quantile(TES[["power"]])
+          tesQuantile25 <- as.numeric(tesQuantile[2])
+          tesQuantile75 <- as.numeric(tesQuantile[4])
+          
+          resultsTES2 <- self$results$resultsTES2
+          resultsTES2$setRow(
+            rowNo = 1,
+            values = list(
+              tesOutputMin = min(TES[["power"]]),
+              tesOutputQ1 = tesQuantile25,
+              tesOutputMed = median(TES[["power"]]),
+              tesOutputQ3 = tesQuantile75,
+              tesOutputMax = max(TES[["power"]])
+            )
+          )
+          
+          
+          tesNote2 <-
+            paste("Estimated Power of Tests (based on theta = ",
+                  round(TES[["theta"]], 4),
+                  ")",
+                  sep = "")
+          
+          resultsTES2$setNote("tesNoteTable", tesNote2)
+          
+          tesOutput3 <- self$results$tesOutput3
+          tesResults3 <-
+            paste(
+              "Test of Excess Significance: p = ",
+              round(TES[["pval"]], 4),
+              " ( X^2 = ",
+              round(TES[["X2"]], 4),
+              ", df = 1). Limit Estimate: ",
+              round(TES[["theta.lim"]], 4),
+              " (where p = ",
+              round(TES[["tes.alpha"]], 4),
+              ")",
+              sep = ""
+            )
+          
+          tesOutput3$setContent(tesResults3)
+          
+        }
+        if (self$options$moderatorType == "CAT" ||
+            self$options$moderatorType == "CON") {
+          
+          resultsTES$setRow(
+            rowNo = 1,
+            values = list(
+              label = " ",
+              tesNumberOutput = 0
+            )
+          )
+          resultsTES$setRow(
+            rowNo = 2,
+            values = list(
+              label = " ",
+              tesNumberOutput = 0
+            )
+          )
+          resultsTES$setRow(
+            rowNo = 3,
+            values = list(
+              label = " ",
+              tesNumberOutput = 0
+            )
+          )
+          
+          tesQuantile <- 0
+          tesQuantile25 <- 0
+          tesQuantile75 <- 0
+          
+          resultsTES2 <- self$results$resultsTES2
+          resultsTES2$setRow(
+            rowNo = 1,
+            values = list(
+              tesOutputMin = 0,
+              tesOutputQ1 = 0,
+              tesOutputMed = 0,
+              tesOutputQ3 = 0,
+              tesOutputMax = 0)
+            )
+          
+          
+          
+          tesNote2 <- "Test of Excess Significance can not run with moderators"
+          
+          resultsTES2$setNote("tesNoteTable", tesNote2)
+          
+          tesOutput3 <- self$results$tesOutput3
+          tesResults3 <- "Test of Excess Significance can not run with moderators"
+          
+          tesOutput3$setContent(tesResults3)
+        }
         
         
-        tesNote2 <-
-          paste("Estimated Power of Tests (based on theta = ",
-                round(TES[["theta"]], 4),
-                ")",
-                sep = "")
+       
 
-        resultsTES2$setNote("tesNoteTable", tesNote2)
-        
-        tesOutput3 <- self$results$tesOutput3
-        tesResults3 <-
-          paste(
-            "Test of Excess Significance: p = ",
-            round(TES[["pval"]], 4),
-            " ( X^2 = ",
-            round(TES[["X2"]], 4),
-            ", df = 1). Limit Estimate: ",
-            round(TES[["theta.lim"]], 4),
-            " (where p = ",
-            round(TES[["tes.alpha"]], 4),
-            ")",
-            sep = ""
-          )
-        
-        tesOutput3$setContent(tesResults3)
 
         # Selection Models for pub bias
         
