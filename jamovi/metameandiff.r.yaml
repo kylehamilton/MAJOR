@@ -10,6 +10,20 @@ items:
       refs: [ metafor ]
       title: "Random-Effects Model"
       rows:  2
+      clearWith:
+      - n1i
+      - n2i
+      - m1i
+      - m2i
+      - sd1i
+      - sd2i
+      - slab
+      - moderatorcor
+      - moderatorType
+      - methodmetacor
+      - cormeasure
+      - testType
+      - level
       columns:
         - name: Intercept
           title: ''
@@ -35,6 +49,20 @@ items:
     - name:  tableTauSqaured
       title: Heterogeneity Statistics
       type: Table
+      clearWith:
+      - n1i
+      - n2i
+      - m1i
+      - m2i
+      - sd1i
+      - sd2i
+      - slab
+      - moderatorcor
+      - moderatorType
+      - methodmetacor
+      - cormeasure
+      - testType
+      - level
       rows:  1
       columns:
         - name: tauSQRT
@@ -107,6 +135,23 @@ items:
       type: Image
       width:  600
       height: 450
+      clearWith:
+      - n1i
+      - n2i
+      - m1i
+      - m2i
+      - sd1i
+      - sd2i
+      - slab
+      - moderatorcor
+      - moderatorType
+      - addcred
+      - addfit
+      - showweights
+      - steps
+      - xAxisTitle
+      - pchForest
+      - forestOrder
       renderFun: .plot
       refs: [ metafor ]
 
@@ -115,6 +160,23 @@ items:
       type: Image
       width:  600
       height: 625
+      clearWith:
+      - n1i
+      - n2i
+      - m1i
+      - m2i
+      - sd1i
+      - sd2i
+      - slab
+      - moderatorcor
+      - moderatorType
+      - addcred
+      - addfit
+      - showweights
+      - steps
+      - xAxisTitle
+      - pchForest
+      - forestOrder
       renderFun: .plot
       refs: [ metafor ]
 
@@ -123,6 +185,23 @@ items:
       type: Image
       width:  600
       height: 900
+      clearWith:
+      - n1i
+      - n2i
+      - m1i
+      - m2i
+      - sd1i
+      - sd2i
+      - slab
+      - moderatorcor
+      - moderatorType
+      - addcred
+      - addfit
+      - showweights
+      - steps
+      - xAxisTitle
+      - pchForest
+      - forestOrder
       renderFun: .plot
       refs: [ metafor ]
 
@@ -131,6 +210,23 @@ items:
       type: Image
       width:  900
       height: 450
+      clearWith:
+      - n1i
+      - n2i
+      - m1i
+      - m2i
+      - sd1i
+      - sd2i
+      - slab
+      - moderatorcor
+      - moderatorType
+      - addcred
+      - addfit
+      - showweights
+      - steps
+      - xAxisTitle
+      - pchForest
+      - forestOrder
       renderFun: .plot
       refs: [ metafor ]
 
@@ -139,6 +235,23 @@ items:
       type: Image
       width:  900
       height: 625
+      clearWith:
+      - n1i
+      - n2i
+      - m1i
+      - m2i
+      - sd1i
+      - sd2i
+      - slab
+      - moderatorcor
+      - moderatorType
+      - addcred
+      - addfit
+      - showweights
+      - steps
+      - xAxisTitle
+      - pchForest
+      - forestOrder
       renderFun: .plot
       refs: [ metafor ]
 
@@ -147,6 +260,23 @@ items:
       type: Image
       width:  900
       height: 900
+      clearWith:
+      - n1i
+      - n2i
+      - m1i
+      - m2i
+      - sd1i
+      - sd2i
+      - slab
+      - moderatorcor
+      - moderatorType
+      - addcred
+      - addfit
+      - showweights
+      - steps
+      - xAxisTitle
+      - pchForest
+      - forestOrder
       renderFun: .plot
       refs: [ metafor ]
 
@@ -197,6 +327,19 @@ items:
       type: Image
       width:  600
       height: 450
+      clearWith:
+      - n1i
+      - n2i
+      - m1i
+      - m2i
+      - sd1i
+      - sd2i
+      - slab
+      - moderatorcor
+      - moderatorType
+      - yaxis
+      - yaxisInv
+      - enhanceFunnel
       renderFun: .funplot
       refs: [ metafor ] 
 
@@ -205,6 +348,19 @@ items:
       type: Image
       width:  750
       height: 563
+      clearWith:
+      - n1i
+      - n2i
+      - m1i
+      - m2i
+      - sd1i
+      - sd2i
+      - slab
+      - moderatorcor
+      - moderatorType
+      - yaxis
+      - yaxisInv
+      - enhanceFunnel
       renderFun: .funplot
       refs: [ metafor ] 
       
@@ -213,6 +369,19 @@ items:
       type: Image
       width:  900
       height: 675
+      clearWith:
+      - n1i
+      - n2i
+      - m1i
+      - m2i
+      - sd1i
+      - sd2i
+      - slab
+      - moderatorcor
+      - moderatorType
+      - yaxis
+      - yaxisInv
+      - enhanceFunnel
       renderFun: .funplot
       refs: [ metafor ]
       
@@ -264,6 +433,16 @@ items:
     - name: pCurvePlot
       title: p Curve Plot
       type: Image
+      clearWith:
+      - n1i
+      - n2i
+      - m1i
+      - m2i
+      - sd1i
+      - sd2i
+      - slab
+      - moderatorcor
+      - moderatorType
       width:  900
       height: 675
       renderFun: .pcurveplot
