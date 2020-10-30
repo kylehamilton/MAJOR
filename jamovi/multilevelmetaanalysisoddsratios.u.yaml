@@ -1,0 +1,45 @@
+title: Dichotomous Models
+name: multiLevelMetaAnalysisOddsRatios
+jus: '3.0'
+stage: 0
+compilerMode: aggressive
+children:
+  - type: VariableSupplier
+    persistentItems: false
+    stretchFactor: 1
+    children:
+      - type: TargetLayoutBox
+        label: Number of positive cases in experimental group
+        children:
+          - type: VariablesListBox
+            name: ai
+            maxItemCount: 1
+            isTarget: true
+      - type: TargetLayoutBox
+        label: Number of negative cases in experimental group
+        children:
+          - type: VariablesListBox
+            name: bi
+            maxItemCount: 1
+            isTarget: true
+      - type: TargetLayoutBox
+        label: Number of negative cases in control group
+        children:
+          - type: VariablesListBox
+            name: ci
+            maxItemCount: 1
+            isTarget: true
+      - type: TargetLayoutBox
+        label: Number of negative cases in control group
+        children:
+          - type: VariablesListBox
+            name: di
+            maxItemCount: 1
+            isTarget: true
+      - type: TargetLayoutBox
+        label: Study or Trial Number
+        children:
+          - type: VariablesListBox
+            name: studyNum
+            maxItemCount: 1
+            isTarget: true

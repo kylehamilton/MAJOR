@@ -44,3 +44,6 @@ export(multiLevelMetaCorrOptions)
 
 export(multiLevelMetaMeanDiffClass)
 export(multiLevelMetaMeanDiffOptions)
+
+export(multiLevelMetaAnalysisOddsRatiosClass)
+export(multiLevelMetaAnalysisOddsRatiosOptions)
