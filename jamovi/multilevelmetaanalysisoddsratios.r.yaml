@@ -1,0 +1,48 @@
+---
+name:  multiLevelMetaAnalysisOddsRatios
+title: Dichotomous Models
+jrs:   '1.1'
+
+items:
+    - name:  resultsTable
+      type: Table
+      refs: [ metafor ]
+      title: "Random-Effects Model"
+      rows:  2
+      columns:
+        - name: Intercept
+          title: ''
+          type: text
+        - name: Estimate
+          type: number
+        - name: se
+          type: number
+        - name: Z
+          type: number
+        - name: p
+          type: number
+          format: zto,pvalue
+        - name: CILow
+          title: CI Lower Bound
+          type: number
+          format: zto
+        - name: CIHigh
+          title: CI Upper Bound
+          type: number
+          format: zto
+    - name:  data1
+      title: data1
+      type:  Preformatted
+    - name:  data2
+      title: data2
+      type:  Preformatted
+    - name:  data2a
+      title: data2a
+      type:  Preformatted
+    - name:  data3
+      title: data3
+      type:  Preformatted
+    - name:  options
+      title: options
+      type:  Preformatted
+...

@@ -81,6 +81,11 @@ analyses:
     menuGroup: MAJOR
     menuTitle: Mean Differences
     menuSubgroup: Multilevel Models
+  - title: Dichotomous Models
+    name: multiLevelMetaAnalysisOddsRatios
+    ns: MAJOR
+    menuGroup: MAJOR
+    menuTitle: Dichotomous Models
 usesNative: true
 minApp: 1.0.8
 
