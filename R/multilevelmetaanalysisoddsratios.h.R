@@ -79,6 +79,7 @@ multiLevelMetaAnalysisOddsRatiosResults <- if (requireNamespace('jmvcore')) R6::
     active = list(
         resultsTable = function() private$.items[["resultsTable"]],
         data1 = function() private$.items[["data1"]],
+        data1a = function() private$.items[["data1a"]],
         data2 = function() private$.items[["data2"]],
         data2a = function() private$.items[["data2a"]],
         data3 = function() private$.items[["data3"]],
@@ -131,6 +132,10 @@ multiLevelMetaAnalysisOddsRatiosResults <- if (requireNamespace('jmvcore')) R6::
                 title="data1"))
             self$add(jmvcore::Preformatted$new(
                 options=options,
+                name="data1a",
+                title="data1a"))
+            self$add(jmvcore::Preformatted$new(
+                options=options,
                 name="data2",
                 title="data2"))
             self$add(jmvcore::Preformatted$new(
@@ -179,6 +184,7 @@ multiLevelMetaAnalysisOddsRatiosBase <- if (requireNamespace('jmvcore')) R6::R6C
 #' \tabular{llllll}{
 #'   \code{results$resultsTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$data1} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$data1a} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$data2} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$data2a} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$data3} \tab \tab \tab \tab \tab a preformatted \cr

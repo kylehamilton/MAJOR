@@ -33,6 +33,9 @@ items:
     - name:  data1
       title: data1
       type:  Preformatted
+    - name:  data1a
+      title: data1a
+      type:  Preformatted
     - name:  data2
       title: data2
       type:  Preformatted
