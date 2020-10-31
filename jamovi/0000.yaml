@@ -69,6 +69,7 @@ analyses:
     ns: MAJOR
     menuGroup: MAJOR
     menuTitle: Risk of Bias Assessment
+    menuSubgroup: Other Tools
   - title: Correlation Coefficients
     name: multiLevelMetaCorr
     ns: MAJOR
@@ -86,6 +87,7 @@ analyses:
     ns: MAJOR
     menuGroup: MAJOR
     menuTitle: Dichotomous Models
+    menuSubgroup: Multilevel Models
 usesNative: true
 minApp: 1.0.8
 

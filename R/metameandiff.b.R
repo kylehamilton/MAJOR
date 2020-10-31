@@ -635,6 +635,19 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         }  
         
         if (is.list(selOutput) == TRUE) {
+          if(selModelType == "none") {
+            selModelOutput$setRow(
+              rowNo = 1,
+              values = list(
+                deltaEstimate = 0,
+                deltaSE = 0,
+                deltaZ = 0,
+                deltaPVAL = 0,
+                deltaCILB = 0,
+                deltaCIUB = 0
+              )
+            )
+          } else {
         selModelOutput$setRow(
           rowNo = 1,
           values = list(
@@ -652,6 +665,7 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
         if(selModelType == "logistic"){selModelOutput$setNote("selModelOutputType", "Logistic selection model (Preston et al. 2004)")}
         if(selModelType == "power"){selModelOutput$setNote("selModelOutputType", "Power selection model")}
         if(selModelType == "stepfun"){selModelOutput$setNote("selModelOutputType", "Vevea and Hedges Weight Function Model (Vevea and Hedges 1995)")}
+          }
         }
         
 

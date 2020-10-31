@@ -279,6 +279,8 @@ options:
       title: Selection model type
       type: List
       options:
+        - name: "none"
+          title: None
         - name: "beta"
           title: Beta
         - name: "halfnorm"
@@ -291,7 +293,7 @@ options:
           title: Power
         - name: "stepfun"
           title: Step function
-      default: beta
+      default: none
       
     - name: yaxis
       title: Funnel plot y-axis options

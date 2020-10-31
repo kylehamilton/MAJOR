@@ -35,7 +35,7 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             tesH0 = 0,
             showTes = FALSE,
             puniformSide = "right",
-            selModelType = "beta",
+            selModelType = "none",
             yaxis = "sei",
             yaxisInv = FALSE,
             enhanceFunnel = FALSE,
@@ -261,13 +261,14 @@ metaMeanDiffOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "selModelType",
                 selModelType,
                 options=list(
+                    "none",
                     "beta",
                     "halfnorm",
                     "negexp",
                     "logistic",
                     "power",
                     "stepfun"),
-                default="beta")
+                default="none")
             private$..yaxis <- jmvcore::OptionList$new(
                 "yaxis",
                 yaxis,
@@ -1335,7 +1336,7 @@ metaMeanDiff <- function(
     tesH0 = 0,
     showTes = FALSE,
     puniformSide = "right",
-    selModelType = "beta",
+    selModelType = "none",
     yaxis = "sei",
     yaxisInv = FALSE,
     enhanceFunnel = FALSE,
