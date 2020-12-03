@@ -1,0 +1,17 @@
+Package: MAJOR
+Type: Package
+Title: MAJOR: Meta-Analysis for JAMOVI
+Version: 1.1.0
+Author: W. Kyle Hamilton
+Maintainer: W. Kyle Hamilton <kyle.hamilton@gmail.com>
+Description: This module allows you to run a meta-analysis and is based on the R package Metafor by Wolfgang Viechtbauer.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports: jmvcore (>= 0.5.5), R6, bayesmeta, ggplot2, TOSTER, pkgconfig,
+        graphics, stats, pwr, stringr, poibin, esc, remotes, nlme,
+        pbapply, numDeriv, utils, grDevices, lme4, CompQuadForm,
+        mvtnorm, BiasedUrn, Epi, gsl, sp, boot, R.rsp, methods, Matrix,
+        puniform
+Remotes: kylehamilton/metafor
+Built: R 4.0.2; ; 2020-12-03 00:03:47 UTC; windows

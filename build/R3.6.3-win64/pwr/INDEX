@@ -1,0 +1,25 @@
+ES.h                    Effect size calculation for proportions
+ES.w1                   Effect size calculation in the chi-squared test
+                        for goodness of fit
+ES.w2                   Effect size calculation in the chi-squared test
+                        for association
+cohen.ES                Conventional effects size
+plot.power.htest        Plot diagram of sample size vs. test power
+pwr-package             Basic Functions for Power Analysis pwr
+pwr.2p.test             Power calculation for two proportions (same
+                        sample sizes)
+pwr.2p2n.test           Power calculation for two proportions
+                        (different sample sizes)
+pwr.anova.test          Power calculations for balanced one-way
+                        analysis of variance tests
+pwr.chisq.test          power calculations for chi-squared tests
+pwr.f2.test             Power calculations for the general linear model
+pwr.norm.test           Power calculations for the mean of a normal
+                        distribution (known variance)
+pwr.p.test              Power calculations for proportion tests (one
+                        sample)
+pwr.r.test              Power calculations for correlation test
+pwr.t.test              Power calculations for t-tests of means (one
+                        sample, two samples and paired samples)
+pwr.t2n.test            Power calculations for two samples (different
+                        sizes) t-tests of means

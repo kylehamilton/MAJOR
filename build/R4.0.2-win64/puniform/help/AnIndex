@@ -1,0 +1,17 @@
+data.mccall93	data.mccall93
+diffprior	diffprior
+escompute	escompute
+fe_ma	fe_ma
+fis_trans	fis_trans
+hybrid	hybrid
+meta_plot	meta_plot
+puniform	puniform
+puni_star	puni_star
+req_ni_r	req_ni_r
+snapshot	snapshot
+snapshot_naive	snapshot_naive
+var_boot_fis	var_boot_fis
+var_boot_rmd	var_boot_rmd
+var_dif_fis	var_dif_fis
+var_dif_rmd	var_dif_rmd
+var_pop	var_pop

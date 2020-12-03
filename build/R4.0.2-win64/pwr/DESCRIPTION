@@ -1,0 +1,36 @@
+Package: pwr
+Version: 1.3-0
+Date: 2020-03-16
+Title: Basic Functions for Power Analysis
+Authors@R: c(person("Stephane", "Champely", role=c("aut")),
+  person("Claus", "Ekstrom", role="ctb"),
+  person("Peter", "Dalgaard", role="ctb"),
+  person("Jeffrey", "Gill", role="ctb"),
+  person("Stephan", "Weibelzahl", role="ctb"),
+  person("Aditya", "Anandkumar", role="ctb"),
+  person("Clay", "Ford", role="ctb"),
+  person("Robert", "Volcic", role="ctb"),
+  person("Helios", "De Rosario", role="cre",
+  email="helios.derosario@gmail.com"))
+Description: Power analysis functions along the lines of Cohen (1988).
+Imports: stats, graphics
+Suggests: ggplot2, scales, knitr, rmarkdown
+License: GPL (>= 3)
+URL: https://github.com/heliosdrm/pwr
+VignetteBuilder: knitr
+RoxygenNote: 7.1.0
+NeedsCompilation: no
+Packaged: 2020-03-16 22:50:22 UTC; meliana
+Author: Stephane Champely [aut],
+  Claus Ekstrom [ctb],
+  Peter Dalgaard [ctb],
+  Jeffrey Gill [ctb],
+  Stephan Weibelzahl [ctb],
+  Aditya Anandkumar [ctb],
+  Clay Ford [ctb],
+  Robert Volcic [ctb],
+  Helios De Rosario [cre]
+Maintainer: Helios De Rosario <helios.derosario@gmail.com>
+Repository: CRAN
+Date/Publication: 2020-03-17 12:10:02 UTC
+Built: R 4.0.2; ; 2020-08-19 13:56:08 UTC; windows

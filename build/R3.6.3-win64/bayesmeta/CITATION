@@ -1,0 +1,14 @@
+bibentry(bibtype = "article",
+         title   = "Bayesian random-effects meta-analysis using the {bayesmeta} {R}~package",
+         author  = person(given  = "Christian",
+                          family = "R\\\"{o}ver",
+                          email  = "christian.roever@med.uni-goettingen.de"),
+         journal = "Journal of Statistical Software",
+         year    = "2020",
+         month   = "apr",
+         volume  = "93",
+         number  = "6",
+         pages   = "1-51",
+         doi     = "10.18637/jss.v093.i06",
+
+         header  = "To cite bayesmeta in publications use:")

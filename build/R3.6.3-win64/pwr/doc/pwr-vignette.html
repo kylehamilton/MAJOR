@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>A simple example</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+<!-- MathJax scripts -->
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<p>The basic idea of calculating power or sample size with functions in the pwr package is to <em>leave out</em> the argument that you want to calculate. If you want to calculate power, then leave the <code>power</code> argument out of the function. If you want to calculate sample size, leave <code>n</code> out of the function. Whatever parameter you want to calculate is determined from the others.</p>
+
+<p>You select a function based on the statistical test you plan to use to analyze your data. If you plan to use a two-sample t-test to compare two means, you would use the <code>pwr.t.test</code> function for estimating sample size or power. All functions for power and sample size analysis in the pwr package begin with <code>pwr</code>. Functions are available for the following statistical tests:</p>
+
+<ul>
+<li><code>pwr.p.test</code>: one-sample proportion test</li>
+<li><code>pwr.2p.test</code>: two-sample proportion test</li>
+<li><code>pwr.2p2n.test</code>: two-sample proportion test (unequal sample sizes)</li>
+<li><code>pwr.t.test</code>: two-sample, one-sample and paired t-tests</li>
+<li><code>pwr.t2n.test</code>: two-sample t-tests (unequal sample sizes)</li>
+<li><code>pwr.anova.test</code>: one-way balanced ANOVA</li>
+<li><code>pwr.r.test</code>: correlation test</li>
+<li><code>pwr.chisq.test</code>: chi-squared test (goodness of fit and association)</li>
+<li><code>pwr.f2.test</code>: test for the general linear model</li>
+</ul>
+
+<p>There are also a few convenience functions for calculating effect size as well as a generic <code>plot</code> function for plotting power versus sample size. All of these are demonstrated in the examples below.</p>
+
+<h2>A simple example</h2>
+
+<p>Let&#39;s say we suspect we have a loaded coin that lands heads 75% of the time instead of the expected 50%. We wish to create an experiment to test this. We will flip the coin a certain number of times and observe the proportion of heads. We will then conduct a one-sample proportion test to see if the proportion of heads is significantly different from what we would expect with a fair coin. We will judge significance by our p-value. If our p-value falls below a certain threshold, say 0.05, we will conclude our coin&#39;s behavior is inconsistent with that of a fair coin.</p>
+
+<ul>
+<li>Our null hypothesis is that the coin is fair and lands heads 50% of the time (\(\pi\) = 0.50).</li>
+<li>Our alternative hypothesis is that the coin is loaded to land heads more then 50% of the time (\(\pi\) &gt; 0.50).</li>
+</ul>
+
+<p>How many times should we flip the coin to have a high probability (or <em>power</em>), say 0.80, of correctly rejecting the null of \(\pi\) = 0.5 if our coin is indeed loaded to land heads 75% of the time?</p>
+
+<p>Here is how we can determine this using the <code>pwr.p.test</code> function.</p>
+
+<pre><code class="r">library(pwr)
+pwr.p.test(h = ES.h(p1 = 0.75, p2 = 0.50),
+           sig.level = 0.05,
+           power = 0.80,
+           alternative = &quot;greater&quot;)
+</code></pre>
+
+<pre><code>## 
+##      proportion power calculation for binomial distribution (arcsine transformation) 
+## 
+##               h = 0.5235988
+##               n = 22.55126
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = greater
+</code></pre>
+
+<p>The function tells us we should flip the coin 22.55127 times, which we round up to 23. Always round sample size estimates up. If we&#39;re correct that our coin lands heads 75% of the time, we need to flip it at least 23 times to have an 80% chance of correctly rejecting the null hypothesis at the 0.05 significance level.</p>
+
+<p>Notice that since we wanted to determine sample size (<code>n</code>), we left it out of the function. Our <em>effect size</em> is entered in the <code>h</code> argument. The label <code>h</code> is due to Cohen (1988). The function <code>ES.h</code> is used to calculate a unitless effect size using the arcsine transformation. (More on effect size below.) <code>sig.level</code> is the argument for our desired significance level. This is also sometimes referred to as our tolerance for a Type I error (\(\alpha\)). <code>power</code> is our desired power. It is sometimes referred to as 1 - \(\beta\), where \(\beta\) is Type II error. The <code>alternative</code> argument says we think the alternative is &ldquo;greater&rdquo; than the null, not just different.</p>
+
+<p>Type I error, \(\alpha\), is the probability of rejecting the null hypothesis when it is true. This is thinking we have found an effect where none exist. This is considered the more serious error. Our tolerance for Type I error is usually 0.05 or lower.</p>
+
+<p>Type II error, \(\beta\), is the probability of failing to reject the null hypothesis when it is false. This is thinking there is no effect when in fact there is. Our tolerance for Type II error is usually 0.20 or lower. Type II error is 1 - Power. If we desire a power of 0.90, then we implicitly specify a Type II error tolerance of 0.10.</p>
+
+<p>The pwr package provides a generic <code>plot</code> function that allows us to see how power changes as we change our sample size. If you have the ggplot2 package installed, it will create a plot using <code>ggplot</code>. Otherwise base R graphics are used.</p>
+
+<pre><code class="r">p.out &lt;- pwr.p.test(h = ES.h(p1 = 0.75, p2 = 0.50),
+                    sig.level = 0.05,
+                    power = 0.80,
+                    alternative = &quot;greater&quot;)
+plot(p.out)
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-2"/></p>
+
+<p>What is the power of our test if we flip the coin 40 times and lower our Type I error tolerance to 0.01? Notice we leave out the <code>power</code> argument, add <code>n = 40</code>, and change <code>sig.level = 0.01</code>:</p>
+
+<pre><code class="r">pwr.p.test(h = ES.h(p1 = 0.75, p2 = 0.50),
+           sig.level = 0.01,
+           n = 40,
+           alternative = &quot;greater&quot;)
+</code></pre>
+
+<pre><code>## 
+##      proportion power calculation for binomial distribution (arcsine transformation) 
+## 
+##               h = 0.5235988
+##               n = 40
+##       sig.level = 0.01
+##           power = 0.8377325
+##     alternative = greater
+</code></pre>
+
+<p>The power of our test is about 84%.</p>
+
+<p>We specified <code>alternative = &quot;greater&quot;</code> since we assumed the coin was loaded for more heads (not less). This is a stronger assumption than assuming that the coin is simply unfair in one way or another. In practice, sample size and power calculations will usually make the more conservative &ldquo;two-sided&rdquo; assumption. In fact this is the default for pwr functions with an <code>alternative</code> argument. If we wish to assume a &ldquo;two-sided&rdquo; alternative, we can simply leave it out of the function. Notice how our power estimate drops below 80% when we do this.</p>
+
+<pre><code class="r">pwr.p.test(h = ES.h(p1 = 0.75, p2 = 0.50),
+           sig.level = 0.01,
+           n = 40)
+</code></pre>
+
+<pre><code>## 
+##      proportion power calculation for binomial distribution (arcsine transformation) 
+## 
+##               h = 0.5235988
+##               n = 40
+##       sig.level = 0.01
+##           power = 0.7690434
+##     alternative = two.sided
+</code></pre>
+
+<p>What if we assume the &ldquo;loaded&rdquo; effect is smaller? Maybe the coin lands heads 65% of the time. How many flips do we need to perform to detect this smaller effect at the 0.05 level with 80% power and the more conservative two-sided alternative?</p>
+
+<pre><code class="r">pwr.p.test(h = ES.h(p1 = 0.65, p2 = 0.50),
+           sig.level = 0.05,
+           power = 0.80)
+</code></pre>
+
+<pre><code>## 
+##      proportion power calculation for binomial distribution (arcsine transformation) 
+## 
+##               h = 0.3046927
+##               n = 84.54397
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+</code></pre>
+
+<p>About 85 coin flips. Detecting smaller effects require larger sample sizes.</p>
+
+<h2>More on effect size</h2>
+
+<p>Cohen describes effect size as &ldquo;the degree to which the null hypothesis is false.&rdquo; In our coin flipping example, this is the difference between 75% and 50%. We could say the effect was 25% but recall we had to transform the absolute difference in proportions to another quantity using the <code>ES.h</code> function. This is a crucial part of using the pwr package correctly: <em>You must provide an effect size on the expected scale.</em> Doing otherwise will produce wrong sample size and power calculations.</p>
+
+<p>When in doubt, we can use <em>Conventional Effect Sizes</em>. These are pre-determined effect sizes for &ldquo;small&rdquo;, &ldquo;medium&rdquo;, and &ldquo;large&rdquo; effects. The <code>cohen.ES</code> function returns a conventional effect size for a given test and size. For example, the medium effect size for the correlation test is 0.3:</p>
+
+<pre><code class="r">cohen.ES(test = &quot;r&quot;, size = &quot;medium&quot;)
+</code></pre>
+
+<pre><code>## 
+##      Conventional effect size from Cohen (1982) 
+## 
+##            test = r
+##            size = medium
+##     effect.size = 0.3
+</code></pre>
+
+<p>As a shortcut, the effect size can be passed to power test functions as a string with the alias of a conventional effect size:</p>
+
+<pre><code class="r">pwr.r.test(r=&quot;medium&quot;, power=0.8)
+</code></pre>
+
+<pre><code>## 
+##      approximate correlation power calculation (arctangh transformation) 
+## 
+##               n = 84.07364
+##               r = 0.3
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+</code></pre>
+
+<p>For convenience, here are all conventional effect sizes for all tests in the pwr package:</p>
+
+<table><thead>
+<tr>
+<th>Test</th>
+<th><code>small</code></th>
+<th><code>medium</code></th>
+<th><code>large</code></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>tests for proportions (<code>p</code>)</td>
+<td>0.2</td>
+<td>0.5</td>
+<td>0.8</td>
+</tr>
+<tr>
+<td>tests for means (<code>t</code>)</td>
+<td>0.2</td>
+<td>0.5</td>
+<td>0.8</td>
+</tr>
+<tr>
+<td>chi-square tests (<code>chisq</code>)</td>
+<td>0.1</td>
+<td>0.3</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>correlation test (<code>r</code>)</td>
+<td>0.1</td>
+<td>0.3</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>anova (<code>anov</code>)</td>
+<td>0.1</td>
+<td>0.25</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>general linear model (<code>f2</code>)</td>
+<td>0.02</td>
+<td>0.15</td>
+<td>0.35</td>
+</tr>
+</tbody></table>
+
+<p>It is worth noting that pwr functions can take vectors for numeric effect size and n arguments. This allows us to make many power calculations at once, either for multiple effect sizes or multiple sample sizes. For example, let&#39;s see how power changes for our coin flipping experiment for the three conventional effect sizes of 0.2, 0.5, and 0.8, assuming a sample size of 20.</p>
+
+<pre><code class="r">pwr.p.test(h = c(0.2,0.5,0.8),
+           n = 20,
+           sig.level = 0.05)
+</code></pre>
+
+<pre><code>## 
+##      proportion power calculation for binomial distribution (arcsine transformation) 
+## 
+##               h = 0.2, 0.5, 0.8
+##               n = 20
+##       sig.level = 0.05
+##           power = 0.1454725, 0.6087795, 0.9471412
+##     alternative = two.sided
+</code></pre>
+
+<p>As we demonstrated with the <code>plot</code> function above, we can save our results. This produces a list object from which we can extract quantities for further manipulation. For example, we can calculate power for sample sizes ranging from 10 to 100 in steps of 10, with an assumed &ldquo;medium&rdquo; effect of 0.5, and output to a data frame with some formatting:</p>
+
+<pre><code class="r">n &lt;- seq(10,100,10)
+p.out &lt;- pwr.p.test(h = 0.5,
+                    n = n,
+                    sig.level = 0.05)
+data.frame(n, power = sprintf(&quot;%.2f%%&quot;, p.out$power * 100))
+</code></pre>
+
+<pre><code>##      n  power
+## 1   10 35.26%
+## 2   20 60.88%
+## 3   30 78.19%
+## 4   40 88.54%
+## 5   50 94.24%
+## 6   60 97.21%
+## 7   70 98.69%
+## 8   80 99.40%
+## 9   90 99.73%
+## 10 100 99.88%
+</code></pre>
+
+<p>We can also directly extract quantities with the <code>$</code> function appended to the end of a pwr function. For example,</p>
+
+<pre><code class="r">pwr.p.test(h = 0.5, n = n, sig.level = 0.05)$power
+</code></pre>
+
+<pre><code>##  [1] 0.3526081 0.6087795 0.7819080 0.8853791 0.9424375 0.9721272 0.9869034
+##  [8] 0.9940005 0.9973108 0.9988173
+</code></pre>
+
+<h2>More examples</h2>
+
+<h3>pwr.2p.test - two-sample test for proportions</h3>
+
+<p>Let&#39;s say we want to randomly sample male and female college undergraduate
+students and ask them if they consume alcohol at least once a week. Our null
+hypothesis is no difference in the proportion that answer yes. Our alternative
+hypothesis is that there is a difference. This is a two-sided alternative; one gender has higher
+proportion but we don&#39;t know which. We would like to detect a difference as small as
+5%. How many students do we need to sample in each group if we want 80% power
+and a significance level of 0.05?</p>
+
+<p>If we think one group proportion is 55% and the other 50%:</p>
+
+<pre><code class="r">pwr.2p.test(h = ES.h(p1 = 0.55, p2 = 0.50), sig.level = 0.05, power = .80)
+</code></pre>
+
+<pre><code>## 
+##      Difference of proportion power calculation for binomial distribution (arcsine transformation) 
+## 
+##               h = 0.1001674
+##               n = 1564.529
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+## 
+## NOTE: same sample sizes
+</code></pre>
+
+<p>Notice the sample size is <em>per group</em>. We need to sample 1,565 males and 1,565 females to detect the 5% difference with 80% power.</p>
+
+<p>If we think one group proportion is 10% and the other 5%:</p>
+
+<pre><code class="r">pwr.2p.test(h = ES.h(p1 = 0.10, p2 = 0.05), sig.level = 0.05, power = .80)
+</code></pre>
+
+<pre><code>## 
+##      Difference of proportion power calculation for binomial distribution (arcsine transformation) 
+## 
+##               h = 0.1924743
+##               n = 423.7319
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+## 
+## NOTE: same sample sizes
+</code></pre>
+
+<p>Even though the absolute difference between proportions is the same (5%), the optimum sample size is now 424 per group. 10% vs 5% is actually a bigger difference than 55% vs 50%. A heuristic approach for understanding why is to compare the ratios: 55/50 = 1.1 while 10/5 = 2.</p>
+
+<p>The <code>ES.h</code> function performs an arcsine transformation on both proportions and returns the difference. By setting <code>p2</code> to 0, we can see the transformed value for <code>p1</code>. We can exploit this to help us visualize how the transformation creates larger effects for two proportions closer to 0 or 1. Below we plot transformed proportions versus untransformed proportions and then compare the distance between pairs of proportions on each axis.</p>
+
+<pre><code class="r">addSegs &lt;- function(p1, p2){
+  tp1 &lt;- ES.h(p1, 0); tp2 &lt;- ES.h(p2, 0)
+  segments(p1,0,p1,tp1, col=&quot;blue&quot;); segments(p2,0,p2,tp2,col=&quot;blue&quot;)
+  segments(0, tp1, p1, tp1, col=&quot;red&quot;); segments(0, tp2, p2, tp2, col=&quot;red&quot;)
+}
+
+curve(expr = ES.h(p1 = x, p2 = 0), xlim = c(0,1),
+      xlab = &quot;proportion&quot;, ylab = &quot;transformed proportion&quot;)
+addSegs(p1 = 0.50, p2 = 0.55) # 50% vs 55%
+addSegs(p1 = 0.05, p2 = 0.10) # 5% vs 10%
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-13"/></p>
+
+<p>The differences on the x-axis between the two pairs of proportions is the same (0.05), but the difference is larger for 5% vs 10% on the y-axis. The <code>ES.h</code> function returns the distance between the red lines.</p>
+
+<p>Base R has a function called <code>power.prop.test</code> that allows us to use the raw
+proportions in the function without a need for a separate effect size function.</p>
+
+<pre><code class="r">power.prop.test(p1 = 0.55, p2 = 0.50, sig.level = 0.05, power = .80)
+</code></pre>
+
+<pre><code>## 
+##      Two-sample comparison of proportions power calculation 
+## 
+##               n = 1564.672
+##              p1 = 0.55
+##              p2 = 0.5
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+## 
+## NOTE: n is number in *each* group
+</code></pre>
+
+<p>Notice the results are slightly different. It calculates effect size differently.</p>
+
+<p>If we don&#39;t have any preconceived estimates of proportions or don&#39;t feel
+comfortable making estimates, we can use conventional effect sizes of 0.2 (small),
+0.5 (medium), or 0.8 (large). The sample size per group needed to detect a &ldquo;small&rdquo; effect with 80% power and 0.05 significance is about 393:</p>
+
+<pre><code class="r">pwr.2p.test(h = 0.2, sig.level = 0.05, power = .80)
+</code></pre>
+
+<pre><code>## 
+##      Difference of proportion power calculation for binomial distribution (arcsine transformation) 
+## 
+##               h = 0.2
+##               n = 392.443
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+## 
+## NOTE: same sample sizes
+</code></pre>
+
+<h3>pwr.2p2n.test - two-sample test for proportions, unequal sample sizes</h3>
+
+<p>Let&#39;s return to our undergraduate survey of alcohol consumption. It turns out
+we were able to survey 543 males and 675 females. The power of our test
+if we&#39;re interested in being able to detect a &ldquo;small&rdquo; effect size with 0.05 significance is about 93%.</p>
+
+<pre><code class="r">cohen.ES(test = &quot;p&quot;, size = &quot;small&quot;)
+</code></pre>
+
+<pre><code>## 
+##      Conventional effect size from Cohen (1982) 
+## 
+##            test = p
+##            size = small
+##     effect.size = 0.2
+</code></pre>
+
+<pre><code class="r">pwr.2p2n.test(h = 0.2, n1 = 543, n2 = 675, sig.level = 0.05)
+</code></pre>
+
+<pre><code>## 
+##      difference of proportion power calculation for binomial distribution (arcsine transformation) 
+## 
+##               h = 0.2
+##              n1 = 543
+##              n2 = 675
+##       sig.level = 0.05
+##           power = 0.9344102
+##     alternative = two.sided
+## 
+## NOTE: different sample sizes
+</code></pre>
+
+<p>Let&#39;s say we previously surveyed 763 female undergraduates and found that <em>p</em>%
+said they consumed alcohol once a week. We would like to survey some males and see
+if a significantly different proportion respond yes. How many do I need to
+sample to detect a small effect size (0.2) in either direction with 80% power
+and a significance level of 0.05?</p>
+
+<pre><code class="r">pwr.2p2n.test(h = 0.2, n1 = 763, power = 0.8, sig.level = 0.05)
+</code></pre>
+
+<pre><code>## 
+##      difference of proportion power calculation for binomial distribution (arcsine transformation) 
+## 
+##               h = 0.2
+##              n1 = 763
+##              n2 = 264.1544
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+## 
+## NOTE: different sample sizes
+</code></pre>
+
+<p>About 265.</p>
+
+<h3>pwr.t.test - one-sample and two-sample t tests for means</h3>
+
+<p>We&#39;re interested to know if there is a difference in the mean price of
+what male and female students pay at a library coffee shop. Let&#39;s say we
+randomly observe 30 male and 30 female students check out from the coffee shop
+and calculate the mean purchase price for each gender. We&#39;ll test for a difference in means using a two-sample t-test. How powerful is this experiment if we want
+to detect a &ldquo;medium&rdquo; effect in either direction with a significance level of 0.05?</p>
+
+<pre><code class="r">cohen.ES(test = &quot;t&quot;, size = &quot;medium&quot;)
+</code></pre>
+
+<pre><code>## 
+##      Conventional effect size from Cohen (1982) 
+## 
+##            test = t
+##            size = medium
+##     effect.size = 0.5
+</code></pre>
+
+<pre><code class="r">pwr.t.test(n = 30, d = 0.5, sig.level = 0.05)
+</code></pre>
+
+<pre><code>## 
+##      Two-sample t test power calculation 
+## 
+##               n = 30
+##               d = 0.5
+##       sig.level = 0.05
+##           power = 0.4778965
+##     alternative = two.sided
+## 
+## NOTE: n is number in *each* group
+</code></pre>
+
+<p>Only 48%. Not very powerful. How many students should we observe for a test with 80% power?</p>
+
+<pre><code class="r">pwr.t.test(d = 0.5, power = 0.80, sig.level = 0.05)
+</code></pre>
+
+<pre><code>## 
+##      Two-sample t test power calculation 
+## 
+##               n = 63.76561
+##               d = 0.5
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+## 
+## NOTE: n is number in *each* group
+</code></pre>
+
+<p>About 64 per group.</p>
+
+<p>Let&#39;s say we want to be able to detect a difference of at least 75
+cents in the mean purchase price. We need to convert that to an effect size using the following formula:</p>
+
+<p>\[d = \frac{m_{1} - m_{2}}{\sigma} \]</p>
+
+<p>where \(m_{1}\) and \(m_{2}\) are the means of each group, respectively, and \(\sigma\) is the common standard deviation of the two groups. Again, the label <em>d</em> is due to Cohen (1988).</p>
+
+<p>We have \(m_{1} - m_{2} =\) 0.75. We need to make a guess at the population standard deviation. If we have
+absolutely no idea, one rule of thumb is to take the difference between the
+maximum and minimum values and divide by 4. Let&#39;s say the maximum purchase is $10 and the minimum purchase is $1. Our estimated standard deviation is (10 - 1)/4 = 2.25. Therefore our effect size is 0.75/2.25 \(\approx\) 0.333.</p>
+
+<pre><code class="r">d &lt;- 0.75/2.25
+pwr.t.test(d = d, power = 0.80, sig.level = 0.05)
+</code></pre>
+
+<pre><code>## 
+##      Two-sample t test power calculation 
+## 
+##               n = 142.2462
+##               d = 0.3333333
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+## 
+## NOTE: n is number in *each* group
+</code></pre>
+
+<p>For a desired power of 80%, Type I error tolerance of 0.05, and a hypothesized effect size of 0.333, we should sample at least 143 per group.</p>
+
+<p>Performing the same analysis with the base R function <code>power.t.test</code> is a little easier. The difference \(m_{1} - m_{2} =\) 0.75 is entered in the <code>delta</code> argument and the estimated \(\sigma\) = 2.25 is entered in the <code>sd</code> argument:</p>
+
+<pre><code class="r">power.t.test(delta = 0.75, sd = 2.25, sig.level = 0.05, power = 0.8)
+</code></pre>
+
+<pre><code>## 
+##      Two-sample t test power calculation 
+## 
+##               n = 142.2466
+##           delta = 0.75
+##              sd = 2.25
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+## 
+## NOTE: n is number in *each* group
+</code></pre>
+
+<p>To calculate power and sample size for one-sample t-tests, we need to set the <code>type</code> argument to <code>&quot;one.sample&quot;</code>. By default it is set to <code>&quot;two.sample&quot;</code>.</p>
+
+<p>For example, we think the average purchase price at the Library coffee shop is over
+$3 per student. Our null is $3 or less; our alternative is greater than $3. We can use a one-sample t-test to investigate this hunch. If
+the true average purchase price is $3.50, we would like to have 90% power to
+declare the estimated average purchase price is greater than $3. How many
+transactions do we need to observe assuming a significance level of 0.05? Let&#39;s
+say the maximum purchase price is $10 and the minimum is $1. So our guess at a standard
+deviation is 9/4 = 2.25.</p>
+
+<pre><code class="r">d &lt;- 0.50/2.25
+pwr.t.test(d = d, sig.level = 0.05, power = 0.90, alternative = &quot;greater&quot;,
+           type = &quot;one.sample&quot;)
+</code></pre>
+
+<pre><code>## 
+##      One-sample t test power calculation 
+## 
+##               n = 174.7796
+##               d = 0.2222222
+##       sig.level = 0.05
+##           power = 0.9
+##     alternative = greater
+</code></pre>
+
+<p>We should plan on observing at least 175 transactions.</p>
+
+<p>To use the <code>power.t.test</code> function, set <code>type = &quot;one.sample&quot;</code> and <code>alternative = &quot;one.sided&quot;</code>:</p>
+
+<pre><code class="r">power.t.test(delta = 0.50, sd = 2.25, power = 0.90, sig.level = 0.05,
+             alternative = &quot;one.sided&quot;, type = &quot;one.sample&quot;)
+</code></pre>
+
+<pre><code>## 
+##      One-sample t test power calculation 
+## 
+##               n = 174.7796
+##           delta = 0.5
+##              sd = 2.25
+##       sig.level = 0.05
+##           power = 0.9
+##     alternative = one.sided
+</code></pre>
+
+<p>&ldquo;Paired&rdquo; t-tests are basically the same as one-sample t-tests, except our one sample is usually differences in pairs. The following example should make this clear.</p>
+
+<p>(<em>From Hogg &amp; Tanis, exercise 6.5-12</em>) 24 high school boys are put on a ultra-heavy rope-jumping program.
+Does this decrease their 40-yard dash time (i.e., make them faster)? We&#39;ll
+measure their 40 time in seconds before the program and after. We&#39;ll use a paired t-test
+to see if the difference in times is greater than 0 (before - after). Assume
+the standard deviation of the differences will be about 0.25 seconds. How powerful is
+the test to detect a difference of about 0.08 seconds with 0.05 significance?</p>
+
+<p>Notice we set <code>type = &quot;paired&quot;</code>:</p>
+
+<pre><code class="r">pwr.t.test(n = 24, d = 0.08 / 0.25,
+           type = &quot;paired&quot;, alternative = &quot;greater&quot;)
+</code></pre>
+
+<pre><code>## 
+##      Paired t test power calculation 
+## 
+##               n = 24
+##               d = 0.32
+##       sig.level = 0.05
+##           power = 0.4508691
+##     alternative = greater
+## 
+## NOTE: n is number of *pairs*
+</code></pre>
+
+<p>Only 45%. Not all that powerful. How many high school boys should we sample for 80% power?</p>
+
+<pre><code class="r">pwr.t.test(d = 0.08 / 0.25, power = 0.8,
+           type = &quot;paired&quot;, alternative = &quot;greater&quot;)
+</code></pre>
+
+<pre><code>## 
+##      Paired t test power calculation 
+## 
+##               n = 61.75209
+##               d = 0.32
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = greater
+## 
+## NOTE: n is number of *pairs*
+</code></pre>
+
+<p>About 62.</p>
+
+<p>For paired t-tests we sometimes estimate a standard deviation for <em>within</em> pairs instead of for the difference in pairs. In our example, this would mean an estimated standard deviation for each boy&#39;s 40-yard dash times. When dealing with this type of estimated standard deviation we need to multiply it by \(\sqrt{2}\) in the <code>pwr.t.test</code> function. Let&#39;s say we estimate the standard deviation of each boy&#39;s 40-yard dash time to be about 0.10 seconds. The sample size needed to detect a difference of 0.08 seconds is now calculated as follows:</p>
+
+<pre><code class="r">pwr.t.test(d = 0.08 / (0.1 * sqrt(2)), power = 0.8,
+           type = &quot;paired&quot;, alternative = &quot;greater&quot;)
+</code></pre>
+
+<pre><code>## 
+##      Paired t test power calculation 
+## 
+##               n = 20.74232
+##               d = 0.5656854
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = greater
+## 
+## NOTE: n is number of *pairs*
+</code></pre>
+
+<p>We need to sample at least 21 students.</p>
+
+<h3>pwr.t2n.test - two-sample t test for means, unequal sample sizes</h3>
+
+<p>Find power for a two-sample t-test with 28 in one group and 35 in the other group and a
+medium effect size. (sig.level defaults to 0.05.)</p>
+
+<pre><code class="r">pwr.t2n.test(n1 = 28, n2 = 35, d = 0.5)
+</code></pre>
+
+<pre><code>## 
+##      t test power calculation 
+## 
+##              n1 = 28
+##              n2 = 35
+##               d = 0.5
+##       sig.level = 0.05
+##           power = 0.4924588
+##     alternative = two.sided
+</code></pre>
+
+<h3>pwr.chisq.test - Goodness of fit test</h3>
+
+<p>(<em>From Cohen, example 7.1</em>) A market researcher is seeking to determine
+preference among 4 package designs. He arranges to have a panel of 100
+consumers rate their favorite package design. He wants to perform a chi-square
+goodness of fit test against the null of equal preference (25% for each
+design) with a significance level of 0.05. What&#39;s the power of the test if 3/8
+of the population actually prefers one of the designs and the remaining 5/8
+are split over the other 3 designs?</p>
+
+<p>We use the <code>ES.w1</code> function to calculate effect size. To do so, we need to create vectors of null and alternative
+proportions:</p>
+
+<pre><code class="r">null &lt;- rep(0.25, 4)
+alt &lt;- c(3/8, rep((5/8)/3, 3))
+ES.w1(null,alt)
+</code></pre>
+
+<pre><code>## [1] 0.2886751
+</code></pre>
+
+<p>To calculate power, specify effect size (<code>w</code>), sample size (<code>N</code>), and degrees of freedom, which is the number of categories minus 1 (<code>df</code> = 4 - 1).</p>
+
+<pre><code class="r">pwr.chisq.test(w=ES.w1(null,alt), N=100, df=(4-1), sig.level=0.05)
+</code></pre>
+
+<pre><code>## 
+##      Chi squared power calculation 
+## 
+##               w = 0.2886751
+##               N = 100
+##              df = 3
+##       sig.level = 0.05
+##           power = 0.6739834
+## 
+## NOTE: N is the number of observations
+</code></pre>
+
+<p>If our estimated effect size is correct, we only have about a 67% chance of finding it (i.e., rejecting the null hypothesis of equal preference).</p>
+
+<p>How many subjects do we need to achieve 80% power?</p>
+
+<pre><code class="r">pwr.chisq.test(w=ES.w1(null,alt), df=(4-1), power=0.8, sig.level = 0.05)
+</code></pre>
+
+<pre><code>## 
+##      Chi squared power calculation 
+## 
+##               w = 0.2886751
+##               N = 130.8308
+##              df = 3
+##       sig.level = 0.05
+##           power = 0.8
+## 
+## NOTE: N is the number of observations
+</code></pre>
+
+<p>If our alternative hypothesis is correct then we need to survey at least 131 people to
+detect it with 80% power.</p>
+
+<h3>pwr.chisq.test - test of association</h3>
+
+<p>We want to see if there&#39;s an association between gender and flossing
+teeth among college students. We randomly sample 100 students (male and female) and
+ask whether or not they floss daily. We want to carry out a chi-square test of
+association to determine if there&#39;s an association between these two
+variables. We set our significance level to 0.01. To determine effect
+size we need to propose an alternative hypothesis, which in this case is a
+table of proportions. We propose the following:</p>
+
+<p>gender | Floss |No Floss
+&ndash;|&mdash;&mdash;|&mdash;&mdash;&ndash;
+Male |  0.1  |    0.4
+Female  | 0.2   |   0.3</p>
+
+<p>We use the <code>ES.w2</code> function to calculate effect size for chi-square tests of association</p>
+
+<pre><code class="r">prob &lt;- matrix(c(0.1,0.2,0.4,0.3), ncol=2,
+               dimnames = list(c(&quot;M&quot;,&quot;F&quot;),c(&quot;Floss&quot;,&quot;No Floss&quot;)))
+prob
+</code></pre>
+
+<pre><code>##   Floss No Floss
+## M   0.1      0.4
+## F   0.2      0.3
+</code></pre>
+
+<p>This says we sample even proportions of male and females, but believe 10% more females floss.</p>
+
+<p>Now use the matrix to calculate effect size:</p>
+
+<pre><code class="r">ES.w2(prob)
+</code></pre>
+
+<pre><code>## [1] 0.2182179
+</code></pre>
+
+<p>We also need degrees of freedom. <code>df</code> = (2 - 1) * (2 - 1) = 1</p>
+
+<p>And now to calculate power:</p>
+
+<pre><code class="r">pwr.chisq.test(w = ES.w2(prob), N = 100, df = 1, sig.level = 0.01)
+</code></pre>
+
+<pre><code>## 
+##      Chi squared power calculation 
+## 
+##               w = 0.2182179
+##               N = 100
+##              df = 1
+##       sig.level = 0.01
+##           power = 0.3469206
+## 
+## NOTE: N is the number of observations
+</code></pre>
+
+<p>At only 35% this is not a very powerful experiment. How many students should I survey if I wish to achieve 90% power?</p>
+
+<pre><code class="r">pwr.chisq.test(w = ES.w2(prob), power = 0.9, df = 1, sig.level = 0.01)
+</code></pre>
+
+<pre><code>## 
+##      Chi squared power calculation 
+## 
+##               w = 0.2182179
+##               N = 312.4671
+##              df = 1
+##       sig.level = 0.01
+##           power = 0.9
+## 
+## NOTE: N is the number of observations
+</code></pre>
+
+<p>About 313.</p>
+
+<p>If you don&#39;t suspect association in either direction, or you don&#39;t feel like
+building a matrix in R, you can try a conventional effect size. For example, how many students should we sample to detect a small effect?</p>
+
+<pre><code class="r">cohen.ES(test = &quot;chisq&quot;, size = &quot;small&quot;)
+</code></pre>
+
+<pre><code>## 
+##      Conventional effect size from Cohen (1982) 
+## 
+##            test = chisq
+##            size = small
+##     effect.size = 0.1
+</code></pre>
+
+<pre><code class="r">pwr.chisq.test(w = 0.1, power = 0.9, df = 1, sig.level = 0.01)
+</code></pre>
+
+<pre><code>## 
+##      Chi squared power calculation 
+## 
+##               w = 0.1
+##               N = 1487.939
+##              df = 1
+##       sig.level = 0.01
+##           power = 0.9
+## 
+## NOTE: N is the number of observations
+</code></pre>
+
+<p>1,488 students. Perhaps more than we thought we might need.</p>
+
+<p>We could consider reframing the question as a two-sample proportion test. What sample
+size do we need to detect a &ldquo;small&rdquo; effect in gender on the proportion of
+students who floss with 90% power and a significance level of 0.01?</p>
+
+<pre><code class="r">pwr.2p.test(h = 0.2, sig.level = 0.01, power = 0.9)
+</code></pre>
+
+<pre><code>## 
+##      Difference of proportion power calculation for binomial distribution (arcsine transformation) 
+## 
+##               h = 0.2
+##               n = 743.9694
+##       sig.level = 0.01
+##           power = 0.9
+##     alternative = two.sided
+## 
+## NOTE: same sample sizes
+</code></pre>
+
+<p>About 744 per group. Notice that 744 \(\times\) 2 = 1,488, the sample size returned previously by <code>pwr.chisq.test</code>. In fact the test statistic for a two-sample proportion test and chi-square test of association are one and the same.</p>
+
+<h3>pwr.r.test - correlation test</h3>
+
+<p>(<em>From Hogg &amp; Tanis, exercise 8.9-12</em>) A graduate student is investigating the effectiveness of a fitness program. She wants to see if there is a correlation between the weight of a participant at the beginning of the program and the participant&#39;s weight change after 6 months. She suspects there is a &ldquo;small&rdquo; positive
+linear relationship between these two quantities. She will measure this relationship with correlation, <em>r</em>, and conduct a correlation test to determine if the estimated correlation is statistically greater than 0.
+How many subjects does she need to sample to detect this small positive (i.e., <em>r</em> &gt; 0) relationship with
+80% power and 0.01 significance level?</p>
+
+<p>There is nothing tricky about the effect size argument, <code>r</code>. It is simply the hypothesized correlation. It can take values ranging from -1 to 1.</p>
+
+<pre><code class="r">cohen.ES(test = &quot;r&quot;, size = &quot;small&quot;)
+</code></pre>
+
+<pre><code>## 
+##      Conventional effect size from Cohen (1982) 
+## 
+##            test = r
+##            size = small
+##     effect.size = 0.1
+</code></pre>
+
+<pre><code class="r">pwr.r.test(r = 0.1, sig.level = 0.01, power = 0.8, alternative = &quot;greater&quot;)
+</code></pre>
+
+<pre><code>## 
+##      approximate correlation power calculation (arctangh transformation) 
+## 
+##               n = 999.2054
+##               r = 0.1
+##       sig.level = 0.01
+##           power = 0.8
+##     alternative = greater
+</code></pre>
+
+<p>She needs to observe about a 1000 students.</p>
+
+<p>The default is a two-sided test. We specify <code>alternative = &quot;greater&quot;</code> since we
+believe there is small positive effect.</p>
+
+<p>If she just wants to detect a small effect in either direction (positive or
+negative correlation), use the default settings of &ldquo;two.sided&rdquo;, which we can do by removing the <code>alternative</code> argument from the function.</p>
+
+<pre><code class="r">pwr.r.test(r = 0.1, sig.level = 0.01, power = 0.8)
+</code></pre>
+
+<pre><code>## 
+##      approximate correlation power calculation (arctangh transformation) 
+## 
+##               n = 1162.564
+##               r = 0.1
+##       sig.level = 0.01
+##           power = 0.8
+##     alternative = two.sided
+</code></pre>
+
+<p>Now she needs to observe 1163 students. Detecting small effects requires large sample sizes.</p>
+
+<h3>pwr.anova.test - balanced one-way analysis of variance tests</h3>
+
+<p>(<em>From Hogg &amp; Tanis, exercise 8.7-11</em>) The driver of a diesel-powered car decides to test the quality of three types of fuel sold in his area
+based on the miles per gallon (mpg) his car gets on each fuel. He will use a balanced one-way ANOVA to test the null that the mean mpg is the same for each fuel versus the alternative that the means are different. (&ldquo;balanced&rdquo; means equal sample size in each group; &ldquo;one-way&rdquo; means one grouping variable.) How many times does he need to try each fuel to have 90% power to detect a &ldquo;medium&rdquo; effect with a significance of 0.01?</p>
+
+<p>We use <code>cohen.ES</code> to get learn the &ldquo;medium&rdquo; effect value is 0.25. We put that in the <code>f</code> argument of <code>pwr.anova.test</code>. We also need to specify the number of groups using the <code>k</code> argument.</p>
+
+<pre><code class="r">cohen.ES(test = &quot;anov&quot;, size = &quot;medium&quot;)
+</code></pre>
+
+<pre><code>## 
+##      Conventional effect size from Cohen (1982) 
+## 
+##            test = anov
+##            size = medium
+##     effect.size = 0.25
+</code></pre>
+
+<pre><code class="r">pwr.anova.test(k = 3, f = 0.25, sig.level = 0.01, power = 0.9)
+</code></pre>
+
+<pre><code>## 
+##      Balanced one-way analysis of variance power calculation 
+## 
+##               k = 3
+##               n = 94.48714
+##               f = 0.25
+##       sig.level = 0.01
+##           power = 0.9
+## 
+## NOTE: n is number in each group
+</code></pre>
+
+<p>He would need to measure mpg 95 times for each type of fuel. His experiment may take a while to complete.</p>
+
+<p>The effect size <code>f</code> is calculated as follows:</p>
+
+<p>\[f = \frac{\sigma_{means}}{\sigma_{pop'n}}\]</p>
+
+<p>where \(\sigma_{means}\) is the standard deviation of the <em>k</em> means and \(\sigma_{pop'n}\) is the common standard deviation of the <em>k</em> groups. These two quantities are also known as the <em>between-group</em> and <em>within-group</em> standard deviations. If our driver suspects the between-group standard deviation is 5 mpg and the within-group standard deviation is 3 mpg, <code>f</code> = 5/3.</p>
+
+<pre><code class="r">pwr.anova.test(k = 3, f = 5/3, sig.level = 0.01, power = 0.9)
+</code></pre>
+
+<pre><code>## 
+##      Balanced one-way analysis of variance power calculation 
+## 
+##               k = 3
+##               n = 3.842228
+##               f = 1.666667
+##       sig.level = 0.01
+##           power = 0.9
+## 
+## NOTE: n is number in each group
+</code></pre>
+
+<p>In this case he only needs to try each fuel 4 times. Clearly the hypothesized effect has important consequences in estimating an optimum effect size.</p>
+
+<p>We can also use the <code>power.anova.test</code> function that comes with base R. It requires between-group and within-group <em>variances</em>. To get the same result as <code>pwr.anova.test</code> we need to square the standard deviations to get variances and multiply the between-group variance by \(\frac{k}{k-1}\). This is because the effect size formula for the ANOVA test assumes the between-group variance has a denominator of <em>k</em> instead of <em>k - 1</em>.</p>
+
+<pre><code class="r">power.anova.test(groups = 3,
+                 within.var = 3^2,
+                 between.var = 5^2 * (3/2),
+                 sig.level = 0.01, power = 0.90)
+</code></pre>
+
+<pre><code>## 
+##      Balanced one-way analysis of variance power calculation 
+## 
+##          groups = 3
+##               n = 3.842225
+##     between.var = 37.5
+##      within.var = 9
+##       sig.level = 0.01
+##           power = 0.9
+## 
+## NOTE: n is number in each group
+</code></pre>
+
+<h3>pwr.f2.test - test for the general linear model</h3>
+
+<p>(<em>From Kutner, et al, exercise 8.43</em>) A director of admissions at a university wants to determine how accurately students&#39; grade-point
+averages (gpa) at the end of their first year can be predicted or explained by SAT scores and high school class rank.
+A common approach to answering this kind of question is to model gpa as a function of SAT score and class rank. Or to put another way, we can perform a multiple regression with gpa as the dependent variable and SAT and class rank as independent variables.</p>
+
+<p>The null hypothesis is that none of the independent variables explain any of the variability in gpa. This would mean their regression coefficients are statistically indistinguishable from 0. The alternative is that at least one of the coefficients is not 0. This is tested with an F test. We can estimate power and sample size for this test using the <code>pwr.f2.test</code> function.</p>
+
+<p>The F test has numerator and denominator degrees of freedom. The numerator degrees of freedom, <code>u</code>, is the number of coefficients you&#39;ll have in your model (minus the intercept). In our example, <code>u = 2</code>. The denominator degrees of freedom, <code>v</code>, is the number of error degrees of freedom: \(v = n - u - 1\). This implies \(n = v + u + 1\).</p>
+
+<p>The effect size, <code>f2</code>, is \(R^{2}/(1 - R^{2})\), where \(R^{2}\) is the coefficient
+of determination, aka the &ldquo;proportion of variance explained&rdquo;.
+To determine effect size you hypothesize the proportion of
+variance your model explains, or the \(R^{2}\). For example, if I think my model explains 45% of the variance in my dependent variable, the effect size is 0.45/(1 - 0.45) \(\approx\) 0.81.</p>
+
+<p>Returning to our example, let&#39;s say the director of admissions hypothesizes his model explains about 30% of the variability in gpa. How large of a sample does he need to take to detect this effect with 80% power at a 0.001 significance level?</p>
+
+<pre><code class="r">pwr.f2.test(u = 2, f2 = 0.3/(1 - 0.3), sig.level = 0.001, power = 0.8)
+</code></pre>
+
+<pre><code>## 
+##      Multiple regression power calculation 
+## 
+##               u = 2
+##               v = 49.88971
+##              f2 = 0.4285714
+##       sig.level = 0.001
+##           power = 0.8
+</code></pre>
+
+<p>Recall \(n = v + u + 1\). Therefore he needs 50 + 2 + 1 = 53 student records.</p>
+
+<p>What is the power of the test with 40 subjects and a significance level of 0.01? Recall \(v = n - u - 1\).</p>
+
+<pre><code class="r">pwr.f2.test(u = 2, v = 40 - 2 - 1, f2 = 0.3/(1 - 0.3), sig.level = 0.01)
+</code></pre>
+
+<pre><code>## 
+##      Multiple regression power calculation 
+## 
+##               u = 2
+##               v = 37
+##              f2 = 0.4285714
+##       sig.level = 0.01
+##           power = 0.8406124
+</code></pre>
+
+<p>Power is about 84%.</p>
+
+<h2>References and Further Reading</h2>
+
+<p>Cohen, J. (1988). <em>Statistical Power Analysis for the Behavioral Sciences (2nd ed.)</em>. LEA.
+Dalgaard, P. (2002). <em>Introductory Statistics with R</em>. Springer. (Ch. 2)
+Hogg, R and Tanis, E. (2006). <em>Probability and Statistical Inference (7th ed.)</em>. Pearson. (Ch. 9)
+Kabacoff, R. (2011). <em>R in Action</em>. Manning. (Ch. 10)
+Kutner, et al. (2005). <em>Applied Linear Statistical Models</em>. McGraw-Hill. (Ch. 16)
+Ryan, T. (2013). <em>Sample Size Determination and Power</em>. Wiley.</p>
+
+<p>The <a href="https://CRAN.R-project.org/view=ClinicalTrials">CRAN Task View for Clinical Trial Design, Monitoring, and Analysis</a> lists various R packages that also perform sample size and power calculations.</p>
+
+</body>
+
+</html>

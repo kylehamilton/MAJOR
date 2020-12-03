@@ -1,0 +1,18 @@
+HRQoL                   Regression coefficients and confidence
+                        intervals from HRQoL study
+forestplot              Draws a forest plot
+forestplot-package      Package description
+fpColors                A function for the color elements used in
+                        forestplot()
+fpDrawNormalCI          Draw standard confidence intervals
+fpLegend                A function for the legend used in forestplot()
+fpShapesGp              A function for graphical parameters of the
+                        shapes used in forestplot()
+fpTxtGp                 Get font settings for forestplot
+getTicks                Ticks for plot axis
+prDefaultGp             Construct default parameters from arguments
+                        that may include missing arguments
+prGetShapeGp            A function to extract graphical parameters from
+                        a fpShapesGp object
+prMergeGp               A function to merge two sets of graphical
+                        parameters

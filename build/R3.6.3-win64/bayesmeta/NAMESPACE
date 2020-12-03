@@ -1,0 +1,48 @@
+export(bayesmeta,
+       print.bayesmeta, summary.bayesmeta, plot.bayesmeta,
+       forestplot.bayesmeta, forestplot.escalc,
+       dlomax, plomax, qlomax, rlomax, elomax, vlomax,
+       dhalfnormal, phalfnormal, qhalfnormal, rhalfnormal,
+         ehalfnormal, vhalfnormal,
+       dhalft, phalft, qhalft, rhalft, ehalft, vhalft,
+       dhalfcauchy, phalfcauchy, qhalfcauchy, rhalfcauchy,
+         ehalfcauchy, vhalfcauchy,
+       dhalflogistic, phalflogistic, qhalflogistic, rhalflogistic,
+         ehalflogistic, vhalflogistic,
+       dinvchi, pinvchi, qinvchi, rinvchi, einvchi, vinvchi,
+       drayleigh, prayleigh, qrayleigh, rrayleigh, erayleigh, vrayleigh,
+       TurnerEtAlParameters, TurnerEtAlPrior,
+       RhodesEtAlParameters, RhodesEtAlPrior,
+       funnel.bayesmeta,
+       normalmixture, pppvalue)
+
+S3method(bayesmeta, default)
+S3method(bayesmeta, escalc)
+S3method(print, bayesmeta)
+S3method(summary, bayesmeta)
+S3method(plot, bayesmeta)
+S3method(forestplot, bayesmeta)
+S3method(forestplot, escalc)
+S3method(forest, bayesmeta)
+S3method(funnel, bayesmeta)
+
+importFrom("grDevices",
+           "grey")
+importFrom("graphics",
+           "abline", "axis", "box", "contour", "image", "lines",
+           "matlines", "mtext", "par", "plot", "points", "polygon")
+importFrom("stats",
+           "dcauchy", "dlnorm", "dlogis", "dnorm", "dt", "integrate", "optim",
+           "optimize", "pcauchy", "plnorm", "plogis", "pnorm", "pt", "qcauchy",
+           "qchisq", "qlnorm", "qlogis", "qnorm", "qt", "rcauchy", "rexp",
+           "rlogis", "rnorm", "rt", "runif", "uniroot")
+importFrom("forestplot",
+           "forestplot", "fpDrawPointCI", "fpDrawSummaryCI","fpDrawBarCI",
+           "fpColors")
+importFrom("metafor",
+           "forest", "funnel")
+importFrom("parallel",
+           "detectCores", "makeCluster", "clusterEvalQ","parSapply",
+           "stopCluster")
+importFrom("utils",
+           "txtProgressBar", "setTxtProgressBar")

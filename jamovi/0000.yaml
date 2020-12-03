@@ -64,12 +64,6 @@ analyses:
     menuGroup: MAJOR
     menuTitle: Mean Differences
     enuSubgroup: Bayesian Meta Analysis
-  - title: Risk of Bias Assessment
-    name: robvis
-    ns: MAJOR
-    menuGroup: MAJOR
-    menuTitle: Risk of Bias Assessment
-    menuSubgroup: Other Tools
   - title: Correlation Coefficients
     name: multiLevelMetaCorr
     ns: MAJOR
@@ -88,6 +82,12 @@ analyses:
     menuGroup: MAJOR
     menuTitle: Dichotomous Models
     menuSubgroup: Multilevel Models
+  - title: Risk of Bias Assessment
+    name: robvis
+    ns: MAJOR
+    menuGroup: MAJOR
+    menuTitle: Risk of Bias Assessment
+    menuSubgroup: Other Tools
 usesNative: true
 minApp: 1.0.8
 

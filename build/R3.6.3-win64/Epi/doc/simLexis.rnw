@@ -1,0 +1,1126 @@
+%\VignetteIndexEntry{Simulation of multistate models with multiple timescales: simLexis}
+\SweaveOpts{results=verbatim,keep.source=TRUE,include=FALSE,eps=FALSE}
+\documentclass[a4paper,dvipsnames,twoside,12pt]{report}
+
+\newcommand{\Title}{Simulation of\\ multistate models with\\ multiple
+  timescales:\\ \texttt{simLexis} in the \texttt{Epi} package}
+\newcommand{\Tit}{Multistate models with multiple timescales}
+\newcommand{\Version}{Version 2.5}
+\newcommand{\Dates}{\today}
+\newcommand{\Where}{SDCC}
+\newcommand{\Homepage}{\url{http://BendixCarstensen.com/Epi/simLexis.pdf}}
+\newcommand{\Faculty}{\begin{tabular}{rl}
+Bendix Carstensen
+  & Steno Diabetes Center Copenhagen, Gentofte, Denmark\\
+  & {\small \& Department of Biostatistics,
+               University of Copenhagen} \\
+  & \texttt{b@bxc.dk}\\
+  & \url{http://BendixCarstensen.com} \\[1em]
+                      \end{tabular}}
+
+\input{topreport}
+\renewcommand{\rwpre}{./simLexis}
+<<echo=FALSE>>=
+options( width=90,
+         SweaveHooks=list( fig=function()
+         par(mar=c(3,3,1,1),mgp=c(3,1,0)/1.6,las=1,bty="n") ) )
+@ %
+
+\chapter{Using \texttt{simLexis}}
+
+\section{Introduction}
+
+This vignette explains the machinery behind simulation of life
+histories through multistate models implemented in
+\texttt{simLexis}. In \texttt{simLexis} transition rates are allowed
+to depend on multiple time scales, including timescales defined as
+time since entry to a particular state (duration). This therefore also
+covers the case where time \emph{at} entry into a state is an
+explanatory variable for the rates, since time at entry is merely time
+minus duration. Thus, the set-up here goes beyond Markov- and
+semi-Markov-models, and brings simulation based estimation of
+state-occupancy probabilities into the realm of realistic multistate
+models.
+
+The basic idea is to simulate a new \texttt{Lexis} object
+\cite{Plummer.2011,Carstensen.2011a} as defined in the \texttt{Epi}
+package for \R, based on 1) a multistate model defined by its states
+and the transition rates between them and 2) an initial population of
+individuals.
+
+Thus the output will be a \texttt{Lexis} object describing the
+transitions of a predefined set of persons through a multistate
+model. Therefore, if persons are defined to be identical at start,
+then calculation of the probability of being in a particular state at
+a given time boils down to a simple enumeration of the fraction of the
+persons in the particular state at the given time. Bar of course the
+(binomial) simulation error, but this can be brought down by
+simulation a sufficiently large number of persons.
+
+An observed \texttt{Lexis} object with follow-up of persons through a
+number of states will normally be the basis for estimation of
+transition rates between states, and thus will contain all information
+about covariates determining the occurrence rates, in particular the
+\emph{timescales} \cite{Iacobelli.2013}. Hence, the natural input to
+simulation from an estimated multistate model will typically be an
+object of the same structure as the originally observed. Since
+transitions and times are what is simulated, any values of
+\texttt{lex.Xst} and \texttt{lex.dur} in the input object will of
+course be ignored.
+
+This first chapter of this vignette shows by an example how to use the
+function \texttt{simLexis} and display the results. The second
+chapter discusses in more detail how the simulation machinery is
+implemented and is not needed for the practical use of \texttt{simLexis}.
+
+\section{\texttt{simLexis} in practice}
+
+This section is largely a commented walk-trough of the example from
+the help-page of \texttt{simLexis}, with a larger number of simulated
+persons in order to minimize the pure simulation variation.
+
+When we want to simulate transition times through a multistate model
+where transition rates may depend on time since entry to the current
+or a previous state, it is essential that we have a machinery to keep
+track of the transition time on \emph{all} time scales, as well as a
+mechanism that can initiate a new time scale to 0 when a transition
+occurs to a state where we shall use time since entry as determinant
+of exit rates from that state. This is provided by \texttt{simLexis}.
+
+\subsection{Input for the simulation}
+
+Input for simulation of a single trajectory through a multistate model
+requires a representation of the \emph{current status} of a person;
+the starting conditions. The object that we supply to the simulation
+function must contain information about all covariates and all
+timescales upon which transitions depend, and in particular which
+one(s) of the timescales that are defined as time since entry into a
+particular state. Hence, starting conditions should be represented as
+a \texttt{Lexis} object (where \texttt{lex.dur} and \texttt{lex.Xst}
+are ignored, since there is no follow-up yet), where the time scale
+information is in the attributes \texttt{time.scales} and
+\texttt{time.since} respectively. 
+
+Note that \texttt{time.scales} attribute is a vector of names of
+variables in the \texttt{Lexis} object, so all of these variables
+should be present even if they are not used in the models for the
+transitions, and they should be set to 0; if they are not in the
+initial dataset, \texttt{simLexis} will crash, if they are
+\texttt{NA}, the \texttt{simLexis} will produce an object with 0 rows.
+
+Thus there are two main arguments to a function to simulate from a
+multistate model:
+\begin{enumerate}
+\item A \texttt{Lexis} object representing the initial states and
+  covariates of the population to be simulated. This has to have the
+  same structure as the original \texttt{Lexis} object representing
+  the multistate model from which transition rates in the model were
+  estimated. As noted above, the values for \texttt{lex.Xst} and
+  \texttt{lex.dur} are not required (since these are the quantities
+  that will be simulated).
+\item A transition object, representing the transition intensities
+  between states, which should be a list of lists of intensity
+  representations. As an intensity representation we mean a function
+  that for a given \texttt{Lexis} object can be used to produce
+  estimates of the transition intensities at a set of supplied time
+  points.
+
+  The names of the elements of the transition object (which are lists)
+  will be names of the \emph{transient} states, that is the states
+  \emph{from} which a transition can occur. The names of the elements
+  of each of these lists are the names of states \emph{to} which
+  transitions can occur (which may be either transient or absorbing
+  states).
+
+  Hence, if the transition object is called \texttt{Tr} then
+  \verb+TR$A$B+ (or \verb+Tr[["A"]][["B"]]+) will represent the
+  transition intensity from state \texttt{A} to the state \texttt{B}.
+
+  The entries in the transition object can be either \texttt{glm}
+  objects (either with \texttt{poisson} or \texttt{poisreg} family),
+  representing Poisson models for the transitions, \texttt{coxph}
+  objects representing an intensity model along one time scale, or
+  simply a function that takes a \texttt{Lexis} object as input and
+  returns an estimated intensity for each row.
+
+\end{enumerate}
+
+In addition to these two input items, there will be a couple of tuning
+parameters.
+
+The output of the function will simply be a \texttt{Lexis} object with
+simulated transitions between states. This will be the basis for
+deriving sensible statistics from the \texttt{Lexis} object --- see
+next section.
+
+\section{Setting up a \texttt{Lexis} object}
+
+As an example we will use the \texttt{DMlate} dataset from the
+\texttt{Epi} package; it is a dataset simulated to resemble a random
+sample of 10,000 patients from the Danish National Diabetes Register.
+
+We start by loading the \texttt{Epi} package:
+<<start>>=
+options( width=90 )
+library( Epi )
+print( sessionInfo(), l=F )
+@ %
+First we load the diabetes data and set up a simple illness-death
+model:
+<<Lexis>>=
+data(DMlate)
+dml <- Lexis( entry = list(Per=dodm, Age=dodm-dobth, DMdur=0 ),
+               exit = list(Per=dox),
+        exit.status = factor(!is.na(dodth),labels=c("DM","Dead")),
+               data = DMlate )
+@ %
+This is just data for a simple survival model with states \texttt{DM} and
+\texttt{Dead}. Now we cut the follow-up at insulin start, which for the
+majority of patients (T2D) is a clinical indicator of deterioration of
+disease regulation. We therefore also introduce a new timescale, and
+split the non-precursor states, so that we can address the question of
+ever having been on insulin:
+<<cut>>=
+dmi <- cutLexis( dml, cut = dml$doins,
+                      pre = "DM",
+                new.state = "Ins",
+                new.scale = "t.Ins",
+             split.states = TRUE )
+summary( dmi, timeScales=T )
+@ % $
+Note that we show the time scales in the \texttt{Lexis} object, and
+that it is indicated that the time scale \texttt{t.Ins} is defined as
+time since entry into stat state \texttt{Ins.}
+
+We can show how many person-years we have and show the number of
+transitions and transition rates (per 1000), using the
+\texttt{boxes.Lexis} function to display the states and the number of
+transitions between them:
+<<boxes,fig=TRUE,height=5,width=7>>=
+boxes( dmi, boxpos = list(x=c(20,20,80,80),
+                        y=c(80,20,80,20)),
+            scale.R = 1000, show.BE = TRUE )
+@ %
+\insfig{boxes}{0.8}{Data overview for the \textrm{\tt dmi}
+  dataset. Numbers in the boxes are person-years and the number of
+  persons who begin, resp. end their follow-up in each state, and
+  numbers on the arrows are no. of transitions and rates (transition
+  intensities) per 1000 PY.}
+
+\section{Analysis of rates}
+
+In the \texttt{Lexis} object (which is just a data frame) each person
+is represented by one record for each transient state occupied,
+thus in this case either 1 or 2 records; those who have a recorded
+time both without and with insulin have two records.
+
+In order to be able to fit Poisson models with occurrence rates varying
+by the different time-scales, we split the follow-up in 3-month intervals
+for modeling:
+<<split>>=
+Si <- splitLexis( dmi, seq(0,20,1/4), "DMdur" )
+summary( Si )
+print( subset( Si, lex.id==97 )[,1:10], digits=6 )
+@ %
+Note that when we split the follow-up, each person's follow up now
+consists of many records, each with the \emph{current} values of the
+timescales at the start of the interval represented by the record. In
+the modeling we shall assume that the rates are constant within each
+6-month interval, but the \emph{size} of these rates we model as
+smooth functions of the time scales (that is the values at the
+beginning of each interval).
+
+The approach often used in epidemiology where one parameter is
+attached to each interval of time (or age) is not feasible when more
+than one time scale is used, because intervals are not classified the
+same way on all timescales.
+
+We shall use natural splines (restricted cubic splines) for the
+analysis of rates, and hence we must allocate knots for the
+splines. This is done for each of the time-scales, and separately for
+the transition out of states \texttt{DM} and \texttt{Ins}. For age, we
+place the knots so that the number of events is the same between each
+pair of knots, but only half of this beyond each of the boundary
+knots, whereas for the timescales \texttt{DMdur} and \texttt{tIns}
+where we have observation from a well-defined 0, we put knots at 0 and
+place the remaining knots so that the number of events is the same
+between each pair of knots as well as outside the boundary knots.
+<<knots>>=
+nk <- 5
+( ai.kn <- with( subset(Si,lex.Xst=="Ins" & lex.Cst!=lex.Xst ),
+                 quantile( Age+lex.dur  , probs=(1:nk-0.5)/nk ) ) )
+( ad.kn <- with( subset(Si,lex.Xst=="Dead"),
+                 quantile( Age+lex.dur  , probs=(1:nk-0.5)/nk ) ) )
+( di.kn <- with( subset(Si,lex.Xst=="Ins" & lex.Cst!=lex.Xst ),
+                 c(0,quantile( DMdur+lex.dur, probs=(1:(nk-1))/nk ) )) )
+( dd.kn <- with( subset(Si,lex.Xst=="Dead"),
+                 c(0,quantile( DMdur+lex.dur, probs=(1:(nk-1))/nk ) )) )
+( ti.kn <- with( subset(Si,lex.Xst=="Dead(Ins)"),
+                 c(0,quantile( t.Ins+lex.dur, probs=(1:(nk-1))/nk ) )) )
+@ %
+Note that when we tease out the event records for transition to
+\emph{transient} states (in this case \texttt{Ins}, that is
+\verb|lex.Xst=="Ins"|), we should add \verb|lex.Cst!=lex.Xst|, to
+include only transition records and avoiding including records of
+sojourn time in the transient state.
+ 
+We then fit Poisson models to transition rates, using the wrapper
+\texttt{Ns} from the \texttt{Epi} package to simplify the
+specification of the rates:
+<<Poisson>>=
+library( splines )
+DM.Ins <- glm( (lex.Xst=="Ins") ~ Ns( Age  , knots=ai.kn ) +
+                                  Ns( DMdur, knots=di.kn ) +
+                                  I(Per-2000) + sex,
+               family=poisson, offset=log(lex.dur),
+               data = subset(Si,lex.Cst=="DM") )
+ci.exp( DM.Ins )
+class( DM.Ins )
+@ % 
+We can also fit this model with a slightly simpler syntax using the
+\texttt{glm.Lexis} function:
+<<>>=
+DM.Ins <- glm.Lexis( Si, from = "DM", to = "Ins",
+                      formula = ~ Ns( Age  , knots=ai.kn ) +
+                                  Ns( DMdur, knots=di.kn ) +
+                                  I(Per-2000) + sex )
+ci.exp( DM.Ins )
+class( DM.Ins )
+@ %
+So we have a slightly simpler syntax, and we get an informative
+message of which transition(s) we are modeling. However we do not have
+\texttt{update} method for these objects.
+<<>>=
+DM.Dead <- glm.Lexis( Si, from = "DM", to = "Dead",
+                       formula = ~ Ns( Age  , knots=ad.kn ) +
+                                   Ns( DMdur, knots=dd.kn ) +
+                                   I(Per-2000) + sex )
+Ins.Dead <- glm.Lexis( Si, from = "Ins",
+                        formula = ~ Ns( Age  , knots=ad.kn ) +
+                                    Ns( DMdur, knots=dd.kn ) +
+                                    Ns( t.Ins, knots=ti.kn ) +
+                                    I(Per-2000) + sex )
+@ %
+Note the similarity of the code used to fit the three models, is is
+mainly redefining the response variable (\texttt{to} state) and the subset
+of the data used (\texttt{from} state). Also note that the last model need
+no specification of \texttt{to}, the default is to model all
+transitions from the \texttt{from} state, and his case there is only
+one.
+
+\section{The mortality rates}
+
+This section discusses in some detail how to extract ad display the
+mortality rates from the models fitted. But it is not necessary for
+understanding how to use \texttt{simLexis} in practice.
+
+\subsection{Proportionality of mortality rates}
+
+Note that we have fitted separate models for the three transitions,
+there is no assumption of proportionality between the mortality rates
+from \texttt{DM} and \texttt{Ins}.
+
+However, there is nothing that prevents us from testing this
+assumption; we can just fit a model for the mortality rates in the
+entire data frame \texttt{Si}, and compare the deviance from this with
+the sum of the deviances from the separate models using the \texttt{glm.Lexis}
+function:  
+<<prop-haz>>=
+All.Dead <- glm.Lexis( Si, to = c("Dead(Ins)","Dead"),
+                      formula = ~ Ns( Age  , knots=ad.kn ) +
+                                  Ns( DMdur, knots=dd.kn ) +
+                                  lex.Cst +
+                                  I(Per-2000) + sex )
+round( ci.exp( All.Dead ), 3 )
+@ %
+Incidentally we could have dispensed with the \texttt{to=} argument
+too, because the default is to take \texttt{to} to be all absorbing
+states in the model.
+
+From the parameter values we would in a simple setting just claim that
+start of insulin-treatment was associated with a slightly more than
+doubling of mortality.
+
+The model \texttt{All.dead} assumes that the age- and DM-duration
+effects on mortality in the \texttt{DM} and \texttt{Ins} states are the same,
+and moreover that there is no effect of insulin duration, but merely a
+mortality that is larger by a multiplicative constant not depending on
+insulin duration. The model \texttt{DM.Dead} has 8 parameters to
+describe the dependency on age and DM duration, the model
+\texttt{Ins.Dead} has 12 for the same plus the insulin duration (a
+natural spline with $k$ knots gives $k-1$ parameters, and we chose
+$k=5$ above).
+
+We can compare the fit of the simple proportional hazards model with
+the fit of the separate models for the two mortality rates, by adding
+up the deviances and d.f. from these:
+<<get-dev>>=
+what <- c("null.deviance","df.null","deviance","df.residual")
+( rD <- unlist(  DM.Dead[what] ) )
+( rI <- unlist( Ins.Dead[what] ) )
+( rA <- unlist( All.Dead[what] ) )
+round( c( dd <- rA-(rI+rD), "pVal"=1-pchisq(dd[3],dd[4]+1) ), 3 )
+@ %
+Thus we see there is a substantial non-proportionality of mortality
+rates from the two states; but a test provides no clue whatsoever to
+the particular \emph{shape} of the non-proportionality.
+
+To this end, we shall explore the predicted mortalities under the two
+models quantitatively in more detail. Note that the reason that there
+is a difference in the null deviances (and a difference of 1 in the
+null d.f.) is that the null deviance of \texttt{All.Dead} refer to a
+model with a single intercept, that is a model with constant and
+\emph{identical} mortality rates from the states \texttt{DM} and \texttt{Ins},
+whereas the null models for \texttt{DM.Dead} and \texttt{Ins.Dead}
+have constant but \emph{different} mortality rates from the states
+\texttt{DM} and \texttt{Ins}.  This is however irrelevant for the comparison of
+the \emph{residual} deviances.
+
+\subsection{How the mortality rates look}
+
+If we want to see how the mortality rates are modelled in
+\texttt{DM.Dead} and \texttt{Ins.Dead} in relation to
+\texttt{All.Dead}, we make a prediction of rates for say men diagnosed
+in different ages and going on insulin at different times after
+this. So we consider men diagnosed in ages 40, 50, 60 and 70, and who
+either never enter insulin treatment or do it 0, 2 or 5 years after
+diagnosis of DM.
+
+To this end we create a prediction data frame where we have
+observation times from diagnosis and 12 years on (longer would not
+make sense as this is the extent of the data).
+
+But we start by setting up an array to hold the predicted mortality
+rates, classified by diabetes duration, age at diabetes onset, time of
+insulin onset, and of course type of model. What we want to do is to
+plot the age-specific mortality rates for persons not on insulin, and
+for persons starting insulin at different times after DM. The
+mortality curves start at the age where the person gets diabetes and
+continues 12 years; for persons on insulin they start at the age when
+they initiate insulin.
+<<pr-array>>=
+pr.rates <- NArray( list( DMdur = seq(0,12,0.1),
+                          DMage = 4:7*10,
+                          r.Ins = c(NA,0,2,5),
+                          model = c("DM/Ins","All"),
+                           what = c("rate","lo","hi") ) )
+str( pr.rates )
+@ %
+For convenience the \texttt{Epi} package contains a function that computes
+predicted (log-)rates with c.i. --- it is merely a wrapper for
+\texttt{predict.glm}.
+
+So we set up the prediction data frame and modify it in loops over
+ages at onset and insulin onset in order to collect the predicted
+rates in different scenarios:
+<<mknd>>=
+nd <- data.frame( DMdur = as.numeric( dimnames(pr.rates)[[1]] ),
+                lex.Cst = factor( 1, levels=1:4,
+                                  labels=levels(Si$lex.Cst) ),
+                    sex = factor( 1, levels=1:2, labels=c("M","F")) )
+@ % $
+Note that we did \emph{not} insert \texttt{lex.dur} as covariate in
+the prediction frame. This would be required if we used the
+\texttt{poisson} family with the \texttt{glm}, but the wrapper
+\texttt{glm.Lexis} uses the \texttt{poisreg} family, so
+\texttt{lex.dur} is ignored and predictions always comes in the
+(inverse) units of \texttt{lex.dur}. So we get rates per 1 person-year
+in the predictions.
+<<make-pred>>=
+for( ia in dimnames(pr.rates)[[2]] )
+   {
+dnew <- transform( nd, Age = as.numeric(ia)+DMdur,
+                       Per = 1998+DMdur )
+pr.rates[,ia,1,"DM/Ins",] <- ci.pred(  DM.Dead, newdata = dnew )
+pr.rates[,ia,1,"All"   ,] <- ci.pred( All.Dead, newdata = dnew )
+for( ii in dimnames(pr.rates)[[3]][-1] )
+   {
+dnew = transform( dnew, lex.Cst = factor( 2, levels=1:4,
+                                          labels=levels(Si$lex.Cst) ),
+                          t.Ins = ifelse( (DMdur-as.numeric(ii)) >= 0,
+                                           DMdur-as.numeric(ii), NA ) )
+pr.rates[,ia, ii ,"DM/Ins",] <- ci.pred( Ins.Dead, newdata = dnew )
+pr.rates[,ia, ii ,"All"   ,] <- ci.pred( All.Dead, newdata = dnew )
+    }
+    }
+@ % $
+So for each age at DM onset we make a plot of the mortality as
+function of current age both for those with no insulin treatment and
+those that start insulin treatment 0, 2 and 5 years after diabetes
+diagnosis, thus 4 curves (with c.i.). These curves are replicated with
+a different color for the simplified model.
+<<mort-int,fig=TRUE,width=8>>=
+par( mar=c(3,3,1,1), mgp=c(3,1,0)/1.6, las=1 )
+plot( NA, xlim=c(40,82), ylim=c(5,300), bty="n",
+      log="y", xlab="Age", ylab="Mortality rate per 1000 PY" )
+abline( v=seq(40,80,5), h=outer(1:9,10^(0:2),"*"), col=gray(0.8) )
+for( aa in 4:7*10 ) for( ii in 1:4 )
+   matshade( aa+as.numeric(dimnames(pr.rates)[[1]]),
+             cbind( pr.rates[,paste(aa),ii,"DM/Ins",],
+                    pr.rates[,paste(aa),ii,"All"   ,] )*1000,
+             type="l", lty=1, lwd=2,
+             col=c("red","limegreen") )
+@ %
+\insfig{mort-int}{0.9}{Estimated mortality rates for male diabetes
+  patients with no insulin (lower sets of curves) and insulin (upper
+  curves), with DM onset in age 40, 50, 60 and 70. The red curves are
+  from the models with separate age effects for persons with and
+  without insulin, and a separate effect of insulin duration. The
+  green curves are from the model with common age-effects and only a
+  time-dependent effect of insulin, assuming no effect of insulin
+  duration (the classical time-dependent variable approach). Hence the
+  upper green curve is common for any time of insulin inception.}
+
+From figure \ref{fig:mort-int} we see that there is a substantial
+insulin-duration effect which is not accommodated by the simple model
+with only one time-dependent variable to describe the insulin
+effect. Note that the simple model (green curves) for those on insulin
+does not depend in insulin duration, and hence the mortality curves
+for those on insulin are just parallel to the mortality curves for
+those not on insulin, regardless of diabetes duration (or age) at the
+time of insulin initiation. This is the proportional hazards
+assumption.  Thus the effect of insulin initiation is under-estimated
+for short duration of insulin and over-estimated for long duration of
+insulin.
+
+This is the major discrepancy between the two models, and
+illustrates the importance of being able to accommodate different time
+scales, but there is also a declining overall insulin effect by age which
+is not accommodated by the proportional hazards approach.
+
+Finally, this plot illustrates an important feature in reporting
+models with multiple timescales; all timescales must be represented in
+the predicted rates, only reporting the effect of one timescale,
+conditional on a fixed value of other timescales is misleading since
+all timescales by definition advance at the same pace. For example,
+the age-effect for a fixed value of insulin duration really is a
+misnomer since it does not correspond to any real person's follow-up,
+but to the mortality of persons in different ages but with the same
+duration of insulin use.
+
+\section{Input to the \texttt{simLexis} function}
+
+We want to estimate the cumulative probability of being in each of the
+4 states, so that we can assess the fraction of diabetes pateints that
+go on insulin
+
+In order to simulate from the multistate model with the estimated
+transition rates, and get the follow-up of a hypothetical cohort, we
+must supply \emph{both} the transition rates and the structure of the
+model \emph{as well as} the initial cohort status to
+\texttt{simLexis}.
+
+\subsection{The transition object}
+
+We first put the models into an object representing the transitions;
+note this is a list of lists, the latter having \texttt{glm} objects
+as elements:
+<<Tr>>=
+Tr <- list( "DM" = list( "Ins"       = DM.Ins,
+                         "Dead"      = DM.Dead  ),
+           "Ins" = list( "Dead(Ins)" = Ins.Dead ) )
+@ %
+Now we have the description of the rates and of the structure of the
+model. The \texttt{Tr} object defines the states and models for all
+transitions between them; the object \verb|Tr$A$B| is the model
+for the transition intensity from state \texttt{A} to state
+\texttt{B}.
+
+\subsection{The initial cohort}
+
+We now define an initial \texttt{Lexis} object of persons with all
+relevant covariates defined. Note that we use \texttt{NULL} as row
+indicator in the \texttt{Lexis} object we used for modeling; this
+conserves the \texttt{time.scale} and \texttt{time.since} attributes
+which are needed for the simulation:
+<<make-ini>>=
+str( ini <- Si[NULL,1:9] )
+@ %
+We now have an empty \texttt{Lexis} object with attributes reflecting
+the timescales in the multistate model we want to simulate from. But
+we must enter some data to represent the initial state of the persons
+whose follow-up we want to simulate through the model; so fill in data
+for one man and one woman:
+<<ini-fill>>=
+ini[1:2,"lex.id"] <- 1:2
+ini[1:2,"lex.Cst"] <- "DM"
+ini[1:2,"Per"] <- 1995
+ini[1:2,"Age"] <- 60
+ini[1:2,"DMdur"] <- 5
+ini[1:2,"sex"] <- c("M","F")
+ini
+@ %
+So the persons starts in age 60 in 1995 with 5 years of diabetes
+duration. Note that the \texttt{t.Ins} is \texttt{NA}, because this is
+a timescale that first comes alive if a transtion to \texttt{Ins} is
+simulated.
+
+\section{Simulation of the follow-up}
+
+Now we simulate life-courses of a 1000 of each of these persons using
+the estimated model. The \texttt{t.range} argument gives the times
+range where the integrated intensities (cumulative rates) are
+evaluated and where linear interpolation is used when simulating
+transition times. Note that this must be given in the same units as
+\texttt{lex.dur} in the \texttt{Lexis} object used for fitting the
+models for the transitions. It is not a parameter that can be easily
+determined from the \texttt{TR} object, hence it must be supplied by
+the user.
+<<simL>>=
+set.seed( 52381764 )
+Nsim <- 5000
+system.time( simL <- simLexis( Tr,
+                              ini,
+                          t.range = 12,
+                                N = Nsim ) )
+@ %
+The result is a \texttt{Lexis} object --- a data frame representing
+the simulated follow-up of \Sexpr{2*Nsim} persons (\Sexpr{Nsim}
+identical men and \Sexpr{Nsim} identical women) according to the rates
+we estimated from the original dataset.
+<<sum-simL>>=
+summary( simL, by="sex" )
+@ %
+
+\subsection{Using other models for simulation}
+
+\subsubsection{Proportional hazards Poisson model}
+
+We fitted a proportional mortality model \texttt{All.Dead} (which fitted
+worse than the other two), this is a model for \emph{both} the
+transition from \texttt{DM} to \texttt{Death} \emph{and} from \texttt{Ins} to
+\texttt{Dead(Ins)}, assuming that they are proportional. But it can easily
+be used in the simulation set-up, because the state is embedded in the
+model via the term \texttt{lex.Cst}, which is updated during the simulation.
+
+Simulation using this instead just requires that we supply a different
+transition object:
+<<Tr.p-simP>>=
+Tr.p <- list( "DM" = list( "Ins"       = DM.Ins,
+                           "Dead"      = All.Dead  ),
+             "Ins" = list( "Dead(Ins)" = All.Dead ) )
+system.time( simP <- simLexis( Tr.p,
+                                ini,
+                            t.range = 12,
+                                  N = Nsim ) )
+summary( simP, by="sex" )
+@ %
+
+\subsubsection{Proportional hazards Cox model}
+
+A third possibility would be to replace the two-time scale
+proportional mortality model by a one-time-scale Cox-model, using
+diabetes duration as time scale, and age at diagnosis of DM as (fixed)
+covariate:
+<<Cox-dur>>=
+library( survival )
+Cox.Dead <- coxph( Surv( DMdur, DMdur+lex.dur,
+                         lex.Xst %in% c("Dead(Ins)","Dead")) ~
+                   Ns( Age-DMdur, knots=ad.kn ) +
+                   I(lex.Cst=="Ins") +
+                   I(Per-2000) + sex,
+               data = Si )
+round( ci.exp( Cox.Dead ), 3 )
+@ %
+Note that in order for this model to be usable for simulation, it is
+necessary that we use the components of the \texttt{Lexis} object to
+specify the survival. Each record in the data frame \texttt{Si}
+represents follow up from \texttt{DMdur} to \texttt{DMdur+lex.dur}, so
+the model is a Cox model with diabetes duration as underlying timescale
+and age at diagnosis, \texttt{Age-DMdur}, as covariate.
+
+Also note that we used \texttt{I(lex.Cst=="Ins")} instead of just
+\texttt{lex.Cst}, because \texttt{coxph} assigns design matrix columns
+to all levels of \texttt{lex.Cst}, also those not present in data,
+which would give \texttt{NA}s among the parameter estimates and
+\texttt{NA}s as mortality outcomes.
+
+We see that the effect of insulin and the other covariates are pretty
+much the same as in the two-time-scale model. We can simulate from this
+model too; there is no restrictions on what type of model can be used
+for different transitions
+<<TR.c>>=
+Tr.c <- list( "DM" = list( "Ins"       = Tr$DM$Ins,
+                           "Dead"      = Cox.Dead  ),
+             "Ins" = list( "Dead(Ins)" = Cox.Dead ) )
+system.time( simC <- simLexis( Tr.c,
+                                ini,
+                            t.range = 12,
+                                  N = Nsim ) )
+summary( simC, by="sex" )
+@
+
+\section{Reporting the simulation results}
+
+We can now tabulate the number of persons in each state at a
+predefined set of times on a given time scale. Note that in order for
+this to be sensible, the \texttt{from} argument would normally be
+equal to the starting time for the simulated individuals.
+<<nState>>=
+system.time(
+nSt <- nState( subset(simL,sex=="M"),
+               at=seq(0,11,0.2), from=1995, time.scale="Per" ) )
+nSt[1:10,]
+@ %
+We see that as time goes by, the 5000 men slowly move away from the
+starting state (\texttt{DM}).
+
+Based on this table (\texttt{nSt} is a table) we can now compute the
+fractions in each state, or, rather more relevant, the cumulative fraction
+across the states in some specified order, so that a plot of the
+stacked probabilities can be made, using either the default rather
+colorful layout, or a more minimalist version (both in figure \ref{fig:pstate0}):
+<<pstate0,fig=TRUE,width=9>>=
+pM <- pState( nSt, perm=c(1,2,4,3) )
+head( pM )
+par( mfrow=c(1,2), mar=c(3,3,1,1), mgp=c(3,1,0)/1.6 )
+plot( pM )
+plot( pM, border="black", col="transparent", lwd=3 )
+text( rep(as.numeric(rownames(pM)[nrow(pM)-1]),ncol(pM)),
+      pM[nrow(pM),]-diff(c(0,pM[nrow(pM),]))/5,
+      colnames( pM ), adj=1 )
+box( col="white", lwd=3 )
+box()
+@ %
+\insfig{pstate0}{1.0}{Default layout of the \textrm{\tt plot.pState}
+  graph (left), and a version with the state probabilities as lines and
+  annotation of states.}
+
+A more useful set-up of the graph would include a more through
+annotation and sensible choice of colors, as seen in figure \ref{fig:pstatex}:
+<<pstatex,fig=TRUE,width=9>>=
+clr <- c("limegreen","orange")
+# expand with a lighter version of the two chosen colors
+clx <- c( clr, rgb( t( col2rgb( clr[2:1] )*2 + rep(255,3) ) / 3, max=255 ) )
+par( mfrow=c(1,2), las=1, mar=c(3,3,4,2), mgp=c(3,1,0)/1.6 )
+# Men
+plot( pM, col=clx, xlab="Date of FU" )
+lines( as.numeric(rownames(pM)), pM[,2], lwd=3 )
+mtext( "60 year old male, diagnosed 1990, aged 55", side=3, line=2.5, adj=0, col=gray(0.6) )
+mtext( "Survival curve", side=3, line=1.5, adj=0 )
+mtext( "DM, no insulin   DM, Insulin", side=3, line=0.5, adj=0, col=clr[2] )
+mtext( "DM, no insulin", side=3, line=0.5, adj=0, col=clr[1] )
+axis( side=4 )
+axis( side=4, at=1:19/20, labels=FALSE )
+axis( side=4, at=1:99/100, labels=FALSE, tcl=-0.3 )
+# Women
+pF <- pState( nState( subset(simL,sex=="F"),
+                      at=seq(0,11,0.2),
+                      from=1995,
+                      time.scale="Per" ),
+              perm=c(1,2,4,3) )
+plot( pF, col=clx, xlab="Date of FU" )
+lines( as.numeric(rownames(pF)), pF[,2], lwd=3 )
+mtext( "60 year old female, diagnosed 1990, aged 55", side=3, line=2.5, adj=0, col=gray(0.6) )
+mtext( "Survival curve", side=3, line=1.5, adj=0 )
+mtext( "DM, no insulin   DM, Insulin", side=3, line=0.5, adj=0, col=clr[2] )
+mtext( "DM, no insulin", side=3, line=0.5, adj=0, col=clr[1] )
+axis( side=4 )
+axis( side=4, at=1:19/20, labels=FALSE )
+axis( side=4, at=1:99/100, labels=FALSE, tcl=-0.3 )
+@ %
+\insfig{pstatex}{1.0}{\textrm{\tt plot.pState} graphs where persons
+  ever on insulin are given in orange and persons never on insulin in
+  green, and the overall survival (dead over the line) as a black line.}
+
+If we instead wanted to show the results on the age-scale, we would
+use age as timescale when constructing the probabilities; otherwise the
+code is pretty much the same as before (Figure \ref{fig:pstatey}):
+<<pstatey,fig=TRUE,width=9>>=
+par( mfrow=c(1,2), las=1, mar=c(3,3,4,2), mgp=c(3,1,0)/1.6 )
+# Men
+pM <- pState( nState( subset(simL,sex=="M"),
+                      at=seq(0,11,0.2),
+                      from=60,
+                      time.scale="Age" ),
+              perm=c(1,2,4,3) )
+plot( pM, col=clx, xlab="Age" )
+lines( as.numeric(rownames(pM)), pM[,2], lwd=3 )
+mtext( "60 year old male, diagnosed 1990, aged 55", side=3, line=2.5, adj=0, col=gray(0.6) )
+mtext( "Survival curve", side=3, line=1.5, adj=0 )
+mtext( "DM, no insulin   DM, Insulin", side=3, line=0.5, adj=0, col=clr[2] )
+mtext( "DM, no insulin", side=3, line=0.5, adj=0, col=clr[1] )
+axis( side=4 )
+axis( side=4, at=1:19/20, labels=FALSE )
+axis( side=4, at=1:19/20, labels=FALSE, tcl=-0.4 )
+axis( side=4, at=1:99/100, labels=FALSE, tcl=-0.3 )
+# Women
+pF <- pState( nState( subset(simL,sex=="F"),
+                      at=seq(0,11,0.2),
+                      from=60,
+                      time.scale="Age" ),
+              perm=c(1,2,4,3) )
+plot( pF, col=clx, xlab="Age" )
+lines( as.numeric(rownames(pF)), pF[,2], lwd=3 )
+mtext( "60 year old female, diagnosed 1990, aged 55", side=3, line=2.5, adj=0, col=gray(0.6) )
+mtext( "Survival curve", side=3, line=1.5, adj=0 )
+mtext( "DM, no insulin   DM, Insulin", side=3, line=0.5, adj=0, col=clr[2] )
+mtext( "DM, no insulin", side=3, line=0.5, adj=0, col=clr[1] )
+axis( side=4 )
+axis( side=4, at=1:9/10, labels=FALSE )
+axis( side=4, at=1:19/20, labels=FALSE, tcl=-0.4 )
+axis( side=4, at=1:99/100, labels=FALSE, tcl=-0.3 )
+@ %
+Note the several statements with \texttt{axis(side=4,...}; they are
+necessary to get the fine tick-marks in the right hand side of the
+plots that you will need in order to read off the probabilities at
+2006 (or 71 years).
+
+\insfig{pstatey}{1.0}{\textrm{\tt plot.pState} graphs where persons
+  ever on insulin are given in orange and persons never on insulin in
+  green, and the overall survival (dead over the line) as a black line.}
+
+\subsection{Comparing predictions from different models}
+
+We have actually fitted different models for the transitions, and we
+have simulated Lexis objects from all three approaches, so we can plot
+these predictions on top of each other:
+<<comp-0,fig=TRUE,width=9>>=
+PrM  <- pState( nState( subset(simP,sex=="M"),
+                        at=seq(0,11,0.2),
+                        from=60,
+                        time.scale="Age" ),
+                perm=c(1,2,4,3) )
+PrF  <- pState( nState( subset(simP,sex=="F"),
+                        at=seq(0,11,0.2),
+                        from=60,
+                        time.scale="Age" ),
+                perm=c(1,2,4,3) )
+CoxM <- pState( nState( subset(simC,sex=="M"),
+                        at=seq(0,11,0.2),
+                        from=60,
+                        time.scale="Age" ),
+                perm=c(1,2,4,3) )
+CoxF <- pState( nState( subset(simC,sex=="F"),
+                        at=seq(0,11,0.2),
+                        from=60,
+                        time.scale="Age" ),
+                perm=c(1,2,4,3) )
+
+par( mfrow=c(1,2), mar=c(3,3,1,1), mgp=c(3,1,0)/1.6 )
+ plot(   pM, border="black", col="transparent", lwd=3 )
+lines(  PrM, border="blue" , col="transparent", lwd=3 )
+lines( CoxM, border="red"  , col="transparent", lwd=3 )
+text( 60.5, 0.05, "M" )
+box( lwd=5, col="white" ) ; box( lwd=2, col="black" )
+
+ plot(   pF, border="black", col="transparent", lwd=3 )
+lines(  PrF, border="blue" , col="transparent", lwd=3 )
+lines( CoxF, border="red"  , col="transparent", lwd=3 )
+text( 60.5, 0.05, "F" )
+box( lwd=5, col="white" ) ; box( lwd=2, col="black" )
+@ %
+\insfig{comp-0}{1.0}{Comparison of the simulated state occupancy
+  probabilities using separate Poisson models for the mortality rates
+  with and without insulin (black) and using proportional hazards
+  Poisson models (blue) and Cox-models with diabetes duration as
+  timescale and age at diabetes diagnosis as covariate (red).}
+
+From figure \ref{fig:comp-0} it is clear that the two proportional
+hazards models (blue and red curves) produce pretty much the same
+estimates of the state occupancy probabilities over time, but also that
+they relative to the model with separately estimated transition
+intensities overestimates the probability of being alive without
+insulin and underestimates the probabilities of being dead without
+insulin. However both the overall survival, and the fraction of
+persons on insulin are quite well in agreement with the more elaborate
+model. Thus the proportional hazards models overestimate the relative
+mortality of the insulin treated diabetes patients relative to the
+non-insulin treated.
+
+Interestingly, we also see a bump in the estimated probabilities from
+the Cox-model based model, but this is entirely an artifact that comes
+from the estimation method for the baseline hazard of the Cox-model
+that lets the (cumulative) hazard have large jumps at event times
+where the risk set is small. So also here it shows up that an
+assumption of continuous underlying hazards leads to more credible
+estimates.
+
+\chapter{Simulation of transitions in multistate models}
+
+\section{Theory}
+
+Suppose that the rate functions for the transitions out of the current
+state to, say, 3 different states are $\lambda_1$, $\lambda_2$ and
+$\lambda_3$, and the corresponding cumulative rates are $\Lambda_1$,
+$\Lambda_2$ and $\Lambda_3$, and we want to simulate an exit time and
+an exit state (that is either 1, 2 or 3). This can be done in two
+slightly different ways:
+\begin{enumerate}
+\item First time, then state:
+  \begin{enumerate}
+  \item Compute the survival function, $S(t) =
+    \exp\bigl(-\Lambda_1(t)-\Lambda_2(t)-\Lambda_3(t)\bigr)$
+  \item Simulate a random U(0,1) variate, $u$, say.
+  \item The simulated exit time is then the solution $t_u$ to
+    the equation $S(t_u) = u \quad \Leftrightarrow \quad \sum_j\Lambda_j(t_u) = -\log(u)$.
+  \item A simulated transition at $t_u$ is then found by simulating a
+    random draw from the multinomial distribution with probabilities
+    $p_i=\lambda_i(t_u) / \sum_j\lambda_j(t_u)$.
+  \end{enumerate}
+\item Separate cumulative incidences:
+  \begin{enumerate}
+  \item Simulate 3 independent U(0,1) random variates $u_1$, $u_2$ and $u_3$.
+  \item Solve the equations $\Lambda_i(t_i)=-\log(u_i), i=1,2,3$ and get $(t_1,t_2,t_3)$.
+  \item The simulated survival time is then $\min(t_1,t_2,t_3)$, and
+    the simulated transition is to the state corresponding to this,
+    that is $k \in \{1,2,3\}$, where $t_k=\min(t_1,t_2,t_3)$
+  \end{enumerate}
+\end{enumerate}
+The intuitive argument is that with three possible transition there are
+3 independent processes running, but only the first transition is observed.
+The latter approach is used in the implementation in \texttt{simLexis}.
+
+The formal argument for the equality of the two approaches goes as
+follows:
+\begin{enumerate}
+\item Equality of the transition times:
+  \begin{enumerate}
+  \item In the first approach we simulate from a distribution with
+    cumulative rate $\Lambda_1(t)+\Lambda_2(t)+\Lambda_3(t)$, hence
+    from a distribution with survival function:
+    \begin{align*}
+    S(t) & = \exp\bigl(-(\Lambda_1(t)+\Lambda_2(t)+\Lambda_3(t))\bigr) \\
+         & = \exp\bigl(-\Lambda_1(t)\bigr)\times
+             \exp\bigl(-\Lambda_2(t)\bigr)\times
+             \exp\bigl(-\Lambda_3(t)\bigr)
+    \end{align*}
+  \item In the second approach we choose the smallest of three
+    independent survival times, with survival functions
+    $\exp(-\Lambda_i), i=1,2,3$. Now, the survival function for the
+    minimum of three independent survival times is:
+    \begin{align*}
+      S_\text{min}(t) & = \pmat{\min(t_1,t_2,t_3)>t} \\
+                     & = \pmat{t_1>t} \times
+                         \pmat{t_2>t} \times
+                         \pmat{t_3>t} \\
+                     & = \exp\bigl(-\Lambda_1(t)\bigr)\times
+                         \exp\bigl(-\Lambda_2(t)\bigr)\times
+                         \exp\bigl(-\Lambda_3(t)\bigr)
+    \end{align*}
+    which is the same survival function as derived above.
+  \end{enumerate}
+\item Type of transition:
+  \begin{enumerate}
+  \item In the first instance the probability of a transition to state
+    $i$, conditional on the transition time being $t$, is as known
+    from standard probability theory:
+    $\lambda_i(t)/\bigl(\lambda_1(t)+\lambda_2(t)+\lambda_3(t)\bigr)$.
+  \item In the second approach we choose the transition corresponding
+    to the the smallest of the transition times. So when we condition
+    on the event that a transition takes place at time $t$, we have to
+    show that the conditional probability that the smallest of the
+    three simulated transition times was actually the $i$th, is as above.
+
+    But conditional on \emph{survival} till $t$, the probabilities
+    that events of type $1,2,3$ takes place in the interval $(t,t+\dif
+    t)$ are $\lambda_1(t)\dif t$, $\lambda_2(t)\dif t$ and
+    $\lambda_1(t)\dif t$, respectively (assuming that the probability
+    of more than one event in the interval of length $\dif t$ is
+    0). Hence the conditional probabilities \emph{given a transition
+      time} in $(t,t+\dif t)$ is:
+    \[
+    \frac{\lambda_i(t)\dif t}{\lambda_1(t)\dif t+\lambda_2(t)\dif t+\lambda_3(t)\dif t}=
+    \frac{\lambda_i(t)}{\lambda_1(t)+\lambda_2(t)+\lambda_3(t)}
+    \]
+    --- exactly as above.
+  \end{enumerate}
+\end{enumerate}
+
+\section{Components of \texttt{simLexis}}
+
+This section explains the actually existing code for
+\texttt{simLexis}, as it is in the current version of \texttt{Epi}.
+
+% The following code sources the originally formatted code in
+% simLexis.R in order to make it printable with all the formatting and
+% comments in it. However the sourcing does not work when compiling
+% the vignettes in R CMD build. So when checking the code we comment
+% this out by putting eval=FALSE, and moreover, because it is only
+% simLexis that is exported, we also need to bring the functions simX,
+% sim1, lint, get.next and chop.lex into the workspace. So depending
+% on whether we actually construct the pdf for the inst/doc folder or
+% test (upload) the package, one of the following to chunks are run
+% with eval=FALSE and the other with eval=TRUE
+
+% When compiling the published vignette
+<<CHANGE1,echo=FALSE,results=hide,eval=FALSE>>=
+source( "../R/simLexis.R", keep.source=TRUE )
+@ %
+% When checking the package
+<<CHANGE2,echo=FALSE,results=hide,eval=TRUE>>=
+simX <- Epi:::simX
+sim1 <- Epi:::sim1
+lint <- Epi:::lint
+get.next <- Epi:::get.next
+chop.lex <- Epi:::chop.lex
+@ %
+The function \texttt{simLexis} takes a \texttt{Lexis} object as
+input. This defines the initial state(s) and times of the start for a
+number of persons. Since the purpose is to simulate a history through
+the estimated multistate model, the input values of the outcome
+variables \texttt{lex.Xst} and \texttt{lex.dur} are ignored --- the
+aim is to simulate values for them.
+
+Note however that the attribute \texttt{time.since} must be present in the
+object. This is used for initializing timescales defined as time since
+entry into a particular state, it is a character vector of the same
+length as the \texttt{time.scales} attribute, with value equal to a
+state name if the corresponding time scale is defined as time since
+entry into that state. In this example the 4th timescale is time since
+entry into the \texttt{Ins} state, and hence:
+<<>>=
+cbind(
+attr( ini, "time.scales" ),
+attr( ini, "time.since" ) )
+@ %
+\texttt{Lexis} objects will have this attribute set for time scales created
+using \texttt{cutLexis}.
+
+The other necessary argument is a transition object \texttt{Tr}, which
+is a list of lists. The elements of the lists should be \texttt{glm}
+objects derived by fitting Poisson models to a \texttt{Lexis} object
+representing follow-up data in a multistate model.  It is assumed (but
+not checked) that timescales enter in the model via the timescales of
+the \texttt{Lexis} object. Formally, there are no assumptions about
+how \texttt{lex.dur} enters in the model.
+
+Optional arguments are \texttt{t.range}, \texttt{n.int} or
+\texttt{time.pts}, specifying the times after entry at which the
+cumulative rates will be computed (the maximum of which will be taken
+as the censoring time), and \texttt{N} a scalar or numerical vector of
+the number of persons with a given initial state each record of the
+\texttt{init} object should represent.
+
+The central part of the functions uses a \texttt{do.call} /
+\texttt{lapply} / \texttt{split} construction to do simulations for
+different initial states. This is the construction in the middle that
+calls \texttt{simX}. \texttt{simLexis} also calls \texttt{get.next}
+which is further detailed below.
+<<>>=
+simLexis
+@ %
+
+\subsection{\texttt{simX}}
+
+\texttt{simX} is called by \texttt{simLexis} and simulates
+transition-times and -types for a set of patients assumed to be in the
+same state. It is called from \texttt{simLexis} with a data frame as
+argument, uses the state in \texttt{lex.Cst} to select the relevant
+component of \texttt{Tr} and compute predicted cumulative intensities
+for all states reachable from this state.
+
+Note that it is here the switch between \texttt{glm}, \texttt{coxph}
+and objects of class \texttt{function} is made.
+
+The dataset on which this prediction is done has
+\texttt{length(time.pts)} rows per person.
+<<>>=
+simX
+@ %
+As we see, \texttt{simX} calls \texttt{sim1} which simulates the
+transition for one person.
+
+\subsection{\texttt{sim1}}
+
+The predicted cumulative intensities are fed, person by person, to
+\texttt{sim1} --- again via a \texttt{do.call} / \texttt{lapply} /
+\texttt{split} construction --- and the resulting time and state is
+appended to the \texttt{nd} data frame. This way we have simulated
+\emph{one} transition (time and state) for each person:
+<<>>=
+sim1
+@ %
+The \texttt{sim1} function uses \texttt{lint} to do linear interpolation.
+
+\subsection{\texttt{lint}}
+
+We do not use \texttt{approx} to do the linear interpolation, because
+this function does not do the right thing if the cumulative incidences
+(\texttt{ci}) are constant across a number of times. Therefore we have
+a custom made linear interpolator that does the interpolation
+exploiting the fact the the \texttt{ci} is non-decreasing and
+\texttt{tt} is strictly monotonously increasing:
+<<>>=
+lint
+@
+
+\subsection{\texttt{get.next}}
+
+We must repeat the simulation operation on those that have a simulated
+entry to a transient state, and also make sure that any time scales
+defined as time since entry to one of these states be initialized to 0
+before a call to \texttt{simX} is made for these persons. This
+accomplished by the function \texttt{get.next}:
+<<>>=
+get.next
+@
+
+\subsection{\texttt{chop.lex}}
+
+The operation so far has censored individuals \texttt{max(time.pts)}
+after \emph{each} new entry to a transient state. In order to groom
+the output data we use \texttt{chop.lex} to censor all persons at the
+same designated time after \emph{initial} entry.
+<<>>=
+chop.lex
+@
+
+\section{Probabilities from simulated \texttt{Lexis} objects}
+
+Once we have simulated a Lexis object we will of course want to use it
+for estimating probabilities, so basically we will want to enumerate
+the number of persons in each state at a pre-specified set of time
+points.
+
+\subsection{\texttt{nState}}
+
+Since we are dealing with multistate model with potentially multiple
+time scales, it is necessary to define the timescale
+(\texttt{time.scale}), the starting point on this timescale
+(\texttt{from}) and the points after this where we compute the number
+of occupants in each state, (\texttt{at}).
+<<>>=
+nState
+@ %
+
+\subsection{\texttt{pState}, \texttt{plot.pState} and \texttt{lines.pState}}
+
+In order to plot probabilities of state-occupancy it is useful to
+compute cumulative probabilities across states in any given order;
+this is done by the function \texttt{pState}, which returns a matrix
+of class \texttt{pState}:
+<<>>=
+pState
+@ %
+There is also a \texttt{plot} and \texttt{lines} method for the
+resulting \texttt{pState} objects:
+<<>>=
+plot.pState
+lines.pState
+@ %
+
+\bibliographystyle{plain}
+\begin{thebibliography}{1}
+
+\bibitem{Carstensen.2011a}
+B~Carstensen and M~Plummer.
+\newblock Using {L}exis objects for multi-state models in {R}.
+\newblock {\em Journal of Statistical Software}, 38(6):1--18, 1 2011.
+
+\bibitem{Iacobelli.2013}
+S~Iacobelli and B~Carstensen.
+\newblock {Multiple time scales in multi-state models}.
+\newblock {\em Stat Med}, 32(30):5315--5327, Dec 2013.
+
+\bibitem{Plummer.2011}
+M~Plummer and B~Carstensen.
+\newblock Lexis: An {R} class for epidemiological studies with long-term
+  follow-up.
+\newblock {\em Journal of Statistical Software}, 38(5):1--12, 1 2011.
+
+\end{thebibliography}
+
+\addcontentsline{toc}{chapter}{References}
+
+\end{document}

@@ -1,0 +1,36 @@
+combine_esc             Combine one or more 'esc' objects into a data
+                        frame
+convert_d2etasq         Convert effect size d into Eta Squared
+convert_d2f             Convert effect size d into f
+convert_d2logit         Convert effect size d into log odds
+convert_d2or            Convert effect size d into OR
+convert_d2r             Convert effect size d into correlation
+convert_or2d            Convert effect size OR from d
+convert_r2z             Convert correlation coefficient r into Fisher's
+                        z
+convert_z2r             Convert Fisher's z into correlation coefficient
+                        r
+effect_sizes            Generate effect size data frame from other data
+esc-package             Effect Size Computation for Meta Analysis
+esc_2x2                 Compute effect size from 2 by 2 Contingency
+                        Table
+esc_B                   Compute effect size from Unstandardized
+                        Regression Coefficient
+esc_beta                Compute effect size from Standardized
+                        Regression Coefficient
+esc_bin_prop            Compute effect size from binary proportions
+esc_chisq               Compute effect size from Chi-Square coefficient
+esc_f                   Compute effect size from One-way Anova
+esc_mean_gain           Compute effect size from Mean Gain Scores and
+                        Standard Deviations
+esc_mean_sd             Compute effect size from Mean and Standard
+                        Deviation
+esc_mean_se             Compute effect size from Mean and Standard
+                        Error
+esc_phi                 Compute effect size from Phi coefficient
+esc_rpb                 Compute effect size from Point-Biserial
+                        Correlation
+esc_t                   Compute effect size from Student's t-test
+hedges_g                Convert effect sizes
+write_esc               Write one or more 'esc' objects into an Excel
+                        csv-file

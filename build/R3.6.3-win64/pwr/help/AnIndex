@@ -1,0 +1,17 @@
+pwr-package	pwr-package
+cohen.ES	cohen.ES
+ES.h	ES.h
+ES.w1	ES.w1
+ES.w2	ES.w2
+plot.power.htest	plot.power.htest
+pwr	pwr-package
+pwr.2p.test	pwr.2p.test
+pwr.2p2n.test	pwr.2p2n.test
+pwr.anova.test	pwr.anova.test
+pwr.chisq.test	pwr.chisq.test
+pwr.f2.test	pwr.f2.test
+pwr.norm.test	pwr.norm.test
+pwr.p.test	pwr.p.test
+pwr.r.test	pwr.r.test
+pwr.t.test	pwr.t.test
+pwr.t2n.test	pwr.t2n.test

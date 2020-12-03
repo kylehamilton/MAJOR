@@ -1,0 +1,19 @@
+data.mccall93           Data from a meta-analysis infants' habituation
+                        to a give stimulus and their later cognitive
+                        ability (IQ)
+diffprior               diffprior
+escompute               escompute
+fe_ma                   fe_ma
+fis_trans               fis_trans
+hybrid                  hybrid
+meta_plot               Meta-plot
+puni_star               p-uniform*
+puniform                p-uniform
+req_ni_r                req_ni_r
+snapshot                snapshot
+snapshot_naive          snapshot_naive
+var_boot_fis            var_boot_fis
+var_boot_rmd            var_boot_rmd
+var_dif_fis             var_dif_fis
+var_dif_rmd             var_dif_rmd
+var_pop                 var_pop

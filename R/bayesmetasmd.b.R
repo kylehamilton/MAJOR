@@ -19,14 +19,14 @@ bayesmetasmdClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             muPrior <- self$options$muPrior
             muMeanPrior <- self$options$muMeanPrior
             muStandardDeviationPrior <- self$options$muStandardDeviationPrior
-            method2 <- self$options$methodmetacor
+            #method2 <- self$options$methodmetacor
             mdmseasure <- self$options$cormeasure
             #level <- self$options$level
             table <- self$results$textRICH
             
             ready <- TRUE
-            if (is.null(self$options$rcor) ||
-                is.null(self$options$samplesize) ||
+            if (is.null(self$options$n1i) ||
+                is.null(self$options$m1i) ||
                 is.null(self$options$slab) == TRUE) {
                 ready <- FALSE
                 # I really need to think of a better error message this is a place holder until I figure something out
@@ -67,11 +67,10 @@ bayesmetasmdClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                         m2i = m2i,
                         sd1i = sd1i,
                         sd2i = sd2i,
-                        method = method2,
-                        measure = mdmseasure,
+                        #method = method2,
+                        measure = cormeasure,
                         data = data,
-                        slab = slab,
-                        level = level
+                        slab = slab
                     )
                 
                 dat <- metafor::escalc(
@@ -109,13 +108,13 @@ bayesmetasmdClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                 
                 if (self$options$muPrior == "normal") {
                     resBayes <- bayesmeta::bayesmeta(dat,
-                                                     label = dat$authors,
+                                                     label = dat$slab,
                                                      mu.prior.mean=muMeanPrior,
                                                      mu.prior.sd=muStandardDeviationPrior,
                                                      tau.prior=taupriordensity)
                 } else if (self$options$muPrior == "uniform") {
                     resBayes <- bayesmeta::bayesmeta(dat,
-                                                     label = dat$authors,
+                                                     label = dat$slab,
                                                      tau.prior=taupriordensity)
                 }
                 
@@ -206,8 +205,8 @@ bayesmetasmdClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             plotData <- image$state
             
             ready <- TRUE
-            if (is.null(self$options$rcor) ||
-                is.null(self$options$samplesize) ||
+            if (is.null(self$options$n1i) ||
+                 is.null(self$options$m1i) ||
                 is.null(self$options$slab) == TRUE) {
                 #if (is.null(self$options$rcor) == TRUE){
                 
@@ -225,8 +224,8 @@ bayesmetasmdClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             # <-- the plot function
             plotDataPD <- imagePDTau$state
             ready <- TRUE
-            if (is.null(self$options$rcor) ||
-                is.null(self$options$samplesize) ||
+            if (is.null(self$options$n1i) ||
+                 is.null(self$options$m1i) ||
                 is.null(self$options$slab) == TRUE) {
                 ready <- FALSE
             }
@@ -240,8 +239,8 @@ bayesmetasmdClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             # <-- the plot function
             plotDataPD1 <- imagePDMu$state
             ready <- TRUE
-            if (is.null(self$options$rcor) ||
-                is.null(self$options$samplesize) ||
+            if (is.null(self$options$n1i) ||
+                 is.null(self$options$m1i) ||
                 is.null(self$options$slab) == TRUE) {
                 ready <- FALSE
             }
@@ -255,8 +254,8 @@ bayesmetasmdClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             # <-- the plot function
             plotDataJPD <- imageJPD$state
             ready <- TRUE
-            if (is.null(self$options$rcor) ||
-                is.null(self$options$samplesize) ||
+            if (is.null(self$options$n1i) ||
+                 is.null(self$options$m1i) ||
                 is.null(self$options$slab) == TRUE) {
                 ready <- FALSE
             }

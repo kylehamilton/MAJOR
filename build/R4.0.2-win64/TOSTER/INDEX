@@ -1,0 +1,35 @@
+TOSTmeta                TOST function for meta-analysis
+TOSTone                 TOST function for a one-sample t-test (Cohen's
+                        d)
+TOSTone.raw             TOST function for a one-sample t-test (raw
+                        scores)
+TOSTpaired              TOST function for a dependent t-test (Cohen's
+                        dz)
+TOSTpaired.raw          TOST function for a dependent t-test (raw
+                        scores)
+TOSTr                   TOST function for a correlations
+TOSTtwo                 TOST function for an independent t-test
+                        (Cohen's d)
+TOSTtwo.prop            TOST function for two proportions (raw scores)
+TOSTtwo.raw             TOST function for an independent t-test (raw
+                        scores)
+dataTOSTone             TOST One Sample T-Test
+dataTOSTpaired          TOST Paired Samples T-Test
+dataTOSTr               TOST Correlation
+dataTOSTtwo             TOST Independent Samples T-Test
+datatosttwoprop         TOST Two Proportions
+powerTOSTone            Power analysis for TOST for one-sample t-test
+                        (Cohen's d).
+powerTOSTone.raw        Power analysis for TOST for one-sample t-test
+                        (raw scores).
+powerTOSTpaired         Power analysis for TOST for dependent t-test
+                        (Cohen's dz).
+powerTOSTpaired.raw     Power analysis for TOST for dependent t-test
+                        (raw scores).
+powerTOSTr              Power analysis for TOST for correlations.
+powerTOSTtwo            Power analysis for TOST for independent t-test
+                        (Cohen's d).
+powerTOSTtwo.prop       Power analysis for TOST for difference between
+                        two proportions using Z-test (pooled)
+powerTOSTtwo.raw        Power analysis for TOST for independent t-test
+                        (raw scores).

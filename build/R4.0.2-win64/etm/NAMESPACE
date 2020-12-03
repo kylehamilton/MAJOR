@@ -1,0 +1,49 @@
+useDynLib(etm, .registration = TRUE)
+
+importFrom(Rcpp, evalCpp)
+
+import(parallel, data.table)
+importFrom("survival", "Surv", "survfit", "is.Surv")
+importFrom("lattice", "xyplot")
+
+importFrom("graphics", "axis", "box", "close.screen", "lines", "par",
+           "plot", "screen", "split.screen", "segments")
+importFrom("stats", "qnorm", "quantile", "model.extract", "terms", "model.frame")
+
+export(etm,
+       clos,
+       tra_ill,
+       tra_ill_comp,
+       tra_comp,
+       tra_surv,
+       prepare.los.data,
+       trprob,
+       trcov,
+       etmCIF,
+       etmprep,
+       closPseudo)
+
+S3method(etm, data.frame)
+S3method(clos, msfit)
+S3method(clos, etm)
+S3method(print, clos.etm)
+S3method(plot, clos.etm)
+S3method(xyplot, etm)
+S3method(print, etm)
+S3method("[", etm)
+S3method(summary, etm)
+S3method(print, summary.etm)
+S3method(plot, etm)
+S3method(lines, etm)
+S3method(trprob, etm)
+S3method(trcov, etm)
+S3method(print, etmCIF)
+S3method(plot, etmCIF)
+S3method(summary, etmCIF)
+S3method(print, summary.etmCIF)
+
+## useDynLib(etm, .registration = TRUE)
+
+## exportPattern("^[[:alpha:]]+")
+
+

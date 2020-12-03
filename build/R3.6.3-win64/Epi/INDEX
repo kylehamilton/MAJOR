@@ -1,0 +1,163 @@
+B.dk                    Births in Denmark by year and month of birth
+                        and sex
+BrCa                    Clinical status, relapse, metastasis and death
+                        in 2982 women with breast cancer.
+DMconv                  Conversion to diabetes
+DMepi                   Epidemiological rates for diabetes in Denmark
+                        1996-2015
+DMlate                  The Danish National Diabetes Register.
+Epi                     Epi: Functions for manipulation and statistical
+                        analysis of epidemiological data
+Icens                   Fits a regression model to interval censored
+                        data.
+LCa.fit                 Fit Lee-Carter-type models for rates to
+                        arbitrarily shaped observations of rates in a
+                        Lexis diagram.
+Lexis                   Create a Lexis object
+Lexis.diagram           Plot a Lexis diagram
+Lexis.lines             Draw life lines in a Lexis diagram.
+Life.lines              Compute dates/ages for life lines in a Lexis
+                        diagram
+M.dk                    Mortality in Denmark 1974 ff.
+N.dk                    Population size in Denmark
+N2Y                     Create risk time ("Person-Years") in Lexis
+                        triangles from population count data.
+NArray                  Set up an array of NAs, solely from the list of
+                        dimnames
+Ns                      Natural splines - (cubic splines linear beyond
+                        outermost knots) with convenient specification
+                        of knots and possibility of centering,
+                        detrending and clamping.
+ROC                     Function to compute and draw ROC-curves.
+Relevel                 Reorder and combine levels of a factor
+S.typh                  Salmonella Typhimurium outbreak 1996 in
+                        Denmark.
+Termplot                A wrapper for 'termplot' that optionally (but
+                        by default) exponentiates terms, and plot them
+                        on a common log-scale. Also scales x-axes to
+                        the same physical scale.
+Y.dk                    Population risk time in Denmark
+addCov.Lexis            Add covariates (typically clinical
+                        measurements) taken at known times to a Lexis
+                        object.
+apc.LCa                 Fit Age-Period-Cohort models and Lee-Carter
+                        models with effects modeled by natural splines.
+apc.fit                 Fit an Age-Period-Cohort model to tabular data.
+apc.frame               Produce an empty frame for display of
+                        parameter-estimates from
+                        Age-Period-Cohort-models.
+apc.lines               Plot APC-estimates in an APC-frame.
+bdendo                  A case-control study of endometrial cancer
+births                  Births in a London Hospital
+blcaIT                  Bladder cancer mortality in Italian males
+bootLexis               Create a bootstrap sample of persons (as
+                        identified by 'lex.id') from a Lexis object
+boxes.MS                Draw boxes and arrows for illustration of
+                        multistate models.
+brv                     Bereavement in an elderly cohort
+cal.yr                  Functions to convert character, factor and
+                        various date objects into a number, and vice
+                        versa.
+cbind.Lexis             Combining a Lexis objects with data frames or
+                        other Lexis objects
+ccwc                    Generate a nested case-control study
+ci.cum                  Compute cumulative sum of estimates.
+ci.lin                  Compute linear functions of parameters with
+                        standard errors and confidence limits,
+                        optionally transforming to a different scale.
+ci.pd                   Compute confidence limits for a difference of
+                        two independent proportions.
+clogistic               Conditional logistic regression
+contr.cum               Contrast matrices
+count                   Special functions for use in stat.table
+crr.Lexis               Fit a competing risks regression model
+                        (Fine-Gray model) using a Lexis object)
+cutLexis                Cut follow-up at a specified date for each
+                        person.
+detrend                 Projection of a model matrix on the orthogonal
+                        complement of a trend or curvature.
+diet                    Diet and heart data
+effx                    Function to calculate effects
+effx.match              Function to calculate effects for individually
+                        matched case-control studies
+entry                   Time series and other methods for Lexis objects
+erl                     Compute survival functions from rates and
+                        expected residual lifetime in an illness-death
+                        model as well as years of life lost to disease.
+ewrates                 Rates of lung and nasal cancer mortality, and
+                        total mortality.
+expand.data             Function to expand data for regression analysis
+                        of interval censored data.
+fit.add                 Fit an addive excess risk model to interval
+                        censored data.
+fit.baseline            Fit a piecewise contsnt intesity model for
+                        interval censored data.
+fit.mult                Fits a multiplicative relative risk model to
+                        interval censored data.
+float                   Calculate floated variances
+ftrend                  Fit a floating trend to a factor in generalized
+                        linear model
+gen.exp                 Generate covariates for drug-exposure follow-up
+                        from drug purchase records.
+glm.Lexis               Fit intensity models to follow-up data in Lexis
+                        objects
+gmortDK                 Population mortality rates for Denmark in
+                        5-years age groups.
+harm                    Create a basis of harmonic functions.
+hivDK                   hivDK: seroconversion in a cohort of Danish men
+in.span                 Is 'x' in the column span of matrix 'A' and
+                        what columns are linearly dependent?
+lep                     An unmatched case-control study of leprosy
+                        incidence
+lgrep                   Convenience versions of grep
+list.lex                Compact printing of Lexis object
+lls                     Functions to manage and explore the workspace
+lungDK                  Male lung cancer incidence in Denmark
+mat2pol                 Plot columns of a matrix as stacked areas.
+matshade                Plot confidence intervals as shaded areas
+                        around lines.
+mcutLexis               Cut follow-up at multiple event dates and keep
+                        track of order of events
+merge.Lexis             Merge a Lexis object with a data frame
+mh                      Mantel-Haenszel analyses of cohort and
+                        case-control studies
+mortDK                  Population mortality rates for Denmark in
+                        1-year age-classes.
+msdata                  Create a data structures suitable for use with
+                        packages 'mstate' or 'etm'.
+ncut                    Function to group a variable in intervals.
+nice                    Nice breakpoints
+nickel                  A Cohort of Nickel Smelters in South Wales
+occup                   A small occupational cohort
+pc.lines                Plot period and cohort effects in an APC-frame.
+pctab                   Create percentages in a table
+plot.Lexis              Lexis diagrams
+plot.apc                Plot the estimates from a fitted
+                        Age-Period-Cohort model
+plotCIF                 Plotting Aalen-Johansen curves for competing
+                        events
+plotEst                 Plot estimates with confidence limits (forest
+                        plot)
+plotevent               Plot Equivalence Classes
+poisreg                 Family Object for Poisson Regression
+pr                      Diabetes prevance as of 2010-01-01 in Denmark
+projection.ip           Projection of columns of a matrix.
+rateplot                Functions to plot rates from a table classified
+                        by age and calendar time (period)
+rm.tr                   Remove transitions from a Lexis object.
+simLexis                Simulate a Lexis object representing follow-up
+                        in a multistate model.
+splitLexis              Split follow-up time in a Lexis object
+stack.Lexis             Functions to facilitate analysis of multistate
+                        models.
+stat.table              Tables of summary statistics
+subset.Lexis            Subsetting Lexis (and stacked.Lexis) objects
+summary.Lexis           Summarize transitions and risk time from a
+                        Lexis object
+testisDK                Testis cancer incidence in Denmark, 1943-1996
+thoro                   Thorotrast Study
+timeBand                Extract time band data from a split Lexis
+                        object
+timeScales              The time scales of a Lexis object
+transform.Lexis         Transform a Lexis (or stacked.Lexis) object
+twoby2                  Analysis of a two by two table
