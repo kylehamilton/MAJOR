@@ -6,7 +6,7 @@ jms: '1.0'
 authors:
   - W. Kyle Hamilton
 maintainer: W. Kyle Hamilton <kyle.hamilton@gmail.com>
-date: '2017-11-10'
+date: '2020-12-02'
 type: R
 description: An interface for Jamovi and the R package Metafor
 analyses:
@@ -88,6 +88,10 @@ analyses:
     menuGroup: MAJOR
     menuTitle: Risk of Bias Assessment
     menuSubgroup: Other Tools
+datasets:
+  - name: normand1999
+    path: normand1999.csv
+    description: Training hours
 usesNative: true
 minApp: 1.0.8
 
