@@ -47,3 +47,6 @@ export(multiLevelMetaAnalysisOddsRatiosOptions)
 
 export(robvisClass)
 export(robvisOptions)
+
+export(metaAnalysisCorrClass)
+export(metaAnalysisCorrOptions)

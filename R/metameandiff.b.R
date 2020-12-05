@@ -984,13 +984,13 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           #imageFUNTRIM$setState(res)
           imageTOST$setState(resTOST)
           imageDiagPlot1$setState(inf)
-          # imageDiagPlot2$setState(inf)
-          # imageDiagPlot3$setState(inf)
-          # imageDiagPlot4$setState(inf)
-          # imageDiagPlot5$setState(inf)
-          # imageDiagPlot6$setState(inf)
-          # imageDiagPlot7$setState(inf)
-          # imageDiagPlot8$setState(inf)
+          imageDiagPlot2$setState(inf)
+          imageDiagPlot3$setState(inf)
+          imageDiagPlot4$setState(inf)
+          imageDiagPlot5$setState(inf)
+          imageDiagPlot6$setState(inf)
+          imageDiagPlot7$setState(inf)
+          imageDiagPlot8$setState(inf)
           imageDiagPlot9$setState(res)
           imageLLPlot$setState(res)
 
@@ -1158,22 +1158,126 @@ metaMeanDiffClass <- if (requireNamespace('jmvcore'))
           ready <- FALSE
         }
         
-        influDiagPlot1 <- try(plot(plotDataInfluence, plotinf=1), silent = TRUE)
-        influDiagPlot2 <- try(plot(plotDataInfluence, plotinf=2), silent = TRUE)
-        influDiagPlot3 <- try(plot(plotDataInfluence, plotinf=3), silent = TRUE)
-        influDiagPlot4 <- try(plot(plotDataInfluence, plotinf=4), silent = TRUE)
-        influDiagPlot5 <- try(plot(plotDataInfluence, plotinf=5), silent = TRUE)
-        influDiagPlot6 <- try(plot(plotDataInfluence, plotinf=6), silent = TRUE)
-        influDiagPlot7 <- try(plot(plotDataInfluence, plotinf=7), silent = TRUE)
-        influDiagPlot8 <- try(plot(plotDataInfluence, plotinf=8), silent = TRUE)
-        
+        influDiagPlot1 <- plot(plotDataInfluence, plotinf=1)
         try(print(influDiagPlot1), silent = TRUE)
+        TRUE
+      },
+      .influDiagPlot2 = function(imageDiagPlot1, ...) {
+        # <-- the plot function
+        plotDataInfluence <- imageDiagPlot1$state
+        
+        ready <- TRUE
+        if (is.null(self$options$n1i) ||
+            is.null(self$options$m1i) ||
+            is.null(self$options$sd1i) ||
+            is.null(self$options$n2i) ||
+            is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
+          ready <- FALSE
+        }
+        
+        influDiagPlot2 <- plot(plotDataInfluence, plotinf=2)
         try(print(influDiagPlot2), silent = TRUE)
-        try( print(influDiagPlot3), silent = TRUE)
-        try( print(influDiagPlot4), silent = TRUE)
+        TRUE
+      },
+      .influDiagPlot3 = function(imageDiagPlot1, ...) {
+        # <-- the plot function
+        plotDataInfluence <- imageDiagPlot1$state
+        
+        ready <- TRUE
+        if (is.null(self$options$n1i) ||
+            is.null(self$options$m1i) ||
+            is.null(self$options$sd1i) ||
+            is.null(self$options$n2i) ||
+            is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
+          ready <- FALSE
+        }
+        
+        influDiagPlot3 <- plot(plotDataInfluence, plotinf=3)
+        try(print(influDiagPlot3), silent = TRUE)
+        TRUE
+      },
+      .influDiagPlot4 = function(imageDiagPlot1, ...) {
+        # <-- the plot function
+        plotDataInfluence <- imageDiagPlot1$state
+        
+        ready <- TRUE
+        if (is.null(self$options$n1i) ||
+            is.null(self$options$m1i) ||
+            is.null(self$options$sd1i) ||
+            is.null(self$options$n2i) ||
+            is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
+          ready <- FALSE
+        }
+        
+        influDiagPlot4 <- plot(plotDataInfluence, plotinf=4)
+        try(print(influDiagPlot4), silent = TRUE)
+        TRUE
+      },
+      .influDiagPlot5 = function(imageDiagPlot1, ...) {
+        # <-- the plot function
+        plotDataInfluence <- imageDiagPlot1$state
+        
+        ready <- TRUE
+        if (is.null(self$options$n1i) ||
+            is.null(self$options$m1i) ||
+            is.null(self$options$sd1i) ||
+            is.null(self$options$n2i) ||
+            is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
+          ready <- FALSE
+        }
+        
+        influDiagPlot5 <- plot(plotDataInfluence, plotinf=5)
         try(print(influDiagPlot5), silent = TRUE)
+        TRUE
+      },
+      .influDiagPlot6 = function(imageDiagPlot1, ...) {
+        # <-- the plot function
+        plotDataInfluence <- imageDiagPlot1$state
+        
+        ready <- TRUE
+        if (is.null(self$options$n1i) ||
+            is.null(self$options$m1i) ||
+            is.null(self$options$sd1i) ||
+            is.null(self$options$n2i) ||
+            is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
+          ready <- FALSE
+        }
+        
+        influDiagPlot6 <- plot(plotDataInfluence, plotinf=6)
         try(print(influDiagPlot6), silent = TRUE)
+        TRUE
+      },
+      .influDiagPlot7 = function(imageDiagPlot1, ...) {
+        # <-- the plot function
+        plotDataInfluence <- imageDiagPlot1$state
+        
+        ready <- TRUE
+        if (is.null(self$options$n1i) ||
+            is.null(self$options$m1i) ||
+            is.null(self$options$sd1i) ||
+            is.null(self$options$n2i) ||
+            is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
+          ready <- FALSE
+        }
+        
+        influDiagPlot7 <- plot(plotDataInfluence, plotinf=7)
         try(print(influDiagPlot7), silent = TRUE)
+        TRUE
+      },
+      .influDiagPlot8 = function(imageDiagPlot1, ...) {
+        # <-- the plot function
+        plotDataInfluence <- imageDiagPlot1$state
+        
+        ready <- TRUE
+        if (is.null(self$options$n1i) ||
+            is.null(self$options$m1i) ||
+            is.null(self$options$sd1i) ||
+            is.null(self$options$n2i) ||
+            is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
+          ready <- FALSE
+        }
+        
+        influDiagPlot8 <- plot(plotDataInfluence, plotinf=8)
         try(print(influDiagPlot8), silent = TRUE)
         TRUE
       },

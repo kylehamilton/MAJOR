@@ -963,49 +963,49 @@ metaMeanDiffResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                             title="DFFITS Values",
                             width=750,
                             height=300,
-                            renderFun=".influDiagPlot1"))
+                            renderFun=".influDiagPlot2"))
                         self$add(jmvcore::Image$new(
                             options=options,
                             name="diagplot3",
                             title="Cook's Distances",
                             width=750,
                             height=300,
-                            renderFun=".influDiagPlot1"))
+                            renderFun=".influDiagPlot3"))
                         self$add(jmvcore::Image$new(
                             options=options,
                             name="diagplot4",
                             title="Covariance Ratios",
                             width=750,
                             height=300,
-                            renderFun=".influDiagPlot1"))
+                            renderFun=".influDiagPlot4"))
                         self$add(jmvcore::Image$new(
                             options=options,
                             name="diagplot5",
                             title="Leave-one-out Tau Estimates",
                             width=750,
                             height=300,
-                            renderFun=".influDiagPlot1"))
+                            renderFun=".influDiagPlot5"))
                         self$add(jmvcore::Image$new(
                             options=options,
                             name="diagplot6",
                             title="Leave-one-out (residual) Heterogeneity Test Statistics",
                             width=750,
                             height=300,
-                            renderFun=".influDiagPlot1"))
+                            renderFun=".influDiagPlot6"))
                         self$add(jmvcore::Image$new(
                             options=options,
                             name="diagplot7",
                             title="Hat Values",
                             width=750,
                             height=300,
-                            renderFun=".influDiagPlot1"))
+                            renderFun=".influDiagPlot7"))
                         self$add(jmvcore::Image$new(
                             options=options,
                             name="diagplot8",
                             title="Weights",
                             width=750,
                             height=300,
-                            renderFun=".influDiagPlot1"))
+                            renderFun=".influDiagPlot8"))
                         self$add(jmvcore::Image$new(
                             options=options,
                             name="diagplot9",

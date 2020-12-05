@@ -88,10 +88,20 @@ analyses:
     menuGroup: MAJOR
     menuTitle: Risk of Bias Assessment
     menuSubgroup: Other Tools
+  - title: 'Correlation Coefficients (r, N)'
+    name: metaAnalysisCorr
+    ns: MAJOR
+    menuGroup: MAJOR
+    menuSubgroup: Meta Analysis
+    menuTitle: 'Correlation Coefficients (r, N)'
 datasets:
-  - name: normand1999
+  - name: Molloy2014 meta-analysis of correlation coefficient
+    path: Molloy2014.csv
+    description: Results from 16 studies on the correlation between conscientiousness and medication adherence.
+  - name: Normand1999 meta-analysis of mean differences 
     path: normand1999.csv
-    description: Training hours
+    description: Results from 9 studies on the length of the hospital stay of stroke patients under specialized care and under conventional/routine (non-specialist) care.
+Usage
 usesNative: true
 minApp: 1.0.8
 

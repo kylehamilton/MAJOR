@@ -1,0 +1,389 @@
+---
+name:  metaAnalysisCorr
+title: Correlation Coefficients
+jrs:   '1.1'
+
+items:
+
+    - name:  textRICH
+      type: Table
+      refs: [ metafor ]
+      title: "Random-Effects Model"
+      rows:  2
+      columns:
+        - name: Intercept
+          title: ''
+          type: text
+        - name: Estimate
+          type: number
+        - name: se
+          type: number
+        - name: Z
+          type: number
+        - name: p
+          type: number
+          format: zto,pvalue
+        - name: CILow
+          title: CI Lower Bound
+          type: number
+          format: zto
+        - name: CIHigh
+          title: CI Upper Bound
+          type: number
+          format: zto
+
+    - name:  tableTauSqaured
+      title: Heterogeneity Statistics
+      type: Table
+      rows:  1
+      columns:
+        - name: tauSQRT
+          title: 'Tau'
+          type: number
+          format: zto
+        - name: tauSqComb
+          title: 'Tau²'
+          type: number
+          format: zto
+        - name: ISqu
+          title: 'I²'
+          type: text
+        - name: HSqu
+          title: 'H²'
+          type: number
+          format: zto
+        - name: RSqu
+          title: 'R²'
+          type: text
+        - name: QallDF
+          title: 'df'
+          type: integer
+          format: zto
+        - name: Qall
+          title: 'Q'
+          type: number
+          format: zto
+        - name: QallPval
+          title: 'p'
+          type: number
+          format: zto,pvalue
+
+    - name:  modelFitRICH
+      title: Model Fit Statistics and Information Criteria
+      type: Table
+      rows:  2
+      columns:
+        - name: label
+          title: ''
+          type: text
+        - name: loglikelihood
+          title: log-likelihood
+          type: number
+          format: zto
+        - name: deviance
+          title: Deviance
+          type: number
+          format: zto
+        - name: AIC
+          type: number
+          format: zto
+        - name: BIC
+          type: number
+          format: zto
+        - name: AICc
+          type: number
+          format: zto
+          
+    - name:  summaryOutputText
+      title: "Model Summary"
+      type: Html
+      
+    - name:  summaryOutputText2
+      title: "Model Summary"
+      type: Html
+      
+    - name: plot
+      title: Forest Plot
+      type: Image
+      width:  600
+      height: 450
+      renderFun: .plot
+      refs: [ metafor ]
+
+    - name: plotMed
+      title: Forest Plot
+      type: Image
+      width:  600
+      height: 625
+      renderFun: .plot
+      refs: [ metafor ]
+
+    - name: plotLarge
+      title: Forest Plot
+      type: Image
+      width:  600
+      height: 900
+      renderFun: .plot
+      refs: [ metafor ]
+
+    - name: plotSmallWide
+      title: Forest Plot
+      type: Image
+      width:  900
+      height: 450
+      renderFun: .plot
+      refs: [ metafor ]
+
+    - name: plotMedWide
+      title: Forest Plot
+      type: Image
+      width:  900
+      height: 625
+      renderFun: .plot
+      refs: [ metafor ]
+
+    - name: plotLargeWide
+      title: Forest Plot
+      type: Image
+      width:  900
+      height: 900
+      renderFun: .plot
+      refs: [ metafor ]
+
+    - name:  selModelOutput
+      title: Selection Model Results
+      type: Table
+      refs: [ metafor ]
+      rows:  1
+      columns:
+        - name: deltaEstimate
+          title: "Estimate"
+          type: number
+        - name: deltaSE
+          title: 'SE'
+          type: number
+          format: zto
+        - name: deltaPVAL
+          title: 'p-value'
+          type: number
+          format: pval
+        - name: deltaCILB
+          title: 'CI Lower Bound'
+          type: number
+          format: zto 
+        - name: deltaCIUB
+          title: 'CI Upper Bound'
+          type: number
+          format: zto
+          
+    - name:  fsnRICH
+      title: ""
+      type: Table
+      rows:  4
+      columns:
+        - name: label
+          title: 'Test Name'
+          type: text
+        - name: failSafeNumber
+          title: 'value'
+          type: integer
+          format: zto
+        - name: p
+          type: number
+          format: zto,pvalue
+
+    - name: funplot
+      title: Funnel Plot
+      type: Image
+      width:  600
+      height: 450
+      renderFun: .funplot
+      refs: [ metafor ] 
+
+    - name: funplotMed
+      title: Funnel Plot
+      type: Image
+      width:  750
+      height: 563
+      renderFun: .funplot
+      refs: [ metafor ] 
+      
+    - name: funplotLarge
+      title: Funnel Plot
+      type: Image
+      width:  900
+      height: 675
+      renderFun: .funplot
+      refs: [ metafor ]
+      
+    - name:  resultsTES
+      title: Test of Excess Significance | Significant Findings
+      type: Table
+      rows:  3
+      refs: [ tes ]
+      columns:
+        - name: label
+          title: ''
+          type: text
+        - name: tesNumberOutput
+          title: ''
+          type: number
+          format: zto
+          
+    - name:  resultsTES2
+      title: Test of Excess Significance | Estimated Power of Tests
+      type: Table
+      rows:  1
+      refs: [ tes ]
+      columns:
+        - name: tesOutputMin
+          title: 'Min'
+          type: number
+          format: zto
+        - name: tesOutputQ1
+          title: 'Q1'
+          type: number
+          format: zto
+        - name: tesOutputMed
+          title: 'Median'
+          type: number
+          format: zto
+        - name: tesOutputQ3
+          title: 'Q3'
+          type: number
+          format: zto
+        - name: tesOutputMax
+          title: 'Max'
+          type: number
+          format: zto
+
+    - name:  tesOutput3
+      title: "Test of Excess Significance | Results"
+      type: Html
+
+    - name: pCurvePlot
+      title: p Curve Plot
+      type: Image
+      width:  900
+      height: 675
+      renderFun: .pcurveplot
+
+    - name:  puniformModelOutput
+      title: Publication bias test p-uniform
+      type: Table
+      rows:  1
+      columns:
+        - name: Lpb
+          title: 'Test Statistic'
+          type: number
+          format: zto
+        - name: pval
+          title: 'p-value'
+          type: number
+          format: pvalue   
+
+    - name:  puniformModelOutput2
+      title: Effect size estimation p-uniform
+      type: Table
+      rows:  1
+      columns:
+        - name: est
+          title: 'Effect Size Estimate'
+          type: number
+          format: zto
+        - name: cilb
+          title: 'CI Lower Bound'
+          type: number
+          format: zto 
+        - name: ciub
+          title: 'CI upper Bound'
+          type: number
+          format: zto
+        - name: lzero
+          title: 'Z'
+          type: number
+          format: zto
+        - name: pval
+          title: 'p-value'
+          type: number
+          format: zto
+        - name: ksig
+          title: 'Number of Significant Studies'
+          type: number
+          format: zto
+
+    - name: likelihoodPlot
+      title: Likelihood Plot
+      type: Image
+      width:  600
+      height: 450
+      renderFun: .likelihoodPlot
+      refs: [ llplot ]
+
+    - name: diagPlotAll
+      title: Outlier and Influential Case Diagnostics
+      type: Group
+      items:
+          - name: diagplot1
+            title: Externally Standardized Residual
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot1
+            
+          - name: diagplot2
+            title: DFFITS Values
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot2
+            
+          - name: diagplot3
+            title: Cook's Distances
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot3
+            
+          - name: diagplot4
+            title: Covariance Ratios
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot4
+            
+          - name: diagplot5
+            title: Leave-one-out Tau Estimates
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot5
+            
+          - name: diagplot6
+            title: Leave-one-out (residual) Heterogeneity Test Statistics
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot6
+            
+          - name: diagplot7
+            title: Hat Values
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot7
+            
+          - name: diagplot8
+            title: Weights
+            type: Image
+            width:  750
+            height: 300
+            renderFun: .influDiagPlot8
+            
+          - name: diagplot9
+            title: Q-Q Plot
+            type: Image
+            width:  700
+            height: 700
+            renderFun: .influDiagPlot9
+...
