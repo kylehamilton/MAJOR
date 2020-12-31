@@ -20,6 +20,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
             fsntype <- self$options$fsntype
             method2 <- self$options$methodmetacor
             mdmseasure <- self$options$cormeasure
+            testType <- self$options$testType
             yaxis <- self$options$yaxis
             steps <- self$options$steps
             pchForest <- self$options$pchForest
@@ -28,6 +29,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
             tesAlternative <- self$options$tesAlternative
             tesAlpha <- self$options$tesAlpha
             tesH0 <- self$options$tesH0
+            # Pub Bias
             selModelOutput <- self$results$selModelOutput
             puniformModelOutput <- self$results$puniformModelOutput
             puniformModelOutput2 <- self$results$puniformModelOutput2
@@ -74,8 +76,6 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                             metafor::rma(
                                 ri = ri,
                                 ni = ni,
-                                sd1i = sd1i,
-                                sd2i = sd2i,
                                 method = method2,
                                 measure = mdmseasure,
                                 test="z",

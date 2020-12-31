@@ -97,11 +97,15 @@ analyses:
 datasets:
   - name: Molloy2014 meta-analysis of correlation coefficient
     path: Molloy2014.csv
-    description: Results from 16 studies on the correlation between conscientiousness and medication adherence.
-  - name: Normand1999 meta-analysis of mean differences 
+    description: >-
+      Results from 16 studies on the correlation between conscientiousness and
+      medication adherence.
+  - name: Normand1999 meta-analysis of mean differences
     path: normand1999.csv
-    description: Results from 9 studies on the length of the hospital stay of stroke patients under specialized care and under conventional/routine (non-specialist) care.
-Usage
+    description: >-
+      Results from 9 studies on the length of the hospital stay of stroke
+      patients under specialized care and under conventional/routine
+      (non-specialist) care.
 usesNative: true
 minApp: 1.0.8
 
