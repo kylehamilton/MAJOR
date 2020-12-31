@@ -13,7 +13,7 @@ metaAnalysisCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             methodmetacor = "REML",
             cormeasure = "ZCOR",
             moderatorType = "NON",
-            testType = FALSE,
+            testType = "z",
             level = 95,
             showModelFit = FALSE,
             addcred = FALSE,
@@ -103,10 +103,14 @@ metaAnalysisCorrOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "CAT",
                     "CON"),
                 default="NON")
-            private$..testType <- jmvcore::OptionBool$new(
+            private$..testType <- jmvcore::OptionList$new(
                 "testType",
                 testType,
-                default=FALSE)
+                options=list(
+                    "z",
+                    "t",
+                    "knha"),
+                default="z")
             private$..level <- jmvcore::OptionNumber$new(
                 "level",
                 level,
@@ -429,9 +433,6 @@ metaAnalysisCorrResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `type`="number"),
                     list(
                         `name`="se", 
-                        `type`="number"),
-                    list(
-                        `name`="Z", 
                         `type`="number"),
                     list(
                         `name`="p", 
@@ -978,7 +979,7 @@ metaAnalysisCorr <- function(
     methodmetacor = "REML",
     cormeasure = "ZCOR",
     moderatorType = "NON",
-    testType = FALSE,
+    testType = "z",
     level = 95,
     showModelFit = FALSE,
     addcred = FALSE,

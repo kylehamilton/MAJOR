@@ -64,6 +64,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                         jmvcore::reject("Must Remove Moderator Variable", code =
                                             '')
                     }
+                }
                     data <-
                         data.frame(ri = self$data[[self$options$rcor]],
                                    ni = self$data[[self$options$samplesize]],
@@ -71,7 +72,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                     data[[ri]] <- jmvcore::toNumeric(data[[ri]])
                     data[[ni]] <- jmvcore::toNumeric(data[[ni]])
                     
-                    if (self$options$testType == FALSE) {
+                    if (self$options$testType == "z") {
                         res <-
                             metafor::rma(
                                 ri = ri,
@@ -82,8 +83,20 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                                 data = data,
                                 slab = slab,
                                 level = level
-                            )
-                    } else {
+                            )}
+                    if (self$options$testType == "t") {
+                        res <-
+                            metafor::rma(
+                                ri = ri,
+                                ni = ni,
+                                method = method2,
+                                measure = mdmseasure,
+                                test="t",
+                                data = data,
+                                slab = slab,
+                                level = level
+                            )}                  
+                    if (self$options$testType == "knha") {
                         res <-
                             metafor::rma(
                                 ri = ri,
@@ -94,163 +107,109 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                                 data = data,
                                 slab = slab,
                                 level = level
-                            )
-                    }
+                            )}
                     
-                    # resTOST <-
-                    #     TOSTER::TOSTmeta(
-                    #         ES = res$beta[1],
-                    #         se = res$se[1],
-                    #         low_eqbound_d = lowerTOST,
-                    #         high_eqbound_d = upperTOST,
-                    #         alpha = alphaTOST,
-                    #         plot = FALSE,
-                    #         verbose = FALSE
-                    #     )
-                    # resTOST$se <- res$se
-                    # 
-                    # resTOSTText <- capture.output(TOSTER::TOSTmeta(
-                    #     ES = res$beta[1],
-                    #     se = res$se[1],
-                    #     low_eqbound_d = lowerTOST,
-                    #     high_eqbound_d = upperTOST,
-                    #     alpha = alphaTOST,
-                    #     verbose = TRUE,
-                    #     plot = FALSE
-                    # ))
                 }
                 
-                if (self$options$moderatorType == "CON") {
+                if (self$options$moderatorType == "CAT" || self$options$moderatorType == "CON") {
                     if (is.null(self$options$moderatorcor) == TRUE) {
                         ready <- FALSE
                         # I really need to think of a better error message this is a place holder until I figure something out
                         jmvcore::reject("Must Supply a Moderator Variable", code =
                                             '')
                     }
-                    
-                    
+
                     data <-
                         data.frame(ri = self$data[[self$options$rcor]],
                                    ni = self$data[[self$options$samplesize]],
                                    slab = self$data[[self$options$slab]])
                     data[[ri]] <- jmvcore::toNumeric(data[[ri]])
                     data[[ni]] <- jmvcore::toNumeric(data[[ni]])
-                    
-                    if (self$options$testType == FALSE) {
-                        res <-
-                            metafor::rma(
-                                ri = ri,
-                                ni = ni,
-                                method = method2,
-                                measure = mdmseasure,
-                                mods = moderator,
-                                test="z",
-                                data = data,
-                                slab = slab,
-                                level = level
-                            )
-                    } else {
-                        res <-
-                            metafor::rma(
-                                ri = ri,
-                                ni = ni,
-                                method = method2,
-                                measure = mdmseasure,
-                                mods = moderator,
-                                test="knha",
-                                data = data,
-                                slab = slab,
-                                level = level
-                            )
-                    }
-                    
-                    # resTOST <-
-                    #     TOSTER::TOSTmeta(
-                    #         ES = res$beta[1],
-                    #         se = res$se[1],
-                    #         low_eqbound_d = lowerTOST,
-                    #         high_eqbound_d = upperTOST,
-                    #         alpha = alphaTOST,
-                    #         plot = FALSE,
-                    #         verbose = FALSE
-                    #     )
-                    # resTOST$se <- res$se
-                    # 
-                    # resTOSTText <- capture.output(TOSTER::TOSTmeta(
-                    #     ES = res$beta[1],
-                    #     se = res$se[1],
-                    #     low_eqbound_d = lowerTOST,
-                    #     high_eqbound_d = upperTOST,
-                    #     alpha = alphaTOST,
-                    #     verbose = TRUE,
-                    #     plot = FALSE
-                    # ))
-                }
+
+                        if (self$options$testType == "z") {
+                            res <-
+                                metafor::rma(
+                                    ri = ri,
+                                    ni = ni,
+                                    method = method2,
+                                    measure = mdmseasure,
+                                    mods = moderator,
+                                    test="z",
+                                    data = data,
+                                    slab = slab,
+                                    level = level
+                                )}
+                        if (self$options$testType == "t") {
+                            res <-
+                                metafor::rma(
+                                    ri = ri,
+                                    ni = ni,
+                                    method = method2,
+                                    measure = mdmseasure,
+                                    mods = moderator,
+                                    test="t",
+                                    data = data,
+                                    slab = slab,
+                                    level = level
+                                )}                  
+                        if (self$options$testType == "knha") {
+                            res <-
+                                metafor::rma(
+                                    ri = ri,
+                                    ni = ni,
+                                    method = method2,
+                                    measure = mdmseasure,
+                                    mods = moderator,
+                                    test="knha",
+                                    data = data,
+                                    slab = slab,
+                                    level = level
+                                )}
                 
-                if ((self$options$moderatorType) == "CAT") {
-                    if (is.null(self$options$moderatorcor) == TRUE) {
-                        ready <- FALSE
-                        # I really need to think of a better error message this is a place holder until I figure something out
-                        jmvcore::reject("Must Supply a Moderator Variable", code =
-                                            '')
-                    }
-                    data <-
-                        data.frame(ri = self$data[[self$options$rcor]],
-                                   ni = self$data[[self$options$samplesize]],
-                                   slab = self$data[[self$options$slab]])
-                    data[[ri]] <- jmvcore::toNumeric(data[[ri]])
-                    data[[ni]] <- jmvcore::toNumeric(data[[ni]])
-                    
-                    if (self$options$testType == FALSE) {
-                        res <-
-                            metafor::rma(
-                                ri = ri,
-                                ni = ni,
-                                method = method2,
-                                measure = mdmseasure,
-                                mods = moderator,
-                                test="z",
-                                data = data,
-                                slab = slab,
-                                level = level
-                            )
-                    } else {
-                        res <-
-                            metafor::rma(
-                                ri = ri,
-                                ni = ni,
-                                method = method2,
-                                measure = mdmseasure,
-                                mods = moderator,
-                                test="knha",
-                                data = data,
-                                slab = slab,
-                                level = level
-                            )
-                    }
-                    
-                    # resTOST <-
-                    #     TOSTER::TOSTmeta(
-                    #         ES = res$beta[1],
-                    #         se = res$se[1],
-                    #         low_eqbound_d = lowerTOST,
-                    #         high_eqbound_d = upperTOST,
-                    #         alpha = alphaTOST,
-                    #         verbose = FALSE,
-                    #         plot = FALSE
-                    #     )
-                    # resTOST$se <- res$se
-                    # 
-                    # resTOSTText <- capture.output(TOSTER::TOSTmeta(
-                    #     ES = res$beta[1],
-                    #     se = res$se[1],
-                    #     low_eqbound_d = lowerTOST,
-                    #     high_eqbound_d = upperTOST,
-                    #     alpha = alphaTOST,
-                    #     verbose = TRUE,
-                    #     plot = FALSE
-                    # ))
-                }
+                
+                # if ((self$options$moderatorType) == "CAT") {
+                #     if (is.null(self$options$moderatorcor) == TRUE) {
+                #         ready <- FALSE
+                #         # I really need to think of a better error message this is a place holder until I figure something out
+                #         jmvcore::reject("Must Supply a Moderator Variable", code =
+                #                             '')
+                #     }
+                #     data <-
+                #         data.frame(ri = self$data[[self$options$rcor]],
+                #                    ni = self$data[[self$options$samplesize]],
+                #                    slab = self$data[[self$options$slab]])
+                #     data[[ri]] <- jmvcore::toNumeric(data[[ri]])
+                #     data[[ni]] <- jmvcore::toNumeric(data[[ni]])
+                #     
+                #     if (self$options$testType == FALSE) {
+                #         res <-
+                #             metafor::rma(
+                #                 ri = ri,
+                #                 ni = ni,
+                #                 method = method2,
+                #                 measure = mdmseasure,
+                #                 mods = moderator,
+                #                 test="z",
+                #                 data = data,
+                #                 slab = slab,
+                #                 level = level
+                #             )
+                #     } else {
+                #         res <-
+                #             metafor::rma(
+                #                 ri = ri,
+                #                 ni = ni,
+                #                 method = method2,
+                #                 measure = mdmseasure,
+                #                 mods = moderator,
+                #                 test="knha",
+                #                 data = data,
+                #                 slab = slab,
+                #                 level = level
+                #             )
+                #     }
+                # 
+                # }
             }
             
             
@@ -690,10 +649,26 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                     CILow = res$ci.lb[1],
                     CIHigh = res$ci.ub[1],
                     p = res$pval[1],
-                    Z = res$zval[1],
+                    testStat = res$zval[1],
                     k = res$k
                 )
             )
+            
+            if (self$options$testType == "z" || self$options$testType == "knha") {
+                table$addColumn(name = "testStat", index = 4, title = "Z", type = "number")
+                table$setRow(rowNo = 1,
+                            values = list(
+                                testStat = res$zval[1]
+                            ))
+            }
+            if (self$options$testType == "t"){
+                table$addColumn(name = "testStat", index = 4, title = "t", type = "number")
+                table$setRow(rowNo = 1,
+                             values = list(
+                                 testStat = res$zval[1]
+                             ))
+    
+            }
             
             if (self$options$methodmetacor == "DL") {
                 tau2EstimatorName = "DerSimonian-Laird"
@@ -715,10 +690,11 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
             
             if (is.null(self$options$moderatorcor) == FALSE) {
                 titleMix <- paste("Mixed-Effects Model (k = ", res$k, ")", sep = "")
-                if (self$options$testType == FALSE) {
+                if (self$options$testType == "z" || self$options$testType == "t") {
                     titleMixNote <-
                         paste("Tau\u00B2 Estimator: ", tau2EstimatorName, sep = "")
-                } else {
+                }
+                if (self$options$testType == "knha"){
                     titleMixNote <-
                         paste("Tau\u00B2 Estimator: ", tau2EstimatorName, ". Knapp and Hartung (2003) adjustment used.", sep = "")
                 }
@@ -730,10 +706,11 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                 
             } else {
                 titleRan <- paste("Random-Effects Model (k = ", res$k, ")", sep = "")
-                if (self$options$testType == FALSE) {
+                if (self$options$testType == "z" || self$options$testType == "t") {
                     titleRanNote <-
                         paste("Tau\u00B2 Estimator: ", tau2EstimatorName, sep = "")
-                } else {
+                } 
+                if (self$options$testType == "knha") {
                     titleRanNote <-
                         paste("Tau\u00B2 Estimator: ", tau2EstimatorName, ". Knapp and Hartung (2003) adjustment used.", sep = "")
                 }

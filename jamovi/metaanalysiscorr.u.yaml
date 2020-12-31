@@ -53,6 +53,9 @@ children:
           - type: ComboBox
             name: moderatorType
             useSingleCell: true
+          - type: ComboBox
+            name: testType
+            useSingleCell: true
           - type: TextBox
             name: level
             format: number
@@ -60,9 +63,6 @@ children:
             suffix: '%'
           - type: CheckBox
             name: showModelFit
-            useSingleCell: true
-          - type: CheckBox
-            name: testType
             useSingleCell: true
   - type: CollapseBox
     label: Plots

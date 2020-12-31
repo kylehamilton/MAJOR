@@ -84,9 +84,16 @@ options:
       default: NON
 
     - name: testType
-      title: Knapp and Hartung Adjustment
-      type: Bool
-      default: FALSE   
+      title: Tests and Confidence Intervals
+      type: List
+      options:
+        - name: "z"
+          title: z test
+        - name: "t"
+          title: t test
+        - name: "knha"
+          title: Knapp and Hartung Adjustment
+      default: z
       
     - name: level
       type: Number
