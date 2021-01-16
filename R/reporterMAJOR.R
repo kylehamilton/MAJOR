@@ -89,69 +89,69 @@ reporterMAJOR <- function(x, filename, open=TRUE, digits, footnotes=FALSE, ...) 
   tau2.method <- c(FE = "", HS = "Hunter-Schmidt", HSk = "k-corrected Hunter-Schmidt", HE = "Hedges'", DL = "DerSimonian-Laird", GENQ = "generalized Q-statistic", GENQM = "(median-unbiased) generalized Q-statistic", SJ = "Sidik-Jonkman", ML = "maximum-likelihood", REML = "restricted maximum-likelihood", EB = "empirical Bayes", PM = "Paule-Mandel", PMM = "(median-unbiased) Paule-Mandel")[x$method]
   
   if (x$method == "HS" && model == "RE")
-    tau2.ref <- "[@hunter1990; @viechtbauer2005]"
+    tau2.ref <- "(Hunter 1990 ; Viechtbauer 2005)"
   if (x$method == "HS" && model == "ME")
-    tau2.ref <- "[@hunter1990; @viechtbauer2015]"
+    tau2.ref <- "(Hunter 1990 ; Viechtbauer 2005)"
   
   if (x$method == "HSk" && model == "RE")
-    tau2.ref <- "[@brannick2019; @hunter1990; @viechtbauer2005]"
+    tau2.ref <- "(Brannick2019; Hunter 1990; Viechtbauer 2005)"
   if (x$method == "HSk" && model == "ME")
-    tau2.ref <- "[@brannick2019; @hunter1990; @viechtbauer2015]"
+    tau2.ref <- "(Brannick2019; Hunter 1990; Viechtbauer 2015)"
   
   if (x$method == "HE" && model == "RE")
-    tau2.ref <- "[@hedges1985]"
+    tau2.ref <- "(Hedges 1985)"
   if (x$method == "HE" && model == "ME")
-    tau2.ref <- "[@hedges1992]"
+    tau2.ref <- "(Hedges 1992)"
   
   if (x$method == "DL" && model == "RE")
-    tau2.ref <- "[@dersimonian1986]"
+    tau2.ref <- "(Dersimonian 1986)"
   if (x$method == "DL" && model == "ME")
-    tau2.ref <- "[@raudenbush2009]"
+    tau2.ref <- "(Raudenbush 2009)"
   
   if (x$method == "GENQ" && model == "RE")
-    tau2.ref <- "[@dersimonian2007]"
+    tau2.ref <- "(DerSimonian 2007)"
   if (x$method == "GENQ" && model == "ME")
-    tau2.ref <- "[@jackson2014]"
+    tau2.ref <- "(Jackson 2014)"
   
   if (x$method == "GENQM" && model == "RE")
-    tau2.ref <- "[@dersimonian2007]"
+    tau2.ref <- "(DerSimonian 2007)"
   if (x$method == "GENQM" && model == "ME")
-    tau2.ref <- "[@jackson2014]"
+    tau2.ref <- "(Jackson 2014)"
   
   if (x$method == "SJ")
-    tau2.ref <- "[@sidik2005]"
+    tau2.ref <- "(Sidik 2005)"
   
   if (x$method == "ML" && model == "RE")
-    tau2.ref <- "[@hardy1996]"
+    tau2.ref <- "(Hardy 1996)"
   if (x$method == "ML" && model == "ME")
-    tau2.ref <- "[@raudenbush2009]"
+    tau2.ref <- "(Raudenbush 2009)"
   
   if (x$method == "REML" && model == "RE")
-    tau2.ref <- "[@viechtbauer2005]"
+    tau2.ref <- "(Viechtbauer 2005)"
   if (x$method == "REML" && model == "ME")
-    tau2.ref <- "[@raudenbush2009]"
+    tau2.ref <- "(Raudenbush 2009)"
   
   if (x$method == "EB" && model == "RE")
-    tau2.ref <- "[@morris1983]"
+    tau2.ref <- "(Morris 1983)"
   if (x$method == "EB" && model == "ME")
-    tau2.ref <- "[@berkey1995]"
+    tau2.ref <- "(Berkey 1995)"
   
   if (x$method == "PM" && model == "RE")
-    tau2.ref <- "[@paule1982]"
+    tau2.ref <- "(Paule 1982)"
   if (x$method == "PM" && model == "ME")
-    tau2.ref <- "[@viechtbauer2015]"
+    tau2.ref <- "(Viechtbauer 2015)"
   
   if (x$method == "PMM" && model == "RE")
     tau2.ref <- "[@paule1982]"
   if (x$method == "PMM" && model == "ME")
-    tau2.ref <- "[@viechtbauer2015]"
+    tau2.ref <- "(Viechtbauer 2015)"
   
   ### Q-test reference
   
   if (is.element(model, c("FE", "RE"))) {
-    qtest.ref <- "[@cochran1954]"
+    qtest.ref <- "(Cochran 1954)"
   } else {
-    qtest.ref <- "[@hedges1983]"
+    qtest.ref <- "(Hedges 1983)"
   }
   
   ### CI level

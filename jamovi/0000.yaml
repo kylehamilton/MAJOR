@@ -16,12 +16,12 @@ analyses:
     menuGroup: MAJOR
     menuTitle: Change Score
     menuSubgroup: Meta Analysis
-  - title: Correlation Coefficients
-    name: MetaCorr
+  - title: 'Correlation Coefficients (r, N)'
+    name: metaAnalysisCorr
     ns: MAJOR
     menuGroup: MAJOR
-    menuTitle: Correlation Coefficients
     menuSubgroup: Meta Analysis
+    menuTitle: 'Correlation Coefficients (r, N)'
   - title: Dichotomous Models
     name: metaDichotomousModel
     ns: MAJOR
@@ -88,12 +88,6 @@ analyses:
     menuGroup: MAJOR
     menuTitle: Risk of Bias Assessment
     menuSubgroup: Other Tools
-  - title: 'Correlation Coefficients (r, N)'
-    name: metaAnalysisCorr
-    ns: MAJOR
-    menuGroup: MAJOR
-    menuSubgroup: Meta Analysis
-    menuTitle: 'Correlation Coefficients (r, N)'
 datasets:
   - name: Molloy2014 meta-analysis of correlation coefficient
     path: Molloy2014.csv
