@@ -450,6 +450,7 @@ MetaCorrClass <- R6::R6Class(
       fsnRICH$setNote("fsnNoteTable", fsnNote)
       fsnRICH <- self$results$fsnRICH
       
+      if ((self$options$moderatorType) == "NON"){
       resTrimFill <- trimfill(res)
       
       summaryTrimAndFillOutput <- self$results$funnelALL$summaryTrimAndFillOutput
@@ -468,6 +469,8 @@ MetaCorrClass <- R6::R6Class(
       
       summaryTrimAndFillOutput$setContent(outputTrimAndFillSummary)
       
+      
+    }
         #pcurve code
       pcurve_cor <- function(ni, 
                              ri, 
