@@ -88,6 +88,12 @@ analyses:
     menuGroup: MAJOR
     menuTitle: Risk of Bias Assessment
     menuSubgroup: Other Tools
+  - title: Correlation Coefficients
+    name: MetaCorr
+    ns: MAJOR
+    menuGroup: MAJOR
+    menuSubgroup: Meta Analysis
+    menuTitle: Correlation Coefficients
 datasets:
   - name: Molloy2014 meta-analysis of correlation coefficient
     path: Molloy2014.csv

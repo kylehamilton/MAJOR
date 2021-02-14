@@ -1309,7 +1309,7 @@ MetaCorrClass <- R6::R6Class(
         imageFUN <- self$results$funnelALL$funplot
         imageTRIMFILL <- self$results$funnelALL$trimfillplot
         imageTOST <- self$results$tostplot
-        vhModelPlotData <- self$results$vhModelAll$vhModelPlot
+        #vhModelPlotData <- self$results$vhModelAll$vhModelPlot
         pcurvePlot <- self$results$pcurveAll$pcurvePlot
         imageDiagPlot1 <- self$results$diagPlotAll$diagplot1
         imageDiagPlot2 <- self$results$diagPlotAll$diagplot2

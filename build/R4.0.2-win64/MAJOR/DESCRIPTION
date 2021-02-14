@@ -14,4 +14,4 @@ Imports: jmvcore (>= 0.5.5), R6, bayesmeta, ggplot2, TOSTER, pkgconfig,
         mvtnorm, BiasedUrn, Epi, gsl, sp, boot, R.rsp, methods, Matrix,
         puniform
 Remotes: kylehamilton/metafor
-Built: R 4.0.2; ; 2020-12-31 02:00:56 UTC; windows
+Built: R 4.0.2; ; 2021-02-14 10:07:59 UTC; windows

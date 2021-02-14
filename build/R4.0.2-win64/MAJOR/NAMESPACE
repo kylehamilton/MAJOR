@@ -12,8 +12,8 @@ import(puniform)
 export(changeScoreClass)
 export(changeScoreOptions)
 
-export(MetaCorrClass)
-export(MetaCorrOptions)
+export(metaAnalysisCorrClass)
+export(metaAnalysisCorrOptions)
 
 export(metaDichotomousModelClass)
 export(metaDichotomousModelOptions)
@@ -48,5 +48,5 @@ export(multiLevelMetaAnalysisOddsRatiosOptions)
 export(robvisClass)
 export(robvisOptions)
 
-export(metaAnalysisCorrClass)
-export(metaAnalysisCorrOptions)
+export(MetaCorrClass)
+export(MetaCorrOptions)
