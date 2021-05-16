@@ -10,12 +10,6 @@ date: '2020-12-02'
 type: R
 description: An interface for Jamovi and the R package Metafor
 analyses:
-  - title: Change Score
-    name: changeScore
-    ns: MAJOR
-    menuGroup: MAJOR
-    menuTitle: Change Score
-    menuSubgroup: Meta Analysis
   - title: 'Correlation Coefficients (r, N)'
     name: metaAnalysisCorr
     ns: MAJOR
@@ -52,13 +46,13 @@ analyses:
     menuGroup: MAJOR
     menuTitle: Reliability Generalization
     menuSubgroup: Meta Analysis
-  - title: Correlation Coefficients
-    name: MetaCorr
-    ns: MAJOR
-    menuGroup: MAJOR
-    menuSubgroup: Meta Analysis
-    menuTitle: Correlation Coefficients
 datasets:
+  - name: Studies on the Reliability of the CES-D Scale
+    path: Bonett2010.csv
+    description: >-
+      Results from 9 studies on the reliability of the  Center for Epidemiologic
+      Studies Depression (CES-D) Scale  administered to children providing care
+      to an elderly parent.
   - name: Molloy2014 meta-analysis of correlation coefficient
     path: Molloy2014.csv
     description: >-

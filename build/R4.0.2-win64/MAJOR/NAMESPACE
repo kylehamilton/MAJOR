@@ -9,9 +9,6 @@ import(poibin)
 import(stringr)
 import(esc)
 import(puniform)
-export(changeScoreClass)
-export(changeScoreOptions)
-
 export(metaAnalysisCorrClass)
 export(metaAnalysisCorrOptions)
 
@@ -29,6 +26,9 @@ export(metaProportionOptions)
 
 export(metaAlphaClass)
 export(metaAlphaOptions)
+
+export(changeScoreClass)
+export(changeScoreOptions)
 
 export(MetaCorrClass)
 export(MetaCorrOptions)
