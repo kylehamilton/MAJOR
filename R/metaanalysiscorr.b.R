@@ -111,7 +111,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                     
                 }
                 
-                if (self$options$moderatorType == "CAT" || self$options$moderatorType == "CON") {
+                if (self$options$moderatorType == "CON") {
                     if (is.null(self$options$moderatorcor) == TRUE) {
                         ready <- FALSE
                         # I really need to think of a better error message this is a place holder until I figure something out
@@ -122,6 +122,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                     data <-
                         data.frame(ri = self$data[[self$options$rcor]],
                                    ni = self$data[[self$options$samplesize]],
+                                   moderator = self$data[[self$options$moderatorcor]],
                                    slab = self$data[[self$options$slab]])
                     data[[ri]] <- jmvcore::toNumeric(data[[ri]])
                     data[[ni]] <- jmvcore::toNumeric(data[[ni]])
@@ -165,52 +166,65 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                                     slab = slab,
                                     level = level
                                 )}
+                }
                 
-                
-                # if ((self$options$moderatorType) == "CAT") {
-                #     if (is.null(self$options$moderatorcor) == TRUE) {
-                #         ready <- FALSE
-                #         # I really need to think of a better error message this is a place holder until I figure something out
-                #         jmvcore::reject("Must Supply a Moderator Variable", code =
-                #                             '')
-                #     }
-                #     data <-
-                #         data.frame(ri = self$data[[self$options$rcor]],
-                #                    ni = self$data[[self$options$samplesize]],
-                #                    slab = self$data[[self$options$slab]])
-                #     data[[ri]] <- jmvcore::toNumeric(data[[ri]])
-                #     data[[ni]] <- jmvcore::toNumeric(data[[ni]])
-                #     
-                #     if (self$options$testType == FALSE) {
-                #         res <-
-                #             metafor::rma(
-                #                 ri = ri,
-                #                 ni = ni,
-                #                 method = method2,
-                #                 measure = mdmseasure,
-                #                 mods = moderator,
-                #                 test="z",
-                #                 data = data,
-                #                 slab = slab,
-                #                 level = level
-                #             )
-                #     } else {
-                #         res <-
-                #             metafor::rma(
-                #                 ri = ri,
-                #                 ni = ni,
-                #                 method = method2,
-                #                 measure = mdmseasure,
-                #                 mods = moderator,
-                #                 test="knha",
-                #                 data = data,
-                #                 slab = slab,
-                #                 level = level
-                #             )
-                #     }
-                # 
-                # }
-            }
+                if ((self$options$moderatorType) == "CAT") {
+                    if (is.null(self$options$moderatorcor) == TRUE) {
+                        ready <- FALSE
+                        # I really need to think of a better error message this is a place holder until I figure something out
+                        jmvcore::reject("Must Supply a Moderator Variable", code =
+                                            '')
+                    }
+                    data <-
+                        data.frame(ri = self$data[[self$options$rcor]],
+                                   ni = self$data[[self$options$samplesize]],
+                                   moderator = self$data[[self$options$moderatorcor]],
+                                   slab = self$data[[self$options$slab]])
+                    data[[ri]] <- jmvcore::toNumeric(data[[ri]])
+                    data[[ni]] <- jmvcore::toNumeric(data[[ni]])
+                    
+                    if (self$options$testType == "z") {
+                        res <-
+                            metafor::rma(
+                                ri = ri,
+                                ni = ni,
+                                method = method2,
+                                measure = mdmseasure,
+                                mods = moderator,
+                                test="z",
+                                data = data,
+                                slab = slab,
+                                level = level
+                            )}
+                    if (self$options$testType == "t") {
+                        res <-
+                            metafor::rma(
+                                ri = ri,
+                                ni = ni,
+                                method = method2,
+                                measure = mdmseasure,
+                                mods = moderator,
+                                test="t",
+                                data = data,
+                                slab = slab,
+                                level = level
+                            )}                  
+                    if (self$options$testType == "knha") {
+                        res <-
+                            metafor::rma(
+                                ri = ri,
+                                ni = ni,
+                                method = method2,
+                                measure = mdmseasure,
+                                mods = moderator,
+                                test="knha",
+                                data = data,
+                                slab = slab,
+                                level = level
+                            )}
+
+                }
+            #}
             
             
             #summary

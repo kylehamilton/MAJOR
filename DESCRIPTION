@@ -1,7 +1,7 @@
 Package: MAJOR
 Type: Package
 Title: MAJOR: Meta-Analysis for JAMOVI
-Version: 1.1.1
+Version: 1.2.0
 Author: W. Kyle Hamilton
 Maintainer: W. Kyle Hamilton <kyle.hamilton@gmail.com>
 Description: This module allows you to run a meta-analysis and is based on the R package Metafor by Wolfgang Viechtbauer.

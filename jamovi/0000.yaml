@@ -1,7 +1,7 @@
 ---
 title: Meta-Analysis for JAMOVI
 name: MAJOR
-version: 1.1.1
+version: 1.2.0
 jms: '1.0'
 authors:
   - W. Kyle Hamilton
@@ -52,42 +52,6 @@ analyses:
     menuGroup: MAJOR
     menuTitle: Reliability Generalization
     menuSubgroup: Meta Analysis
-  - title: Correlation Coefficients
-    name: bayesmetacorr
-    ns: MAJOR
-    menuGroup: MAJOR
-    menuTitle: Correlation Coefficients
-    menuSubgroup: Bayesian Meta Analysis
-  - title: Mean Differences
-    name: bayesmetasmd
-    ns: MAJOR
-    menuGroup: MAJOR
-    menuTitle: Mean Differences
-    enuSubgroup: Bayesian Meta Analysis
-  - title: Correlation Coefficients
-    name: multiLevelMetaCorr
-    ns: MAJOR
-    menuGroup: MAJOR
-    menuTitle: Correlation Coefficients
-    menuSubgroup: Multilevel Models
-  - title: Mean Differences
-    name: multiLevelMetaMeanDiff
-    ns: MAJOR
-    menuGroup: MAJOR
-    menuTitle: Mean Differences
-    menuSubgroup: Multilevel Models
-  - title: Dichotomous Models
-    name: multiLevelMetaAnalysisOddsRatios
-    ns: MAJOR
-    menuGroup: MAJOR
-    menuTitle: Dichotomous Models
-    menuSubgroup: Multilevel Models
-  - title: Risk of Bias Assessment
-    name: robvis
-    ns: MAJOR
-    menuGroup: MAJOR
-    menuTitle: Risk of Bias Assessment
-    menuSubgroup: Other Tools
   - title: Correlation Coefficients
     name: MetaCorr
     ns: MAJOR

@@ -30,23 +30,5 @@ export(metaProportionOptions)
 export(metaAlphaClass)
 export(metaAlphaOptions)
 
-export(bayesmetacorrClass)
-export(bayesmetacorrOptions)
-
-export(bayesmetasmdClass)
-export(bayesmetasmdOptions)
-
-export(multiLevelMetaCorrClass)
-export(multiLevelMetaCorrOptions)
-
-export(multiLevelMetaMeanDiffClass)
-export(multiLevelMetaMeanDiffOptions)
-
-export(multiLevelMetaAnalysisOddsRatiosClass)
-export(multiLevelMetaAnalysisOddsRatiosOptions)
-
-export(robvisClass)
-export(robvisOptions)
-
 export(MetaCorrClass)
 export(MetaCorrOptions)
