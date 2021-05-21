@@ -10,9 +10,9 @@ metaDichotomousModelClass <-
       private = list(
         .run = function() {
           ai <- self$options$ai
-          bi <- self$options$bi
+          # bi <- self$options$bi
           ci <- self$options$ci
-          di <- self$options$di
+          # di <- self$options$di
           n1i <- self$options$n1i
           n2i <- self$options$n2i
           moderator <- self$options$moderatorcor
@@ -45,6 +45,14 @@ metaDichotomousModelClass <-
               code = ''
             )
           }
+
+          #   ready <- FALSE
+          #   # I really need to think of a better error message this is a place holder until I figure something out
+          #   jmvcore::reject(
+          #     "Incidents, Sample Size, and Study Label fields must be populated to run analysis",
+          #     code = ''
+          #   )
+          # }
           if (is.null(self$options$slab) == TRUE) {
             ready <- FALSE
             # I really need to think of a better error message this is a place holder until I figure something out
@@ -63,19 +71,23 @@ metaDichotomousModelClass <-
                 data <-
                   data.frame(
                     ai = self$data[[self$options$ai]],
-                    n1i = self$data[[self$options$n1i]],
+                   # bi = self$data[[self$options$bi]],
                     ci = self$data[[self$options$ci]],
+                   # di = self$data[[self$options$di]],
+                    n1i = self$data[[self$options$n1i]],
                     n2i = self$data[[self$options$n2i]],
                     slab = self$data[[self$options$slab]]
                   )
               data[[ai]] <- jmvcore::toNumeric(data[[ai]])
-              data[[n1i]] <- jmvcore::toNumeric(data[[n1i]])
+             # data[[bi]] <- jmvcore::toNumeric(data[[bi]])
               data[[ci]] <- jmvcore::toNumeric(data[[ci]])
+             # data[[di]] <- jmvcore::toNumeric(data[[di]])
+              data[[n1i]] <- jmvcore::toNumeric(data[[n1i]])
               data[[n2i]] <- jmvcore::toNumeric(data[[n2i]])
-              data$checkG1 <- 0
-              data$checkG2 <- 0
-              data$checkG1 <- data$n1i - data$ai
-              data$checkG2 <- data$n2i - data$ci
+            data$checkG1 <- 0
+            data$checkG2 <- 0
+            data$checkG1 <- data$n1i - data$ai
+            data$checkG2 <- data$n2i - data$ci
               if (data$checkG1 < 0) {
                 #ready <- FALSE
                 jmvcore::reject(
@@ -90,12 +102,14 @@ metaDichotomousModelClass <-
                   code = ''
                 )
               }
-            }
+             }
             res <-
               metafor::rma(
                 ai = ai,
-                n1i = n1i,
+                # bi = bi,
                 ci = ci,
+                # di = di,
+                n1i = n1i,
                 n2i = n2i,
                 method = method2,
                 measure = mdmseasure,
@@ -124,8 +138,10 @@ metaDichotomousModelClass <-
                 slab = self$data[[self$options$slab]]
               )
             data[[ai]] <- jmvcore::toNumeric(data[[ai]])
-            data[[n1i]] <- jmvcore::toNumeric(data[[n1i]])
+            # data[[bi]] <- jmvcore::toNumeric(data[[bi]])
             data[[ci]] <- jmvcore::toNumeric(data[[ci]])
+            # data[[di]] <- jmvcore::toNumeric(data[[di]])
+            data[[n1i]] <- jmvcore::toNumeric(data[[n1i]])
             data[[n2i]] <- jmvcore::toNumeric(data[[n2i]])
             data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
             data$checkG1 <- 0
@@ -149,8 +165,10 @@ metaDichotomousModelClass <-
             res <-
               metafor::rma(
                 ai = ai,
-                n1i = n1i,
+                #bi = bi,
                 ci = ci,
+                #di = di,
+                n1i = n1i,
                 n2i = n2i,
                 mods = moderator,
                 method = method2,
@@ -176,8 +194,10 @@ metaDichotomousModelClass <-
                 slab = self$data[[self$options$slab]]
               )
             data[[ai]] <- jmvcore::toNumeric(data[[ai]])
-            data[[n1i]] <- jmvcore::toNumeric(data[[n1i]])
+           # data[[bi]] <- jmvcore::toNumeric(data[[bi]])
             data[[ci]] <- jmvcore::toNumeric(data[[ci]])
+           # data[[di]] <- jmvcore::toNumeric(data[[di]])
+            data[[n1i]] <- jmvcore::toNumeric(data[[n1i]])
             data[[n2i]] <- jmvcore::toNumeric(data[[n2i]])
             data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
             data$checkG1 <- 0
@@ -201,8 +221,10 @@ metaDichotomousModelClass <-
             res <-
               metafor::rma(
                 ai = ai,
-                n1i = n1i,
+               # bi = bi,
                 ci = ci,
+               # di = di,
+                n1i = n1i,
                 n2i = n2i,
                 mods = ~ factor(moderator),
                 method = method2,
@@ -223,7 +245,45 @@ metaDichotomousModelClass <-
             # if (is.character(res)== TRUE)
             #   jmvcore::reject("Check sample size and incident data", code='')
             
+            summaryOutputText <- self$results$summaryOutputText
+            if (self$options$moderatorType == "NON") {
+              
+              textReport <- reporterMAJOR(res)
+              outputTextSummary <- textReport[[1]]
+              
+            }
             
+            if (self$options$moderatorType == "CAT") {
+              
+              outputTextSummary <- "Text reporting does not currently work with moderators"
+              
+            }
+            
+            if (self$options$moderatorType == "CON") {
+              
+              outputTextSummary <- "Text reporting does not currently work with moderators"
+              
+            }
+            
+            
+            summaryOutputText$setContent(outputTextSummary)
+            
+            ### Second part
+            summaryOutputText2 <- self$results$summaryOutputText2
+            
+            if (self$options$moderatorType == "NON") {
+              
+              outputTextSummary2 <- textReport[[2]]
+              
+            }
+            if (self$options$moderatorType == "CAT" ||
+                self$options$moderatorType == "CON") {
+              
+              outputTextSummary2 <- " "
+            }
+            
+            
+            summaryOutputText2$setContent(outputTextSummary2)       
             
             #Pub Bias
             failsafePB <-
@@ -471,11 +531,106 @@ metaDichotomousModelClass <-
             # `self$options` contains the options
             # `self$results` contains the results object (to populate)
             
+            # image <- self$results$plot
+            # imageFUN <- self$results$funplot
+            # 
+            # image$setState(res)
+            # imageFUN$setState(res)
+            
+            #Forest Plots
             image <- self$results$plot
+            
+            forestSmall <- self$results$plot
+            forestMedium <- self$results$plotMed
+            forestLarge <- self$results$plotLarge
+            forestSmallWide <- self$results$plotSmallWide
+            forestMediumWide <- self$results$plotMedWide
+            forestLargeWide <- self$results$plotLargeWide
+            
+            forestSmall$setState(res)
+            forestMedium$setState(res)
+            forestLarge$setState(res)
+            forestSmallWide$setState(res)
+            forestMediumWide$setState(res)
+            forestLargeWide$setState(res)
+            
+            ## Funnel
             imageFUN <- self$results$funplot
             
-            image$setState(res)
-            imageFUN$setState(res)
+            funPlot <- self$results$funplot
+            funPlotMed <- self$results$funplotMed
+            funPlotLarge <- self$results$funplotLarge
+            
+            funPlot$setState(res)
+            funPlotMed$setState(res)
+            funPlotLarge$setState(res)
+            
+            #Forest Plot Size
+            if (self$options$forestPlotSize == "SMALL") {
+              forestSmall$setVisible(visible = TRUE)
+              forestMedium$setVisible(visible = FALSE)
+              forestLarge$setVisible(visible = FALSE)
+              forestSmallWide$setVisible(visible = FALSE)
+              forestMediumWide$setVisible(visible = FALSE)
+              forestLargeWide$setVisible(visible = FALSE)
+            }
+            if (self$options$forestPlotSize == "MEDIUM") {
+              forestSmall$setVisible(visible = FALSE)
+              forestMedium$setVisible(visible = TRUE)
+              forestLarge$setVisible(visible = FALSE)
+              forestSmallWide$setVisible(visible = FALSE)
+              forestMediumWide$setVisible(visible = FALSE)
+              forestLargeWide$setVisible(visible = FALSE)
+            }
+            if (self$options$forestPlotSize == "LARGE") {
+              forestSmall$setVisible(visible = FALSE)
+              forestMedium$setVisible(visible = FALSE)
+              forestLarge$setVisible(visible = TRUE)
+              forestSmallWide$setVisible(visible = FALSE)
+              forestMediumWide$setVisible(visible = FALSE)
+              forestLargeWide$setVisible(visible = FALSE)
+            }
+            if (self$options$forestPlotSize == "SMALLWIDE") {
+              forestSmall$setVisible(visible = FALSE)
+              forestMedium$setVisible(visible = FALSE)
+              forestLarge$setVisible(visible = FALSE)
+              forestSmallWide$setVisible(visible = TRUE)
+              forestMediumWide$setVisible(visible = FALSE)
+              forestLargeWide$setVisible(visible = FALSE)
+            }
+            if (self$options$forestPlotSize == "MEDIUMWIDE") {
+              forestSmall$setVisible(visible = FALSE)
+              forestMedium$setVisible(visible = FALSE)
+              forestLarge$setVisible(visible = FALSE)
+              forestSmallWide$setVisible(visible = FALSE)
+              forestMediumWide$setVisible(visible = TRUE)
+              forestLargeWide$setVisible(visible = FALSE)
+            }
+            if (self$options$forestPlotSize == "LARGEWIDE") {
+              forestSmall$setVisible(visible = FALSE)
+              forestMedium$setVisible(visible = FALSE)
+              forestLarge$setVisible(visible = FALSE)
+              forestSmallWide$setVisible(visible = FALSE)
+              forestMediumWide$setVisible(visible = FALSE)
+              forestLargeWide$setVisible(visible = TRUE)
+            }
+            
+            #Funnel Plot Size
+            if (self$options$funnelPlotSize == "SMALL") {
+              funPlot$setVisible(visible = TRUE)
+              funPlotMed$setVisible(visible = FALSE)
+              funPlotLarge$setVisible(visible = FALSE)
+            }
+            if (self$options$funnelPlotSize == "MEDIUM") {
+              funPlot$setVisible(visible = FALSE)
+              funPlotMed$setVisible(visible = TRUE)
+              funPlotLarge$setVisible(visible = FALSE)
+            }
+            if (self$options$funnelPlotSize == "LARGE") {
+              funPlot$setVisible(visible = FALSE)
+              funPlotMed$setVisible(visible = FALSE)
+              funPlotLarge$setVisible(visible = TRUE)
+            }
             
             # }}))
           #}
@@ -521,7 +676,18 @@ metaDichotomousModelClass <-
                 steps = steps,
                 pch = pch
               )
+            plotMed <- plot
+            plotLarge <- plot
+            plotSmallWide <- plot
+            plotMedWide <- plot
+            plotLargeWide <- plot
+            
             print(plot)
+            print(plotMed)
+            print(plotLarge)
+            print(plotSmallWide)
+            print(plotMedWide)
+            print(plotLargeWide)
             TRUE
           }
         },
@@ -573,7 +739,13 @@ metaDichotomousModelClass <-
                 
               }
             }
-            print(plotFUN)
+            funplot <- plotFUN
+            funplotMed <- plotFUN
+            funplotLarge <- plotFUN
+            
+            print(funplot)
+            print(funplotMed)
+            print(funplotLarge)
             TRUE
           }
         }

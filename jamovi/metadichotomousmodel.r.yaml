@@ -110,12 +110,60 @@ items:
         - name: AICc
           type: number
           format: zto
-
+          
+    - name:  summaryOutputText
+      title: "Model Summary"
+      type: Html
+      
+    - name:  summaryOutputText2
+      title: "Model Summary"
+      type: Html
+      
     - name: plot
       title: Forest Plot
       type: Image
       width:  600
       height: 450
+      renderFun: .plot
+      refs: [ metafor ]
+
+    - name: plotMed
+      title: Forest Plot
+      type: Image
+      width:  600
+      height: 625
+      renderFun: .plot
+      refs: [ metafor ]
+
+    - name: plotLarge
+      title: Forest Plot
+      type: Image
+      width:  600
+      height: 900
+      renderFun: .plot
+      refs: [ metafor ]
+
+    - name: plotSmallWide
+      title: Forest Plot
+      type: Image
+      width:  900
+      height: 450
+      renderFun: .plot
+      refs: [ metafor ]
+
+    - name: plotMedWide
+      title: Forest Plot
+      type: Image
+      width:  900
+      height: 625
+      renderFun: .plot
+      refs: [ metafor ]
+
+    - name: plotLargeWide
+      title: Forest Plot
+      type: Image
+      width:  900
+      height: 900
       renderFun: .plot
       refs: [ metafor ]
 
@@ -166,6 +214,22 @@ items:
       type: Image
       width:  600
       height: 450
+      renderFun: .funplot
+      refs: [ metafor ] 
+
+    - name: funplotMed
+      title: Funnel Plot
+      type: Image
+      width:  750
+      height: 563
+      renderFun: .funplot
+      refs: [ metafor ] 
+      
+    - name: funplotLarge
+      title: Funnel Plot
+      type: Image
+      width:  900
+      height: 675
       renderFun: .funplot
       refs: [ metafor ]
 ...

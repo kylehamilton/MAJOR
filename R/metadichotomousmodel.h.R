@@ -23,6 +23,8 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             showweights = FALSE,
             steps = 5,
             xAxisTitle = NULL,
+            forestPlotSize = "SMALL",
+            funnelPlotSize = "SMALL",
             pchForest = "15",
             forestOrder = "fit",
             fsntype = "Rosenthal",
@@ -142,6 +144,25 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             private$..xAxisTitle <- jmvcore::OptionString$new(
                 "xAxisTitle",
                 xAxisTitle)
+            private$..forestPlotSize <- jmvcore::OptionList$new(
+                "forestPlotSize",
+                forestPlotSize,
+                options=list(
+                    "SMALL",
+                    "MEDIUM",
+                    "LARGE",
+                    "SMALLWIDE",
+                    "MEDIUMWIDE",
+                    "LARGEWIDE"),
+                default="SMALL")
+            private$..funnelPlotSize <- jmvcore::OptionList$new(
+                "funnelPlotSize",
+                funnelPlotSize,
+                options=list(
+                    "SMALL",
+                    "MEDIUM",
+                    "LARGE"),
+                default="SMALL")
             private$..pchForest <- jmvcore::OptionList$new(
                 "pchForest",
                 pchForest,
@@ -210,6 +231,8 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..showweights)
             self$.addOption(private$..steps)
             self$.addOption(private$..xAxisTitle)
+            self$.addOption(private$..forestPlotSize)
+            self$.addOption(private$..funnelPlotSize)
             self$.addOption(private$..pchForest)
             self$.addOption(private$..forestOrder)
             self$.addOption(private$..fsntype)
@@ -235,6 +258,8 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         showweights = function() private$..showweights$value,
         steps = function() private$..steps$value,
         xAxisTitle = function() private$..xAxisTitle$value,
+        forestPlotSize = function() private$..forestPlotSize$value,
+        funnelPlotSize = function() private$..funnelPlotSize$value,
         pchForest = function() private$..pchForest$value,
         forestOrder = function() private$..forestOrder$value,
         fsntype = function() private$..fsntype$value,
@@ -259,6 +284,8 @@ metaDichotomousModelOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..showweights = NA,
         ..steps = NA,
         ..xAxisTitle = NA,
+        ..forestPlotSize = NA,
+        ..funnelPlotSize = NA,
         ..pchForest = NA,
         ..forestOrder = NA,
         ..fsntype = NA,
@@ -274,9 +301,18 @@ metaDichotomousModelResults <- if (requireNamespace('jmvcore')) R6::R6Class(
         tableTauSqaured = function() private$.items[["tableTauSqaured"]],
         modelBackTransform = function() private$.items[["modelBackTransform"]],
         modelFitRICH = function() private$.items[["modelFitRICH"]],
+        summaryOutputText = function() private$.items[["summaryOutputText"]],
+        summaryOutputText2 = function() private$.items[["summaryOutputText2"]],
         plot = function() private$.items[["plot"]],
+        plotMed = function() private$.items[["plotMed"]],
+        plotLarge = function() private$.items[["plotLarge"]],
+        plotSmallWide = function() private$.items[["plotSmallWide"]],
+        plotMedWide = function() private$.items[["plotMedWide"]],
+        plotLargeWide = function() private$.items[["plotLargeWide"]],
         pubBias = function() private$.items[["pubBias"]],
-        funplot = function() private$.items[["funplot"]]),
+        funplot = function() private$.items[["funplot"]],
+        funplotMed = function() private$.items[["funplotMed"]],
+        funplotLarge = function() private$.items[["funplotLarge"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -416,12 +452,65 @@ metaDichotomousModelResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `name`="AICc", 
                         `type`="number", 
                         `format`="zto"))))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="summaryOutputText",
+                title="Model Summary"))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="summaryOutputText2",
+                title="Model Summary"))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
                 title="Forest Plot",
                 width=600,
                 height=450,
+                renderFun=".plot",
+                refs=list(
+                    "metafor")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plotMed",
+                title="Forest Plot",
+                width=600,
+                height=625,
+                renderFun=".plot",
+                refs=list(
+                    "metafor")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plotLarge",
+                title="Forest Plot",
+                width=600,
+                height=900,
+                renderFun=".plot",
+                refs=list(
+                    "metafor")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plotSmallWide",
+                title="Forest Plot",
+                width=900,
+                height=450,
+                renderFun=".plot",
+                refs=list(
+                    "metafor")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plotMedWide",
+                title="Forest Plot",
+                width=900,
+                height=625,
+                renderFun=".plot",
+                refs=list(
+                    "metafor")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="plotLargeWide",
+                title="Forest Plot",
+                width=900,
+                height=900,
                 renderFun=".plot",
                 refs=list(
                     "metafor")))
@@ -490,6 +579,24 @@ metaDichotomousModelResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 height=450,
                 renderFun=".funplot",
                 refs=list(
+                    "metafor")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="funplotMed",
+                title="Funnel Plot",
+                width=750,
+                height=563,
+                renderFun=".funplot",
+                refs=list(
+                    "metafor")))
+            self$add(jmvcore::Image$new(
+                options=options,
+                name="funplotLarge",
+                title="Funnel Plot",
+                width=900,
+                height=675,
+                renderFun=".funplot",
+                refs=list(
                     "metafor")))}))
 
 metaDichotomousModelBase <- if (requireNamespace('jmvcore')) R6::R6Class(
@@ -533,6 +640,8 @@ metaDichotomousModelBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param showweights .
 #' @param steps .
 #' @param xAxisTitle .
+#' @param forestPlotSize .
+#' @param funnelPlotSize .
 #' @param pchForest .
 #' @param forestOrder .
 #' @param fsntype .
@@ -545,11 +654,20 @@ metaDichotomousModelBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   \code{results$tableTauSqaured} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$modelBackTransform} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$modelFitRICH} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$summaryOutputText} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$summaryOutputText2} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plotMed} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plotLarge} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plotSmallWide} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plotMedWide} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$plotLargeWide} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$pubBias$fsnRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$pubBias$rankRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$pubBias$regRICH} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$funplot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$funplotMed} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$funplotLarge} \tab \tab \tab \tab \tab an image \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -578,6 +696,8 @@ metaDichotomousModel <- function(
     showweights = FALSE,
     steps = 5,
     xAxisTitle,
+    forestPlotSize = "SMALL",
+    funnelPlotSize = "SMALL",
     pchForest = "15",
     forestOrder = "fit",
     fsntype = "Rosenthal",
@@ -623,6 +743,8 @@ metaDichotomousModel <- function(
         showweights = showweights,
         steps = steps,
         xAxisTitle = xAxisTitle,
+        forestPlotSize = forestPlotSize,
+        funnelPlotSize = funnelPlotSize,
         pchForest = pchForest,
         forestOrder = forestOrder,
         fsntype = fsntype,

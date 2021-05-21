@@ -53,6 +53,16 @@ datasets:
       Results from 9 studies on the reliability of the  Center for Epidemiologic
       Studies Depression (CES-D) Scale  administered to children providing care
       to an elderly parent.
+  - name: Studies on the Effectiveness of the BCG Vaccine Against Tuberculosis
+    path: Colditz1994.csv
+    description: >-
+      Results from 13 studies examining the effectiveness of the  Bacillus
+      Calmette-Guerin (BCG) vaccine against tuberculosis
+  - name: Lee2004 meta-analysis of dichotomous events with outcome and total
+    path: Lee2004.csv
+    description: >-
+      Results  from 16 clinical trials examining the effectiveness of  wrist
+      acupuncture point P6 stimulation for preventing postoperative nausea.
   - name: Molloy2014 meta-analysis of correlation coefficient
     path: Molloy2014.csv
     description: >-
