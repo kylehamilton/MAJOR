@@ -10,8 +10,10 @@ metaDichotomousModelClass <-
       private = list(
         .run = function() {
           ai <- self$options$ai
-          n1i <- self$options$n1i
+          bi <- self$options$bi
           ci <- self$options$ci
+          di <- self$options$di
+          n1i <- self$options$n1i
           n2i <- self$options$n2i
           moderator <- self$options$moderatorcor
           slab <- self$options$slab

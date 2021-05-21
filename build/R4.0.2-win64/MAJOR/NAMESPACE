@@ -26,9 +26,3 @@ export(metaProportionOptions)
 
 export(metaAlphaClass)
 export(metaAlphaOptions)
-
-export(changeScoreClass)
-export(changeScoreOptions)
-
-export(MetaCorrClass)
-export(MetaCorrOptions)

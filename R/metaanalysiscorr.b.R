@@ -72,6 +72,14 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                     data[[ri]] <- jmvcore::toNumeric(data[[ri]])
                     data[[ni]] <- jmvcore::toNumeric(data[[ni]])
                     
+                    na_test <- if(any(is.na(data)) == TRUE) {
+                        ready <- FALSE
+                        # I really need to think of a better error message this is a place holder until I figure something out
+                        jmvcore::reject("One or more rows is missing data. Remove or filter out the row that contains missing data and rerun your analysis", code =
+                                            '')
+                    }
+                    
+                    
                     if (self$options$testType == "z") {
                         res <-
                             metafor::rma(
@@ -1143,11 +1151,13 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                 is.null(self$options$samplesize) ||
                 is.null(self$options$slab) == TRUE) {
                 ready <- FALSE
+
             }
-            
+            if(ready == TRUE){
             influDiagPlot8 <- plot(plotDataInfluence, plotinf=8)
             try(print(influDiagPlot8), silent = TRUE)
             TRUE
+            }
         },
         .influDiagPlot9 = function(imageDiagPlot9, ...) {
             # <-- the plot function
