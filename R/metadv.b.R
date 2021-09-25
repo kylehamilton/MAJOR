@@ -753,10 +753,14 @@ metaDVClass <- if (requireNamespace('jmvcore'))
             }
           tostPlotFUN <-
             plotTOSTfunction(
-              ES = plotDataTOST$ES,
-              se = plotDataTOST$se,
-              low_eqbound_d = plotDataTOST$low_eqbound_d,
-              high_eqbound_d = plotDataTOST$high_eqbound_d,
+              #ES = plotDataTOST$ES,
+			  ES = plotDataTOST$ES[1],
+              #se = plotDataTOST$se,
+			  se = plotDataTOST$se[1],
+              #low_eqbound_d = plotDataTOST$low_eqbound_d,
+			  low_eqbound_d = plotDataTOST$low_eqbound_d[1],
+              #high_eqbound_d = plotDataTOST$high_eqbound_d,
+			  high_eqbound_d = plotDataTOST$high_eqbound_d[1],
               alpha = plotDataTOST$alpha
             )
           print(tostPlotFUN)
