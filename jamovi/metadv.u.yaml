@@ -55,6 +55,10 @@ children:
             format: number
             useSingleCell: true
             suffix: '%'
+          - type: TextBox
+            name: step
+            format: number
+            useSingleCell: true
           - type: CheckBox
             name: showModelFit
             useSingleCell: true
