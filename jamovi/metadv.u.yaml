@@ -1,4 +1,4 @@
-title: Effect Sizes and Sampling Variances
+title: Effect Sizes and (Sampling Variances or Standard Errors)
 name: metaDV
 jus: '2.0'
 stage: 0
@@ -9,6 +9,13 @@ children:
     stretchFactor: 1
     children:
       - type: TargetLayoutBox
+        label: Study Label
+        children:
+          - type: VariablesListBox
+            name: slab
+            maxItemCount: 1
+            isTarget: true
+      - type: TargetLayoutBox
         label: Effect Size
         children:
           - type: VariablesListBox
@@ -16,17 +23,10 @@ children:
             maxItemCount: 1
             isTarget: true
       - type: TargetLayoutBox
-        label: Variance
+        label: Variance or SE (correspondent observed ES)
         children:
           - type: VariablesListBox
             name: samplingVariances
-            maxItemCount: 1
-            isTarget: true
-      - type: TargetLayoutBox
-        label: Study Label
-        children:
-          - type: VariablesListBox
-            name: slab
             maxItemCount: 1
             isTarget: true
       - type: TargetLayoutBox
@@ -36,6 +36,7 @@ children:
             name: moderatorcor
             maxItemCount: 1
             isTarget: true
+
   - type: CollapseBox
     label: Model Options
     collapsed: true
@@ -44,6 +45,9 @@ children:
       - type: LayoutBox
         margin: large
         children:
+          - type: ComboBox
+            name: corobses
+            useSingleCell: true
           - type: ComboBox
             name: methodmetacor
             useSingleCell: true
@@ -56,12 +60,13 @@ children:
             useSingleCell: true
             suffix: '%'
           - type: TextBox
-            name: step
+            name: slfadj
             format: number
             useSingleCell: true
           - type: CheckBox
             name: showModelFit
             useSingleCell: true
+
   - type: CollapseBox
     label: Plots
     collapsed: true
@@ -114,6 +119,7 @@ children:
                 label: Contour-Enhanced
                 verticalAlignment: center
                 enable: '(yaxis:sei || yaxis:vi)'
+
   - type: CollapseBox
     label: Publication Bias
     collapsed: true
@@ -124,6 +130,7 @@ children:
         children:
           - type: ComboBox
             name: fsntype
+
   - type: CollapseBox
     label: Equivalence Test Options
     collapsed: true

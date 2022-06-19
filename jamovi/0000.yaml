@@ -1,7 +1,7 @@
 ---
 title: Meta-Analysis for JAMOVI
 name: MAJOR
-version: 1.2.2
+version: 1.2.3
 jms: '1.0'
 authors:
   - W. Kyle Hamilton
@@ -22,11 +22,11 @@ analyses:
     menuGroup: MAJOR
     menuTitle: Dichotomous Models
     menuSubgroup: Meta Analysis
-  - title: Effect Sizes and Sampling Variances
+  - title: Effect Sizes and (Sampling Variances or Standard Errors)
     name: metaDV
     ns: MAJOR
     menuGroup: MAJOR
-    menuTitle: Effect Sizes and Sampling Variances
+    menuTitle: Effect Sizes and (Sampling Variances or Standard Errors)
     menuSubgroup: Meta Analysis
   - title: 'Mean Differences (n, M, SD)'
     name: metaMeanDiff

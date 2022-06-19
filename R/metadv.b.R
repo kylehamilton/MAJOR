@@ -6,6 +6,9 @@ metaDVClass <- if (requireNamespace('jmvcore')) R6::R6Class(
         .run = function() {
             yi <- self$options$effectSize
             vi <- self$options$samplingVariances
+            #Select Simple Variances (default) or Standard Errors
+            #correspondent observed Effect Sizes
+            corobses <- self$options$corobses
             moderator <- self$options$moderatorcor
             fsntype <- self$options$fsntype
             method2 <- self$options$methodmetacor
@@ -16,7 +19,8 @@ metaDVClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             addfit <- self$options$addfit
             showweights <- self$options$showweights
             level <- self$options$level
-            step <- self$options$step
+            #Step length of the Fisher algorithm adjust
+            slfadj <- self$options$slfadj
             #yaxis <- self$options$yaxis
             #data <- self$data
             steps <- self$options$steps
@@ -35,7 +39,7 @@ metaDVClass <- if (requireNamespace('jmvcore')) R6::R6Class(
 
                 ready <- FALSE
                 # I really need to think of a better error message this is a place holder until I figure something out
-                jmvcore::reject("Effect Sizes, Sampling Variances, and Study Label fields must be populated to run analysis", code = '')
+                jmvcore::reject("Effect Sizes, Sampling Variances or Standard Errors, and Study Label fields must be populated to run analysis", code = '')
             }
 
             # if (is.null(self$options$slab) == TRUE) {
@@ -62,13 +66,20 @@ metaDVClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     data[[yi]] <- jmvcore::toNumeric(data[[yi]])
                     data[[vi]] <- jmvcore::toNumeric(data[[vi]])
 
-                    res <- try(metafor::rma(yi=yi,
-                                        vi=vi,
-                                        method=method2,
-                                        data=data,
-                                        slab=slab,
-                                        level=level,
-                                        control=list(stepadj=step)))
+                    if (corobses == 'SV')
+                        res <- try(metafor::rma(yi=yi, vi=vi,
+                                                method=method2,
+                                                data=data,
+                                                slab=slab,
+                                                level=level,
+                                                control=list(stepadj=slfadj)))
+                    else
+                        res <- try(metafor::rma(yi=yi, vi=NULL, sei=vi,
+                                                method=method2,
+                                                data=data,
+                                                slab=slab,
+                                                level=level,
+                                                control=list(stepadj=slfadj)))
 
                     resTOST <- TOSTER::TOSTmeta(ES = res$beta,
                                                 se = res$se,
@@ -107,14 +118,22 @@ metaDVClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     data[[vi]] <- jmvcore::toNumeric(data[[vi]])
                     data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
 
-                    res <- metafor::rma(yi = yi,
-                                        vi = vi,
-                                        method = method2,
-                                        mods = moderator,
-                                        data = data,
-                                        slab = slab,
-                                        level=level,
-                                        control=list(stepadj=step))
+                    if (corobses == 'SV')
+                        res <- try(metafor::rma(yi=yi, vi=vi,
+                                                method=method2,
+                                                mods = moderator,
+                                                data=data,
+                                                slab=slab,
+                                                level=level,
+                                                control=list(stepadj=slfadj)))
+                    else
+                        res <- try(metafor::rma(yi=yi, vi=NULL, sei=vi,
+                                                method=method2,
+                                                mods = moderator,
+                                                data=data,
+                                                slab=slab,
+                                                level=level,
+                                                control=list(stepadj=slfadj)))
 
                     resTOST <- TOSTER::TOSTmeta(ES = res$beta,
                                                 se = res$se,
@@ -153,14 +172,22 @@ metaDVClass <- if (requireNamespace('jmvcore')) R6::R6Class(
                     data[[vi]] <- jmvcore::toNumeric(data[[vi]])
                     data[[moderator]] <- jmvcore::toNumeric(data[[moderator]])
 
-                    res <- metafor::rma(yi = yi,
-                                        vi = vi,
-                                        method = method2,
-                                        mods = ~ factor(moderator),
-                                        data = data,
-                                        slab = slab,
-                                        level=level,
-                                        control=list(stepadj=step))
+                    if (corobses == 'SV')
+                        res <- try(metafor::rma(yi=yi, vi=vi,
+                                                method=method2,
+                                                mods = ~ factor(moderator),
+                                                data=data,
+                                                slab=slab,
+                                                level=level,
+                                                control=list(stepadj=slfadj)))
+                    else
+                        res <- try(metafor::rma(yi=yi, vi=NULL, sei=vi,
+                                                method=method2,
+                                                mods = ~ factor(moderator),
+                                                data=data,
+                                                slab=slab,
+                                                level=level,
+                                                control=list(stepadj=slfadj)))
 
                     resTOST <- TOSTER::TOSTmeta(ES = res$beta,
                                                 se = res$se,
@@ -616,7 +643,7 @@ metaDVClass <- if (requireNamespace('jmvcore')) R6::R6Class(
             is.null(self$options$samplingVariances) ||
             is.null(self$options$slab) == TRUE) {
             ready <- FALSE
-            jmvcore::reject("Effect Sizes, Sampling Variances, and Study Label fields must be populated to run analysis", code = '')
+            jmvcore::reject("Effect Sizes, Sampling Variances or Standard Errors, and Study Label fields must be populated to run analysis", code = '')
         } else if (is.null(plotDataInfluence)) {
             ready <- FALSE
             jmvcore::reject("\U1F631 Fisher scoring algorithm did not converge! [A possible remedy: Adjust the step length of the algorithm]", code = '')

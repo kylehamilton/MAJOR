@@ -10,10 +10,11 @@ metaDVOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             samplingVariances = NULL,
             slab = NULL,
             moderatorcor = NULL,
+            corobses = "SV",
             methodmetacor = "REML",
             moderatorType = "NON",
             level = 95,
-            step = 0.5,
+            slfadj = 0.5,
             showModelFit = FALSE,
             addcred = FALSE,
             addfit = TRUE,
@@ -64,6 +65,13 @@ metaDVOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "continuous"),
                 permitted=list(
                     "numeric"))
+            private$..corobses <- jmvcore::OptionList$new(
+                "corobses",
+                corobses,
+                options=list(
+                    "SV",
+                    "SE"),
+                default="SV")
             private$..methodmetacor <- jmvcore::OptionList$new(
                 "methodmetacor",
                 methodmetacor,
@@ -92,9 +100,9 @@ metaDVOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 min=50,
                 max=99.9,
                 default=95)
-            private$..step <- jmvcore::OptionNumber$new(
-                "step",
-                step,
+            private$..slfadj <- jmvcore::OptionNumber$new(
+                "slfadj",
+                slfadj,
                 min=0,
                 max=1,
                 default=0.5)
@@ -204,10 +212,11 @@ metaDVOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..samplingVariances)
             self$.addOption(private$..slab)
             self$.addOption(private$..moderatorcor)
+            self$.addOption(private$..corobses)
             self$.addOption(private$..methodmetacor)
             self$.addOption(private$..moderatorType)
             self$.addOption(private$..level)
-            self$.addOption(private$..step)
+            self$.addOption(private$..slfadj)
             self$.addOption(private$..showModelFit)
             self$.addOption(private$..addcred)
             self$.addOption(private$..addfit)
@@ -231,10 +240,11 @@ metaDVOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         samplingVariances = function() private$..samplingVariances$value,
         slab = function() private$..slab$value,
         moderatorcor = function() private$..moderatorcor$value,
+        corobses = function() private$..corobses$value,
         methodmetacor = function() private$..methodmetacor$value,
         moderatorType = function() private$..moderatorType$value,
         level = function() private$..level$value,
-        step = function() private$..step$value,
+        slfadj = function() private$..slfadj$value,
         showModelFit = function() private$..showModelFit$value,
         addcred = function() private$..addcred$value,
         addfit = function() private$..addfit$value,
@@ -257,10 +267,11 @@ metaDVOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..samplingVariances = NA,
         ..slab = NA,
         ..moderatorcor = NA,
+        ..corobses = NA,
         ..methodmetacor = NA,
         ..moderatorType = NA,
         ..level = NA,
-        ..step = NA,
+        ..slfadj = NA,
         ..showModelFit = NA,
         ..addcred = NA,
         ..addfit = NA,
@@ -609,7 +620,7 @@ metaDVBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 requiresMissings = FALSE)
         }))
 
-#' Effect Sizes and Sampling Variances
+#' Effect Sizes and (Sampling Variances or Standard Errors)
 #'
 #' 
 #' @param data .
@@ -617,10 +628,11 @@ metaDVBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param samplingVariances .
 #' @param slab .
 #' @param moderatorcor .
+#' @param corobses .
 #' @param methodmetacor .
 #' @param moderatorType .
 #' @param level .
-#' @param step .
+#' @param slfadj .
 #' @param showModelFit .
 #' @param addcred .
 #' @param addfit .
@@ -673,10 +685,11 @@ metaDV <- function(
     samplingVariances,
     slab,
     moderatorcor,
+    corobses = "SV",
     methodmetacor = "REML",
     moderatorType = "NON",
     level = 95,
-    step = 0.5,
+    slfadj = 0.5,
     showModelFit = FALSE,
     addcred = FALSE,
     addfit = TRUE,
@@ -716,10 +729,11 @@ metaDV <- function(
         samplingVariances = samplingVariances,
         slab = slab,
         moderatorcor = moderatorcor,
+        corobses = corobses,
         methodmetacor = methodmetacor,
         moderatorType = moderatorType,
         level = level,
-        step = step,
+        slfadj = slfadj,
         showModelFit = showModelFit,
         addcred = addcred,
         addfit = addfit,
