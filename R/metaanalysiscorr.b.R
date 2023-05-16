@@ -2,7 +2,7 @@
 
 # This file is a generated template, your changes will not be overwritten
 
-metaAnalysisCorrClass <- if (requireNamespace('jmvcore')) 
+metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
     R6::R6Class(
     "metaAnalysisCorrClass",
     inherit = metaAnalysisCorrBase,
@@ -35,9 +35,9 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
             puniformModelOutput2 <- self$results$puniformModelOutput2
             puniformSide <- self$options$puniformSide
             selModelType <- self$options$selModelType
-            
+
             data2 <- self$data
-            
+
             ready <- TRUE
             if (is.null(self$options$rcor) ||
                 is.null(self$options$samplesize) ||
@@ -45,24 +45,21 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                 ready <- FALSE
                 # I really need to think of a better error message this is a place holder until I figure something out
                 jmvcore::reject(
-                    "Sample Size, Mean, Standard Deviation and Study Label fields must be populated to run analysis",
-                    code = 'samplesize_mean_sd_label_BLANK'
-                )
+                    "Sample Size, Correlations and Study Label fields must be populated to run analysis",
+                    code = 'samplesize_mean_sd_label_BLANK')
             }
             if (is.null(self$options$slab) == TRUE) {
                 ready <- FALSE
                 # I really need to think of a better error message this is a place holder until I figure something out
-                jmvcore::reject("Study Label fields must be populated to run analysis", code =
-                                    '')
+                jmvcore::reject("Study Label fields must be populated to run analysis", code = '')
             }
-            
+
             if (ready == TRUE) {
                 if (self$options$moderatorType == "NON") {
                     if (is.null(self$options$moderatorcor) == FALSE) {
                         ready <- FALSE
                         # I really need to think of a better error message this is a place holder until I figure something out
-                        jmvcore::reject("Must Remove Moderator Variable", code =
-                                            '')
+                        jmvcore::reject("Must Remove Moderator Variable", code = '')
                     }
                 }
                     data <-
@@ -71,15 +68,14 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                                    slab = self$data[[self$options$slab]])
                     data[[ri]] <- jmvcore::toNumeric(data[[ri]])
                     data[[ni]] <- jmvcore::toNumeric(data[[ni]])
-                    
+
                     na_test <- if(any(is.na(data)) == TRUE) {
                         ready <- FALSE
                         # I really need to think of a better error message this is a place holder until I figure something out
                         jmvcore::reject("One or more rows is missing data. Remove or filter out the row that contains missing data and rerun your analysis", code =
                                             '')
                     }
-                    
-                    
+
                     if (self$options$testType == "z") {
                         res <-
                             metafor::rma(
@@ -103,7 +99,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                                 data = data,
                                 slab = slab,
                                 level = level
-                            )}                  
+                            )}
                     if (self$options$testType == "knha") {
                         res <-
                             metafor::rma(
@@ -116,15 +112,14 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                                 slab = slab,
                                 level = level
                             )}
-                    
+
                 }
-                
+
                 if (self$options$moderatorType == "CON") {
                     if (is.null(self$options$moderatorcor) == TRUE) {
                         ready <- FALSE
                         # I really need to think of a better error message this is a place holder until I figure something out
-                        jmvcore::reject("Must Supply a Moderator Variable", code =
-                                            '')
+                        jmvcore::reject("Must Supply a Moderator Variable", code = '')
                     }
 
                     data <-
@@ -160,7 +155,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                                     data = data,
                                     slab = slab,
                                     level = level
-                                )}                  
+                                )}
                         if (self$options$testType == "knha") {
                             res <-
                                 metafor::rma(
@@ -175,13 +170,12 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                                     level = level
                                 )}
                 }
-                
+
                 if ((self$options$moderatorType) == "CAT") {
                     if (is.null(self$options$moderatorcor) == TRUE) {
                         ready <- FALSE
                         # I really need to think of a better error message this is a place holder until I figure something out
-                        jmvcore::reject("Must Supply a Moderator Variable", code =
-                                            '')
+                        jmvcore::reject("Must Supply a Moderator Variable", code = '')
                     }
                     data <-
                         data.frame(ri = self$data[[self$options$rcor]],
@@ -190,7 +184,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                                    slab = self$data[[self$options$slab]])
                     data[[ri]] <- jmvcore::toNumeric(data[[ri]])
                     data[[ni]] <- jmvcore::toNumeric(data[[ni]])
-                    
+
                     if (self$options$testType == "z") {
                         res <-
                             metafor::rma(
@@ -216,7 +210,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                                 data = data,
                                 slab = slab,
                                 level = level
-                            )}                  
+                            )}
                     if (self$options$testType == "knha") {
                         res <-
                             metafor::rma(
@@ -233,52 +227,50 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
 
                 }
             #}
-            
-            
+
+
             #summary
             #I took this entire bit of code from Emily Kothe and her amazing meta-analysis templates
             #https://osf.io/6bk7b/
-            
+
             #res_back<-predict(res)
-            
+
             summaryOutputText <- self$results$summaryOutputText
             if (self$options$moderatorType == "NON") {
-                
+
                 textReport <- reporterMAJOR(res)
                 outputTextSummary <- textReport[[1]]
-                
+
             }
-            
+
             if (self$options$moderatorType == "CAT") {
-                
+
                 outputTextSummary <- "Text reporting does not currently work with moderators"
-                
+
             }
-            
+
             if (self$options$moderatorType == "CON") {
-                
+
                 outputTextSummary <- "Text reporting does not currently work with moderators"
-                
+
             }
-            
-            
+
             summaryOutputText$setContent(outputTextSummary)
-            
+
             ### Second part
             summaryOutputText2 <- self$results$summaryOutputText2
-            
+
             if (self$options$moderatorType == "NON") {
-                
+
                 outputTextSummary2 <- textReport[[2]]
-                
+
             }
             if (self$options$moderatorType == "CAT" ||
                 self$options$moderatorType == "CON") {
-                
+
                 outputTextSummary2 <- " "
             }
-            
-            
+
             summaryOutputText2$setContent(outputTextSummary2)
 
             #Pub Bias
@@ -289,7 +281,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
             ranktestPB <- metafor::ranktest(res)
             regtestPB <- metafor::regtest(res)
             fsnRICH <- self$results$fsnRICH
-            
+
             if (self$options$moderatorType == "NON") {
                 trimfillPB <- metafor::trimfill(res)
                 fsnRICH$setRow(
@@ -299,7 +291,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                         failSafeNumber = trimfillPB[["k0"]])
                 )
             }
-            
+
             if (self$options$moderatorType == "CAT") {
                 fsnRICH$setRow(
                     rowNo = 4,
@@ -314,9 +306,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                         label = "Trim and Fill Number of Studies")
                 )
             }
-            
-            
-            
+
             fsnRICH$setRow(
                 rowNo = 1,
                 values = list(
@@ -324,7 +314,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                     failSafeNumber = failsafePB$fsnum[1],
                     p = failsafePB$pval[1])
             )
-            
+
             fsnRICH$setRow(
                 rowNo = 2,
                 values = list(
@@ -332,7 +322,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                     failSafeNumber = ranktestPB$tau[1],
                     p = ranktestPB$pval[1])
             )
-            
+
             fsnRICH$setRow(
                 rowNo = 3,
                 values = list(
@@ -340,14 +330,14 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                     failSafeNumber = regtestPB[["zval"]],
                     p = regtestPB[["pval"]])
             )
-            
+
             # fsnRICH$setRow(
             #   rowNo = 4,
             #   values = list(
             #     label = "Trim and Fill Number of Studies",
             #     failSafeNumber = trimfillPB[["k0"]])
             # )
-            
+
             fsnTitle <-
                 paste("Publication Bias Assessment")
             fsnNote <-
@@ -357,14 +347,12 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                       sep = "")
             fsnRICH$setTitle(title = fsnTitle)
             fsnRICH$setNote("fsnNoteTable", fsnNote)
-            
-            
+
             # Test of Excess Significance
-            
             resultsTES <- self$results$resultsTES
-            
+
             if (self$options$moderatorType == "NON") {
-                
+
                 TES <- tes(res, H0 = tesH0, alternative = tesAlternative, alpha = tesAlpha)
                 resultsTES$setRow(
                     rowNo = 1,
@@ -387,11 +375,11 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                         tesNumberOutput = TES[["OEratio"]]
                     )
                 )
-                
+
                 tesQuantile <- quantile(TES[["power"]])
                 tesQuantile25 <- as.numeric(tesQuantile[2])
                 tesQuantile75 <- as.numeric(tesQuantile[4])
-                
+
                 resultsTES2 <- self$results$resultsTES2
                 resultsTES2$setRow(
                     rowNo = 1,
@@ -403,16 +391,15 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                         tesOutputMax = max(TES[["power"]])
                     )
                 )
-                
-                
+
                 tesNote2 <-
                     paste("Estimated Power of Tests (based on theta = ",
                           round(TES[["theta"]], 4),
                           ")",
                           sep = "")
-                
+
                 resultsTES2$setNote("tesNoteTable", tesNote2)
-                
+
                 tesOutput3 <- self$results$tesOutput3
                 tesResults3 <-
                     paste(
@@ -427,13 +414,13 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                         ")",
                         sep = ""
                     )
-                
+
                 tesOutput3$setContent(tesResults3)
-                
+
             }
             if (self$options$moderatorType == "CAT" ||
                 self$options$moderatorType == "CON") {
-                
+
                 resultsTES$setRow(
                     rowNo = 1,
                     values = list(
@@ -455,11 +442,11 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                         tesNumberOutput = 0
                     )
                 )
-                
+
                 tesQuantile <- 0
                 tesQuantile25 <- 0
                 tesQuantile75 <- 0
-                
+
                 resultsTES2 <- self$results$resultsTES2
                 resultsTES2$setRow(
                     rowNo = 1,
@@ -470,33 +457,27 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                         tesOutputQ3 = 0,
                         tesOutputMax = 0)
                 )
-                
-                
-                
+
                 tesNote2 <- "Test of Excess Significance can not run with moderators"
-                
+
                 resultsTES2$setNote("tesNoteTable", tesNote2)
-                
+
                 tesOutput3 <- self$results$tesOutput3
                 tesResults3 <- "Test of Excess Significance can not run with moderators"
-                
+
                 tesOutput3$setContent(tesResults3)
             }
-            
-            
-            
-            
-            
+
             # Selection Models for pub bias
-            
+
             if(selModelType == "stepfun"){
                 selOutput <- try(selmodel(res, type="stepfun", steps=c(0.05, 1)), silent = TRUE)
             } else {
                 selOutput <- try(selmodel(res, type=selModelType), silent = TRUE)
             }
-            
+
             selModelOutput <- self$results$selModelOutput
-            
+
             if (is.character(selOutput) == TRUE) {
                 selModelOutput$setRow(
                     rowNo = 1,
@@ -510,8 +491,8 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                     )
                 )
                 selModelOutput$setNote("selModelOutputType", "Error during optimization, select another model type")
-            }  
-            
+            }
+
             if (is.list(selOutput) == TRUE) {
                 if(selModelType == "none") {
                     selModelOutput$setRow(
@@ -545,9 +526,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                     if(selModelType == "stepfun"){selModelOutput$setNote("selModelOutputType", "Vevea and Hedges Weight Function Model (Vevea and Hedges 1995)")}
                 }
             }
-            
-            
-            
+
             # puniform
             puniformSide
             #puniformOutput <- try(puniform(yi=res$yi, vi=res$vi, side= "left"))
@@ -558,9 +537,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                     side = puniformSide
                 ),
                 silent = TRUE)
-            
-            
-            
+
             ### atempt to get jamovi to skip errors so the rest of the work will still process
             if (is.character(puniformOutput) == TRUE){
                 puniformModelOutput <- self$results$puniformModelOutput
@@ -609,13 +586,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                 )
             }
             ### end of attempot to get errors to not ruin my day!
-            
-            
-            
-            
-            
-            
-            
+
             #Model Fit
             modelFitRICH <- self$results$modelFitRICH
             modelFitRICH$setRow(
@@ -629,8 +600,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                     AICc = res$fit.stats[5, 1]
                 )
             )
-            
-            
+
             modelFitRICH$setRow(
                 rowNo = 2,
                 values = list(
@@ -642,7 +612,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                     AICc = res$fit.stats[5, 2]
                 )
             )
-            
+
             #fit statistics and information criteria
             #Show if checked, hide if unchecked
             if (self$options$showModelFit == TRUE) {
@@ -650,18 +620,18 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
             } else {
                 modelFitRICH$setVisible(visible = FALSE)
             }
-            
+
             #Pub Bias Connections
             #self$results$pubBias$fsn$setContent(failsafePB)
             #self$results$pubBias$rank$setContent(ranktestPB)
             #self$results$pubBias$reg$setContent(regtestPB)
-            
+
             #Data Prep: Results Table
             CILB <- round(res$ci.lb[1], 3)
             CIUB <- round(res$ci.ub[1], 3)
             ciLBUB <- paste(CILB, "-", CIUB)
-            
-            
+
+
             table$setRow(
                 rowNo = 1,
                 values = list(
@@ -675,7 +645,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                     k = res$k
                 )
             )
-            
+
             if (self$options$testType == "z" || self$options$testType == "knha") {
                 table$addColumn(name = "testStat", index = 4, title = "Z", type = "number")
                 table$setRow(rowNo = 1,
@@ -689,9 +659,9 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                              values = list(
                                  testStat = res$zval[1]
                              ))
-    
+
             }
-            
+
             if (self$options$methodmetacor == "DL") {
                 tau2EstimatorName = "DerSimonian-Laird"
             } else if (self$options$methodmetacor == "HE") {
@@ -709,7 +679,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
             } else if (self$options$methodmetacor == "PM") {
                 tau2EstimatorName = "Paule-Mandel"
             }
-            
+
             if (is.null(self$options$moderatorcor) == FALSE) {
                 titleMix <- paste("Mixed-Effects Model (k = ", res$k, ")", sep = "")
                 if (self$options$testType == "z" || self$options$testType == "t") {
@@ -725,13 +695,13 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
             } else if (self$options$methodmetacor == "FE") {
                 titleFix <- paste("Fixed-Effects Model (k = ", res$k, ")", sep = "")
                 table$setTitle(title = titleFix)
-                
+
             } else {
                 titleRan <- paste("Random-Effects Model (k = ", res$k, ")", sep = "")
                 if (self$options$testType == "z" || self$options$testType == "t") {
                     titleRanNote <-
                         paste("Tau\u00B2 Estimator: ", tau2EstimatorName, sep = "")
-                } 
+                }
                 if (self$options$testType == "knha") {
                     titleRanNote <-
                         paste("Tau\u00B2 Estimator: ", tau2EstimatorName, ". Knapp and Hartung (2003) adjustment used.", sep = "")
@@ -739,11 +709,11 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                 table$setTitle(title = titleRan)
                 table$setNote("rannote", titleRanNote)
             }
-            
+
             if (is.null(self$options$moderatorcor) == FALSE) {
                 modCILB <- round(res$ci.lb[2], 3)
                 modCIUB <- round(res$ci.ub[2], 3)
-                
+
                 table$setRow(
                     rowNo = 2,
                     values = list(
@@ -753,11 +723,11 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                         CILow = res$ci.lb[2],
                         CIHigh = res$ci.ub[2],
                         p = res$pval[2],
-                        Z = res$zval[2],
+                        testStat = res$zval[2],
                         k = res$k
                     )
                 )
-                
+
             } else {
                 table$setRow(
                     rowNo = 2,
@@ -768,12 +738,12 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                         CILow = NULL,
                         CIHigh = NULL,
                         p = NULL,
-                        Z = NULL,
+                        testStat = NULL,
                         k = NULL
                     )
                 )
             }
-            
+
             #Data Prep: Heterogeneity Stats
             tauSquared <- round(res$tau2[1], 4)
             tauSquaredSE <- round(res$se.tau2[1], 4)
@@ -782,16 +752,16 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
             tauOnly <- round(sqrt(res$tau2[1]), 4)
             ISquStat <- paste(round(res$I2[1], 2), "%", sep = "")
             HSquStat <- round(res$H2[1], 4)
-            
+
             if (is.null(self$options$moderatorcor) == FALSE) {
                 RSquStat <- paste(round(res$R2, 2), "%", sep = "")
             } else {
                 RSquStat <- NULL
             }
-            
+
             #Data Prep: Heterogeneity Test
             QTestStatDF <- round(res$k[1] - 1, 4)
-            
+
             #Heterogeneity Stats annd Test Table
             tableTauSqaured <- self$results$tableTauSqaured
             tableTauSqaured$setRow(
@@ -807,58 +777,51 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                     QallPval = res$QEp[1]
                 )
             )
-            
+
             # Influence Diagnostics
-            
             inf <- influence(res)
-            
-            
-            # 
-            # `self$data` contains the data
-            # `self$options` contains the options
-            # `self$results` contains the results object (to populate)
-            
+
             pcurve_lists  <- list("TE" = as.numeric(res$yi), "seTE" = sqrt(res$vi), "studlab" = res$slab)
             pcurve_dataframe <- as.data.frame(pcurve_lists)
-            
+
             #Forest Plots
             image <- self$results$plot
-            
+
             forestSmall <- self$results$plot
             forestMedium <- self$results$plotMed
             forestLarge <- self$results$plotLarge
             forestSmallWide <- self$results$plotSmallWide
             forestMediumWide <- self$results$plotMedWide
             forestLargeWide <- self$results$plotLargeWide
-            
+
             forestSmall$setState(res)
             forestMedium$setState(res)
             forestLarge$setState(res)
             forestSmallWide$setState(res)
             forestMediumWide$setState(res)
             forestLargeWide$setState(res)
-            
+
             ## Funnel
             imageFUN <- self$results$funplot
-            
+
             funPlot <- self$results$funplot
             funPlotMed <- self$results$funplotMed
             funPlotLarge <- self$results$funplotLarge
-            
+
             funPlot$setState(res)
             funPlotMed$setState(res)
             funPlotLarge$setState(res)
-            
+
             pCurvePlotResults <- self$results$pCurvePlot
-            
+
             pCurvePlotResults$setState(pcurve_dataframe)
-            
+
             # imageFUNTRIM <- self$results$funplotTrimGroup$funplotTrim
-            
+
             # imageTOST <- self$results$tostplot
-            
-            
-            
+
+
+
             imageDiagPlot1 <- self$results$diagPlotAll$diagplot1
             imageDiagPlot2 <- self$results$diagPlotAll$diagplot2
             imageDiagPlot3 <- self$results$diagPlotAll$diagplot3
@@ -870,7 +833,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
             imageDiagPlot9 <- self$results$diagPlotAll$diagplot9
             # new plots from metafor 10/20/2020 wkh
             imageLLPlot <- self$results$likelihoodPlot
-            
+
             image$setState(res)
             imageFUN$setState(res)
             #imageFUNTRIM$setState(res)
@@ -885,7 +848,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
             imageDiagPlot8$setState(inf)
             imageDiagPlot9$setState(res)
             imageLLPlot$setState(res)
-            
+
             #Forest Plot Size
             if (self$options$forestPlotSize == "SMALL") {
                 forestSmall$setVisible(visible = TRUE)
@@ -935,7 +898,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                 forestMediumWide$setVisible(visible = FALSE)
                 forestLargeWide$setVisible(visible = TRUE)
             }
-            
+
             #Funnel Plot Size
             if (self$options$funnelPlotSize == "SMALL") {
                 funPlot$setVisible(visible = TRUE)
@@ -952,21 +915,21 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                 funPlotMed$setVisible(visible = FALSE)
                 funPlotLarge$setVisible(visible = TRUE)
             }
-            
+
             #Display TOST Image
             # if (self$options$showTOST == TRUE) {
             #     imageTOST$setVisible(visible = TRUE)
             # } else {
             #     imageTOST$setVisible(visible = FALSE)
-            # }  
-            
+            # }
+
             #Display LL Plot Image
             if (self$options$showLL== TRUE) {
                 imageLLPlot$setVisible(visible = TRUE)
             } else {
                 imageLLPlot$setVisible(visible = FALSE)
-            }  
-            
+            }
+
             #Display Diagnostic Plots
             if (self$options$showInfPlot == TRUE) {
                 imageDiagPlot1$setVisible(visible = TRUE)
@@ -989,7 +952,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                 imageDiagPlot8$setVisible(visible = FALSE)
                 imageDiagPlot9$setVisible(visible = FALSE)
             }
-            
+
             #Display TES output
             if (self$options$showTes== TRUE) {
                 resultsTES$setVisible(visible = TRUE)
@@ -999,15 +962,15 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                 resultsTES$setVisible(visible = FALSE)
                 resultsTES2$setVisible(visible = FALSE)
                 tesOutput3$setVisible(visible = FALSE)
-            } 
-            
+            }
+
             #Display p-curve output
             if (self$options$showPcurve== TRUE) {
                 pCurvePlotResults$setVisible(visible = TRUE)
             } else {
                 pCurvePlotResults$setVisible(visible = FALSE)
-            } 
-            
+            }
+
             #Display p-uniform output
             if (self$options$showPuniform== TRUE) {
                 puniformModelOutput$setVisible(visible = TRUE)
@@ -1015,8 +978,8 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
             } else {
                 puniformModelOutput$setVisible(visible = FALSE)
                 puniformModelOutput2$setVisible(visible = FALSE)
-            } 
-            
+            }
+
             #Display selection model output
             if (self$options$showSelmodel== TRUE) {
                 selModelOutput$setVisible(visible = TRUE)
@@ -1024,10 +987,10 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
             } else {
                 selModelOutput$setVisible(visible = FALSE)
                 #puniformModelOutput2$setVisible(visible = FALSE)
-            } 
-            
-            
-            
+            }
+
+
+
             #Display Trim and Fill Funnel Plot
             # if (self$options$showFunTrimPlot == TRUE) {
             #   imageFUNTRIM$setVisible(visible = TRUE)
@@ -1040,14 +1003,14 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
         .influDiagPlot1 = function(imageDiagPlot1, ...) {
             # <-- the plot function
             plotDataInfluence <- imageDiagPlot1$state
-            
+
             ready <- TRUE
             if (is.null(self$options$rcor) ||
                 is.null(self$options$samplesize) ||
                 is.null(self$options$slab) == TRUE) {
                 ready <- FALSE
             }
-            
+
             influDiagPlot1 <- plot(plotDataInfluence, plotinf=1)
             try(print(influDiagPlot1), silent = TRUE)
             TRUE
@@ -1055,14 +1018,14 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
         .influDiagPlot2 = function(imageDiagPlot1, ...) {
             # <-- the plot function
             plotDataInfluence <- imageDiagPlot1$state
-            
+
             ready <- TRUE
             if (is.null(self$options$rcor) ||
                 is.null(self$options$samplesize) ||
                 is.null(self$options$slab) == TRUE) {
                 ready <- FALSE
             }
-            
+
             influDiagPlot2 <- plot(plotDataInfluence, plotinf=2)
             try(print(influDiagPlot2), silent = TRUE)
             TRUE
@@ -1070,14 +1033,14 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
         .influDiagPlot3 = function(imageDiagPlot1, ...) {
             # <-- the plot function
             plotDataInfluence <- imageDiagPlot1$state
-            
+
             ready <- TRUE
             if (is.null(self$options$rcor) ||
                 is.null(self$options$samplesize) ||
                 is.null(self$options$slab) == TRUE) {
                 ready <- FALSE
             }
-            
+
             influDiagPlot3 <- plot(plotDataInfluence, plotinf=3)
             try(print(influDiagPlot3), silent = TRUE)
             TRUE
@@ -1085,14 +1048,14 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
         .influDiagPlot4 = function(imageDiagPlot1, ...) {
             # <-- the plot function
             plotDataInfluence <- imageDiagPlot1$state
-            
+
             ready <- TRUE
             if (is.null(self$options$rcor) ||
                 is.null(self$options$samplesize) ||
                 is.null(self$options$slab) == TRUE) {
                 ready <- FALSE
             }
-            
+
             influDiagPlot4 <- plot(plotDataInfluence, plotinf=4)
             try(print(influDiagPlot4), silent = TRUE)
             TRUE
@@ -1100,14 +1063,14 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
         .influDiagPlot5 = function(imageDiagPlot1, ...) {
             # <-- the plot function
             plotDataInfluence <- imageDiagPlot1$state
-            
+
             ready <- TRUE
             if (is.null(self$options$rcor) ||
                 is.null(self$options$samplesize) ||
                 is.null(self$options$slab) == TRUE) {
                 ready <- FALSE
             }
-            
+
             influDiagPlot5 <- plot(plotDataInfluence, plotinf=5)
             try(print(influDiagPlot5), silent = TRUE)
             TRUE
@@ -1115,14 +1078,14 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
         .influDiagPlot6 = function(imageDiagPlot1, ...) {
             # <-- the plot function
             plotDataInfluence <- imageDiagPlot1$state
-            
+
             ready <- TRUE
             if (is.null(self$options$rcor) ||
                 is.null(self$options$samplesize) ||
                 is.null(self$options$slab) == TRUE) {
                 ready <- FALSE
             }
-            
+
             influDiagPlot6 <- plot(plotDataInfluence, plotinf=6)
             try(print(influDiagPlot6), silent = TRUE)
             TRUE
@@ -1130,14 +1093,14 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
         .influDiagPlot7 = function(imageDiagPlot1, ...) {
             # <-- the plot function
             plotDataInfluence <- imageDiagPlot1$state
-            
+
             ready <- TRUE
             if (is.null(self$options$rcor) ||
                 is.null(self$options$samplesize) ||
                 is.null(self$options$slab) == TRUE) {
                 ready <- FALSE
             }
-            
+
             influDiagPlot7 <- plot(plotDataInfluence, plotinf=7)
             try(print(influDiagPlot7), silent = TRUE)
             TRUE
@@ -1145,7 +1108,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
         .influDiagPlot8 = function(imageDiagPlot1, ...) {
             # <-- the plot function
             plotDataInfluence <- imageDiagPlot1$state
-            
+
             ready <- TRUE
             if (is.null(self$options$rcor) ||
                 is.null(self$options$samplesize) ||
@@ -1162,17 +1125,14 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
         .influDiagPlot9 = function(imageDiagPlot9, ...) {
             # <-- the plot function
             plotDataInfluence <- imageDiagPlot9$state
-            
+
             ready <- TRUE
             if (is.null(self$options$rcor) ||
                 is.null(self$options$samplesize) ||
                 is.null(self$options$slab) == TRUE) {
                 ready <- FALSE
                 #imageDiagPlot9$setStatus(`error`)
-                jmvcore::reject(
-                    "Sample Size, Mean, Standard Deviation and Study Label fields must be populated to run analysis",
-                    code = ''
-                )
+                jmvcore::reject("Sample Size, Correlations and Study Label fields must be populated to run analysis", code = '')
             } else {
                 influDiagPlot9 <- try(qqnorm(plotDataInfluence), silent = TRUE)
                 try(print(influDiagPlot9), silent = TRUE)
@@ -1182,17 +1142,14 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
         .pcurveplot = function(pCurvePlotResults, ...) {
             # <-- the plot function
             pCurve_res <- pCurvePlotResults$state
-            
+
             ready <- TRUE
             if (is.null(self$options$rcor) ||
                 is.null(self$options$samplesize) ||
                 is.null(self$options$slab) == TRUE) {
                 ready <- FALSE
                 #imageDiagPlot9$setStatus(`error`)
-                jmvcore::reject(
-                    "Sample Size, Mean, Standard Deviation and Study Label fields must be populated to run analysis",
-                    code = ''
-                )
+                jmvcore::reject("Sample Size, Correlations and Study Label fields must be populated to run analysis",code = '')
             } else {
                 invisible(pcurve(pCurve_res))
             }
@@ -1201,26 +1158,23 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
         .likelihoodPlot = function(imageLLPlot, ...) {
             # <-- the plot function
             plotLL<- imageLLPlot$state
-            
+
             ready <- TRUE
             if (is.null(self$options$rcor) ||
                 is.null(self$options$samplesize) ||
                 is.null(self$options$slab) == TRUE) {
                 ready <- FALSE
-                jmvcore::reject(
-                    "Sample Size, Mean, and Standard Deviation fields must be populated to generate this plot",
-                    code = ''
-                )
+                jmvcore::reject("Sample Size, Correlations and Study Label fields must be populated to generate this plot", code = '')
             } else {
                 data_test <- NA
                 data_test$yi <- plotLL$yi
                 data_test$vi <- plotLL$vi
-                
+
                 llplot_output <- try(llplot(measure="GEN", yi=yi, vi=vi, data=data_test, lwd=1, refline=NA, xlim=c(-3,3)), silent = TRUE)
                 try(print(llplot_output), silent = TRUE)
             }
             TRUE
-        },      
+        },
         #Forest Plot Function
         .plot = function(image, ...) {
             # <-- the plot function
@@ -1267,7 +1221,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                 plotSmallWide <- plot
                 plotMedWide <- plot
                 plotLargeWide <- plot
-                
+
                 print(plot)
                 print(plotMed)
                 print(plotLarge)
@@ -1284,8 +1238,8 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
         #   yaxis <- self$options$yaxis
         #   yaxisInv <- self$options$yaxisInv
         #   enhancePlot <- self$options$enhanceFunnel
-        #   
-        #   
+        #
+        #
         #   ready <- TRUE
         #   if (is.null(self$options$n1i) ||
         #       is.null(self$options$m1i) ||
@@ -1293,7 +1247,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
         #       is.null(self$options$n2i) ||
         #       is.null(self$options$m2i) || is.null(self$options$sd2i) == TRUE) {
         #     #if (is.null(self$options$rcor) == TRUE){
-        #     
+        #
         #     ready <- FALSE
         #   }
         #   if (is.null(imageFUNTRIM$state$yi) ||
@@ -1318,7 +1272,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
         #         plotFUNTRIM <-
         #           metafor::funnel(trimfill(plotDataFUN), yaxis = yaxisTrans)
         #       }
-        #       
+        #
         #     } else {
         #       if (self$options$enhanceFunnel == TRUE) {
         #         plotFUNTRIM <-
@@ -1369,7 +1323,7 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                         plotFUN <-
                             metafor::funnel(plotDataFUN, yaxis = yaxisTrans)
                     }
-                    
+
                 } else {
                     if (self$options$enhanceFunnel == TRUE) {
                         plotFUN <-
@@ -1386,12 +1340,11 @@ metaAnalysisCorrClass <- if (requireNamespace('jmvcore'))
                 funplot <- plotFUN
                 funplotMed <- plotFUN
                 funplotLarge <- plotFUN
-                
+
                 print(funplot)
                 print(funplotMed)
                 print(funplotLarge)
-                
-                
+
                 TRUE
             }
         }

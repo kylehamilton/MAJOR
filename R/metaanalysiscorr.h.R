@@ -426,28 +426,28 @@ metaAnalysisCorrResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6
                 rows=2,
                 columns=list(
                     list(
-                        `name`="Intercept", 
-                        `title`="", 
+                        `name`="Intercept",
+                        `title`="",
                         `type`="text"),
                     list(
-                        `name`="Estimate", 
+                        `name`="Estimate",
                         `type`="number"),
                     list(
-                        `name`="se", 
+                        `name`="se",
                         `type`="number"),
                     list(
-                        `name`="p", 
-                        `type`="number", 
+                        `name`="p",
+                        `type`="number",
                         `format`="zto,pvalue"),
                     list(
-                        `name`="CILow", 
-                        `title`="CI Lower Bound", 
-                        `type`="number", 
+                        `name`="CILow",
+                        `title`="CI Lower Bound",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="CIHigh", 
-                        `title`="CI Upper Bound", 
-                        `type`="number", 
+                        `name`="CIHigh",
+                        `title`="CI Upper Bound",
+                        `type`="number",
                         `format`="zto"))))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -456,42 +456,42 @@ metaAnalysisCorrResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6
                 rows=1,
                 columns=list(
                     list(
-                        `name`="tauSQRT", 
-                        `title`="Tau", 
-                        `type`="number", 
+                        `name`="tauSQRT",
+                        `title`="Tau",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="tauSqComb", 
-                        `title`="Tau\u00B2", 
-                        `type`="number", 
+                        `name`="tauSqComb",
+                        `title`="Tau\u00B2",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="ISqu", 
-                        `title`="I\u00B2", 
+                        `name`="ISqu",
+                        `title`="I\u00B2",
                         `type`="text"),
                     list(
-                        `name`="HSqu", 
-                        `title`="H\u00B2", 
-                        `type`="number", 
+                        `name`="HSqu",
+                        `title`="H\u00B2",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="RSqu", 
-                        `title`="R\u00B2", 
+                        `name`="RSqu",
+                        `title`="R\u00B2",
                         `type`="text"),
                     list(
-                        `name`="QallDF", 
-                        `title`="df", 
-                        `type`="integer", 
+                        `name`="QallDF",
+                        `title`="df",
+                        `type`="integer",
                         `format`="zto"),
                     list(
-                        `name`="Qall", 
-                        `title`="Q", 
-                        `type`="number", 
+                        `name`="Qall",
+                        `title`="Q",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="QallPval", 
-                        `title`="p", 
-                        `type`="number", 
+                        `name`="QallPval",
+                        `title`="p",
+                        `type`="number",
                         `format`="zto,pvalue"))))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -500,30 +500,30 @@ metaAnalysisCorrResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6
                 rows=2,
                 columns=list(
                     list(
-                        `name`="label", 
-                        `title`="", 
+                        `name`="label",
+                        `title`="",
                         `type`="text"),
                     list(
-                        `name`="loglikelihood", 
-                        `title`="log-likelihood", 
-                        `type`="number", 
+                        `name`="loglikelihood",
+                        `title`="log-likelihood",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="deviance", 
-                        `title`="Deviance", 
-                        `type`="number", 
+                        `name`="deviance",
+                        `title`="Deviance",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="AIC", 
-                        `type`="number", 
+                        `name`="AIC",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="BIC", 
-                        `type`="number", 
+                        `name`="BIC",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="AICc", 
-                        `type`="number", 
+                        `name`="AICc",
+                        `type`="number",
                         `format`="zto"))))
             self$add(jmvcore::Html$new(
                 options=options,
@@ -596,28 +596,28 @@ metaAnalysisCorrResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6
                 rows=1,
                 columns=list(
                     list(
-                        `name`="deltaEstimate", 
-                        `title`="Estimate", 
+                        `name`="deltaEstimate",
+                        `title`="Estimate",
                         `type`="number"),
                     list(
-                        `name`="deltaSE", 
-                        `title`="SE", 
-                        `type`="number", 
+                        `name`="deltaSE",
+                        `title`="SE",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="deltaPVAL", 
-                        `title`="p-value", 
-                        `type`="number", 
+                        `name`="deltaPVAL",
+                        `title`="p-value",
+                        `type`="number",
                         `format`="pval"),
                     list(
-                        `name`="deltaCILB", 
-                        `title`="CI Lower Bound", 
-                        `type`="number", 
+                        `name`="deltaCILB",
+                        `title`="CI Lower Bound",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="deltaCIUB", 
-                        `title`="CI Upper Bound", 
-                        `type`="number", 
+                        `name`="deltaCIUB",
+                        `title`="CI Upper Bound",
+                        `type`="number",
                         `format`="zto"))))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -626,17 +626,17 @@ metaAnalysisCorrResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6
                 rows=4,
                 columns=list(
                     list(
-                        `name`="label", 
-                        `title`="Test Name", 
+                        `name`="label",
+                        `title`="Test Name",
                         `type`="text"),
                     list(
-                        `name`="failSafeNumber", 
-                        `title`="value", 
-                        `type`="integer", 
+                        `name`="failSafeNumber",
+                        `title`="value",
+                        `type`="integer",
                         `format`="zto"),
                     list(
-                        `name`="p", 
-                        `type`="number", 
+                        `name`="p",
+                        `type`="number",
                         `format`="zto,pvalue"))))
             self$add(jmvcore::Image$new(
                 options=options,
@@ -674,13 +674,13 @@ metaAnalysisCorrResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6
                     "tes"),
                 columns=list(
                     list(
-                        `name`="label", 
-                        `title`="", 
+                        `name`="label",
+                        `title`="",
                         `type`="text"),
                     list(
-                        `name`="tesNumberOutput", 
-                        `title`="", 
-                        `type`="number", 
+                        `name`="tesNumberOutput",
+                        `title`="",
+                        `type`="number",
                         `format`="zto"))))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -691,29 +691,29 @@ metaAnalysisCorrResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6
                     "tes"),
                 columns=list(
                     list(
-                        `name`="tesOutputMin", 
-                        `title`="Min", 
-                        `type`="number", 
+                        `name`="tesOutputMin",
+                        `title`="Min",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="tesOutputQ1", 
-                        `title`="Q1", 
-                        `type`="number", 
+                        `name`="tesOutputQ1",
+                        `title`="Q1",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="tesOutputMed", 
-                        `title`="Median", 
-                        `type`="number", 
+                        `name`="tesOutputMed",
+                        `title`="Median",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="tesOutputQ3", 
-                        `title`="Q3", 
-                        `type`="number", 
+                        `name`="tesOutputQ3",
+                        `title`="Q3",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="tesOutputMax", 
-                        `title`="Max", 
-                        `type`="number", 
+                        `name`="tesOutputMax",
+                        `title`="Max",
+                        `type`="number",
                         `format`="zto"))))
             self$add(jmvcore::Html$new(
                 options=options,
@@ -733,14 +733,14 @@ metaAnalysisCorrResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6
                 rows=1,
                 columns=list(
                     list(
-                        `name`="Lpb", 
-                        `title`="Test Statistic", 
-                        `type`="number", 
+                        `name`="Lpb",
+                        `title`="Test Statistic",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="pval", 
-                        `title`="p-value", 
-                        `type`="number", 
+                        `name`="pval",
+                        `title`="p-value",
+                        `type`="number",
                         `format`="pvalue"))))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -749,34 +749,34 @@ metaAnalysisCorrResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6
                 rows=1,
                 columns=list(
                     list(
-                        `name`="est", 
-                        `title`="Effect Size Estimate", 
-                        `type`="number", 
+                        `name`="est",
+                        `title`="Effect Size Estimate",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="cilb", 
-                        `title`="CI Lower Bound", 
-                        `type`="number", 
+                        `name`="cilb",
+                        `title`="CI Lower Bound",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="ciub", 
-                        `title`="CI upper Bound", 
-                        `type`="number", 
+                        `name`="ciub",
+                        `title`="CI upper Bound",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="lzero", 
-                        `title`="Z", 
-                        `type`="number", 
+                        `name`="lzero",
+                        `title`="Z",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="pval", 
-                        `title`="p-value", 
-                        `type`="number", 
+                        `name`="pval",
+                        `title`="p-value",
+                        `type`="number",
                         `format`="zto"),
                     list(
-                        `name`="ksig", 
-                        `title`="Number of Significant Studies", 
-                        `type`="number", 
+                        `name`="ksig",
+                        `title`="Number of Significant Studies",
+                        `type`="number",
                         `format`="zto"))))
             self$add(jmvcore::Image$new(
                 options=options,
@@ -892,7 +892,7 @@ metaAnalysisCorrBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
 
 #' Correlation Coefficients (r, N)
 #'
-#' 
+#'
 #' @param data .
 #' @param rcor .
 #' @param samplesize .
