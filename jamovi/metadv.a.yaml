@@ -1,6 +1,6 @@
 ---
 name:  metaDV
-title: Effect Sizes and Sampling Variances
+title: Effect Sizes and (Sampling Variances or Standard Errors)
 menuGroup: MAJOR
 menuSubgroup: Meta Analysis
 version: '1.0.0'
@@ -11,13 +11,13 @@ options:
       type: Data
 
     - name: effectSize
-      title: Effect sizes (d)
+      title: Effect Sizes
       suggested: [continuous]
       permitted: [numeric]
       type: Variable
 
     - name: samplingVariances
-      title: Sampling variances
+      title: Variance or SE (correspondent observed ES)
       suggested: [continuous]
       permitted: [numeric]
       type: Variable
@@ -32,6 +32,16 @@ options:
       suggested: [continuous]
       permitted: [numeric]
       type: Variable
+
+    - name: corobses
+      title: Selected (correspondent observed ES)
+      type: List
+      options:
+        - name: "SV"
+          title: Sampling Variances
+        - name: "SE"
+          title: Standard Errors
+      default: SV
 
     - name: methodmetacor
       title: Model estimator
@@ -77,6 +87,13 @@ options:
       min: 50
       max: 99.9
       default: 95
+
+    - name: slfadj
+      type: Number
+      title: Step length of the Fisher algorithm adjust
+      min: 0.0
+      max: 1.0
+      default: 0.5
 
     - name: showModelFit
       title: Display model fit
